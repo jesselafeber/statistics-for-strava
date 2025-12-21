@@ -34,3 +34,4 @@ phpstan.neon
 /mercure
 /tests/strava.db
 ###> app-build ###
+/.env
