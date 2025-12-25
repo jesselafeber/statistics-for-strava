@@ -4,6 +4,7 @@ namespace App\Application\Import\ImportActivities\Pipeline;
 
 use App\Domain\Activity\Activity;
 use App\Domain\Activity\ActivityId;
+use App\Domain\Activity\Stream\ActivityStreams;
 
 final readonly class ActivityImportContext
 {
@@ -13,6 +14,8 @@ final readonly class ActivityImportContext
         private array $rawStravaData,
         private bool $isNewActivity,
         private ?Activity $activity,
+        private ActivityStreams $streams,
+        private bool $streamsWereImported,
     ) {
     }
 
@@ -29,6 +32,8 @@ final readonly class ActivityImportContext
             rawStravaData: $rawStravaData,
             isNewActivity: $isNewActivity,
             activity: null,
+            streams: ActivityStreams::empty(),
+            streamsWereImported: false,
         );
     }
 
@@ -41,6 +46,20 @@ final readonly class ActivityImportContext
     {
         return clone ($this, [
             'activity' => $activity,
+        ]);
+    }
+
+    public function withStreams(ActivityStreams $streams): self
+    {
+        return clone ($this, [
+            'streams' => $streams,
+        ]);
+    }
+
+    public function withStreamsWereImported(): self
+    {
+        return clone ($this, [
+            'streamsWereImported' => true,
         ]);
     }
 
@@ -60,5 +79,15 @@ final readonly class ActivityImportContext
     public function getActivity(): ?Activity
     {
         return $this->activity;
+    }
+
+    public function getStreams(): ActivityStreams
+    {
+        return $this->streams;
+    }
+
+    public function streamsWereImported(): bool
+    {
+        return $this->streamsWereImported;
     }
 }

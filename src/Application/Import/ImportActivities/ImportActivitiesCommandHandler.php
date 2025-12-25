@@ -13,6 +13,7 @@ use App\Domain\Activity\ActivityWithRawData;
 use App\Domain\Activity\ActivityWithRawDataRepository;
 use App\Domain\Activity\SportType\SportType;
 use App\Domain\Activity\SportType\SportTypesToImport;
+use App\Domain\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Strava\RateLimit\StravaRateLimitHasBeenReached;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\Command\Command;
@@ -32,6 +33,7 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
         private Strava $strava,
         private ActivityRepository $activityRepository,
         private ActivityWithRawDataRepository $activityWithRawDataRepository,
+        private ActivityStreamRepository $activityStreamRepository,
         private NumberOfNewActivitiesToProcessPerImport $numberOfNewActivitiesToProcessPerImport,
         private SportTypesToImport $sportTypesToImport,
         private ActivityVisibilitiesToImport $activityVisibilitiesToImport,
@@ -143,23 +145,17 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
 
             $activity = $context->getActivity() ?? throw new \RuntimeException('Activity not set on $context');
             if ($context->isNewActivity()) {
+                // We always expect "segment_efforts" to be set in raw data.
+                // If not, something is really wrong. Abort import.
+                if (!array_key_exists('segment_efforts', $context->getRawStravaData())) {
+                    throw new \RuntimeException(sprintf('Activity %s is expected to include segment_efforts in the raw Strava data. This appears to be a regression introduced in a recent version. Please report this as a bug on GitHub.', $activityId->toUnprefixedString()));
+                }
                 $this->activityWithRawDataRepository->add(ActivityWithRawData::fromState(
                     activity: $activity,
                     rawData: $context->getRawStravaData()
                 ));
 
                 $this->numberOfNewActivitiesToProcessPerImport->increaseNumberOfProcessedActivities();
-                if ($this->numberOfNewActivitiesToProcessPerImport->maxNumberProcessed()) {
-                    // Stop importing activities, we reached the max number to process for this batch.
-                    $command->getOutput()->writeln(sprintf(
-                        '  => [%d/%d] Imported activity: "%s - %s"',
-                        $delta,
-                        $countTotalStravaActivitiesToImport,
-                        $activity->getName(),
-                        $activity->getStartDate()->format('d-m-Y'))
-                    );
-                    break;
-                }
             } else {
                 $this->activityWithRawDataRepository->update(ActivityWithRawData::fromState(
                     activity: $activity,
@@ -168,6 +164,13 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                         ...$rawStravaData,
                     ]
                 ));
+            }
+
+            foreach ($context->getStreams() as $stream) {
+                $this->activityStreamRepository->add($stream);
+            }
+            if ($context->streamsWereImported()) {
+                $this->activityWithRawDataRepository->markActivityStreamsAsImported($activityId);
             }
 
             unset($activityIdsToDelete[(string) $context->getActivity()->getId()]);
@@ -180,6 +183,11 @@ final readonly class ImportActivitiesCommandHandler implements CommandHandler
                 $activity->getName(),
                 $activity->getStartDate()->format('d-m-Y'))
             );
+
+            if ($this->numberOfNewActivitiesToProcessPerImport->maxNumberProcessed()) {
+                // Stop importing activities, we reached the max number to process for this batch.
+                break;
+            }
 
             $this->mutex->heartbeat();
             ++$delta;

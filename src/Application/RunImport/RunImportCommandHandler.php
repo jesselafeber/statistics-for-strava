@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace App\Application\RunImport;
 
-use App\Application\Import\CalculateBestActivityEfforts\CalculateBestActivityEfforts;
-use App\Application\Import\CalculateBestStreamAverages\CalculateBestStreamAverages;
-use App\Application\Import\CalculateCombinedStreams\CalculateCombinedStreams;
-use App\Application\Import\CalculateNormalizedPower\CalculateNormalizedPower;
-use App\Application\Import\CalculateStreamValueDistribution\CalculateStreamValueDistribution;
+use App\Application\Import\CalculateActivityMetrics\CalculateActivityMetrics;
 use App\Application\Import\DeleteActivitiesMarkedForDeletion\DeleteActivitiesMarkedForDeletion;
 use App\Application\Import\ImportActivities\ImportActivities;
-use App\Application\Import\ImportActivityLaps\ImportActivityLaps;
-use App\Application\Import\ImportActivitySplits\ImportActivitySplits;
-use App\Application\Import\ImportActivityStreams\ImportActivityStreams;
 use App\Application\Import\ImportAthlete\ImportAthlete;
 use App\Application\Import\ImportChallenges\ImportChallenges;
 use App\Application\Import\ImportGear\ImportGear;
 use App\Application\Import\ImportSegments\ImportSegments;
 use App\Application\Import\LinkCustomGearToActivities\LinkCustomGearToActivities;
+use App\Application\Import\ProcessRawActivityData\ProcessRawActivityData;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\Command\Bus\CommandBus;
 use App\Infrastructure\CQRS\Command\Command;
@@ -60,17 +54,11 @@ final readonly class RunImportCommandHandler implements CommandHandler
             output: $output,
             restrictToActivityIds: $command->getRestrictToActivityIds())
         );
+        $this->commandBus->dispatch(new ProcessRawActivityData($output));
         $this->commandBus->dispatch(new LinkCustomGearToActivities($output));
-        $this->commandBus->dispatch(new ImportActivitySplits($output));
-        $this->commandBus->dispatch(new ImportActivityLaps($output));
-        $this->commandBus->dispatch(new ImportActivityStreams($output));
-        $this->commandBus->dispatch(new CalculateBestActivityEfforts($output));
         $this->commandBus->dispatch(new ImportSegments($output));
         $this->commandBus->dispatch(new ImportChallenges($output));
-        $this->commandBus->dispatch(new CalculateBestStreamAverages($output));
-        $this->commandBus->dispatch(new CalculateStreamValueDistribution($output));
-        $this->commandBus->dispatch(new CalculateNormalizedPower($output));
-        $this->commandBus->dispatch(new CalculateCombinedStreams($output));
+        $this->commandBus->dispatch(new CalculateActivityMetrics($output));
         $this->commandBus->dispatch(new DeleteActivitiesMarkedForDeletion($output));
 
         if ($rateLimits = $this->strava->getRateLimit()) {
