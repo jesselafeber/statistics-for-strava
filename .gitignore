@@ -32,6 +32,6 @@ phpstan.neon
 /cron
 /ollama
 /mercure
-/tests/strava.db
+/tests/strava*.db
 ###> app-build ###
 /.env

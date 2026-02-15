@@ -21,6 +21,13 @@ general:
     # maxHeartRateFormula:
     #    "2020-01-01": 198
     #    "2025-01-10": 193
+    # The formula used to calculate your resting heart rate. The default is heuristicAgeBased.
+    # Allowed values: a fixed number, heuristicAgeBased or you can set a fixed number for any given date range.  
+    restingHeartRateFormula: 'heuristicAgeBased'
+    # restingHeartRateFormula: 50
+    # restingHeartRateFormula:
+    #    "2020-01-01": 53
+    #    "2025-01-10": 55
     # If you're not sure about your zones, leave this unchanged, the defaults are sensible.
     heartRateZones:
       # Relative or absolute. 
@@ -199,7 +206,7 @@ integrations:
     # ⚠️ Use caution when enabling this feature if your app is publicly accessible!
     enableUI: false
     # The provider you want to use. 
-    # Allowed values: ["anthropic", "azureOpenAI", "gemini", "ollama", "openAI", "deepseek", "mistral"]
+    # Allowed values: ["anthropic", "azureOpenAI", "deepseek", "gemini", "grok", "huggingFace", "ollama", "openAI", "openAILike", "openAIResponses", "mistral"]
     provider: 'PROVIDER-YOU-CHOOSE'
     configuration:
       key: 'YOUR-API-KEY'

@@ -18,19 +18,18 @@ Activities: 活动
 Activity: 活动
 'Activity count': 活动量
 'Activity heatmap': 活动热图
-'Activity intensity': 活动强度
 'Activity locations': 活动地点
 'Activity start times': 活动开始时间
 'Acute Training Load (Fatigue) - 7-day exponentially weighted average of your daily training load. Represents short-term fatigue.': '短期训练负荷（疲劳）– 7天每日训练负荷的指数加权平均值。代表短期疲劳。'
 'Acute:Chronic Ratio - Ratio of ATL to CTL. Indicates injury risk.': '短期/长期疲劳比率 – ATL与CTL的比值。表示受伤风险。'
 'Adaptive & Inclusive Sports': 适应性和包容性运动
-Advanced: 高级
 Afternoon: 下午
 All: All
 'All time': 所有时间
 'Alpine Ski': 高山滑雪
 Apr: 四月
 'Ask Mark something...': 问问Mark...
+'Athlete profile': 'Athlete profile'
 Aug: 八月
 Avg: 平均
 'Back Country Ski': 越野滑雪
@@ -49,6 +48,7 @@ Canoeing: 划独木舟
 'Challenge consistency': 挑战一致性
 Challenges: 挑战
 'Chronic Training Load (Fitness) - 42-day exponentially weighted average of your daily training load. Represents long-term training adaptation.': '长期训练负荷（体能）— 42天训练的负荷指数加权平均值。代表长期训练适应情况。'
+'Clear chat': 'Clear chat'
 'Close modal': 关闭模态框
 'Collapse sidebar': 折叠侧边栏
 Commutes: 通勤
@@ -56,7 +56,9 @@ Commutes: 通勤
 Compare: 对比
 'Compare to': 对比
 'Congrats! You achieved personal bests during this activity.': 恭喜！您在此活动中取得了个人最佳成绩。
+Consistency: Consistency
 Crossfit: 交叉健身
+'Current streaks': 'Current streaks'
 'Custom gear disabled': 自定义装备已禁用
 Cycling: 骑行
 'Daily TRIMP': 每日TRIMP
@@ -66,6 +68,7 @@ Date: 日期
 'Days needed': 所需天数
 'Daytime stats': 白天统计
 Dec: 十二月
+Density: Density
 'Detailed instructions are available in the documentation on': 详细说明
 Details: 详情
 Device: 设备
@@ -75,6 +78,7 @@ Distance: 距离
 'Distance over time per gear': 每个装备随时间变化的距离
 'Distance per month per gear': 每个装备每月的距离
 Distribution: 分布
+Duration: Duration
 'E-Bike Rides': 电动自行车骑行
 'E-Mountain Bike Rides': 电动山地车骑行
 Eddington: 愛丁頓數
@@ -82,6 +86,7 @@ Elev: 海拔
 Elevation: 海拔高度
 'Elevation in {unit}': '海拔高度（单位：{unit})'
 Elliptical: 椭圆机
+'Enter fullscreen mode': 'Enter fullscreen mode'
 Evening: 晚上
 'Excludes commutes': 筛除通勤
 'FTP history': FTP历史
@@ -128,12 +133,20 @@ High: 高
 'High risk - reduce volume': 风险高——减少运动量
 Hikes: 徒步
 History: 历史
+'History chart': 'History chart'
+'How diverse is your training': 'How diverse is your training'
+'How hard is your typical training session': 'How hard is your typical training session'
+'How long is your typical training session': 'How long is your typical training session'
+'How much do you train on average per week': 'How much do you train on average per week'
+'How much training you do in total on days you train.': 'How much training you do in total on days you train.'
+'How often do you train': 'How often do you train'
 'Ice Skate': 冰刀
 Id: Id
 'Image "{imgSrc}" is referenced in your maintenance config file, but was not found in "storage/gear-maintenance"': '您的维护配置文件中引用了图像"{imgSrc}"，但在"storage/gear-maintenance"中未找到该图像。'
 "In that time, I’ve covered {totalDistance}, that's {numberOfTripsAroundTheWorld} trips around the world 🌍 or {numberOfTripsToTheMoonPercent}% of the way to the moon 🌕, and climbed an elevation of {totalElevation} which is {timesMountEverest} times Mount Everest 🏔. All up that's {totalTimeRecorded} of moving time 🎉.": '在那段时间里，我走了{totalDistance}，相当于环游世界{numberOfTripsAroundTheWorld}次🌍，或者说是到达月球的{numberOfTripsToTheMoonPercent}%🌕，并且攀登了{totalElevation}，相当于珠穆朗玛峰的{timesMountEverest}倍🏔。总而言之，我走了{totalTimeRecorded}的路🎉。'
 'Individual thresholds vary based on fitness level.': 个人阈值因体能水平而异。
 'Inline Skate': 直排轮滑
+Intensity: Intensity
 'It looks like no valid gear is attached to any of the components. Please check your config file.': 无法在任何组件上找到有效装备。请检查您的配置文件。
 Jan: 一月
 Jul: 七月
@@ -143,12 +156,12 @@ Kayaking: 皮划艇
 'Kite Surf': 风筝冲浪
 Lap: 圈
 Laps: 圈
-'Last 45 days': 最近45天
 'Last 7 days training load': 最近7天训练负荷
-'Last 90 days': 最近90天
 'Last effort': 最后努力
 'Last maintenance': 最后维护
+'Last {numberOfDays} days': '最近{numberOfDays}天'
 Lifetime: Lifetime
+Load: Load
 'Load (CTL/ATL)': '负荷 (CTL/ATL)'
 'Loading data...': 加载数据中...
 Loading...: 加载中...
@@ -248,7 +261,6 @@ Search: 搜索
 Segments: 路段
 Sep: 九月
 'Show information': 显示信息
-Simplified: 简化
 "Since I began using Strava {numberOfDaysAgo} ago on {startDate}, I've logged {totalDaysOfWorkingOut} active days of training and adventure.": '从{startDate}算起，我已使用Strava {numberOfDaysAgo}多天​，我已经记录了{totalDaysOfWorkingOut}天的训练和冒险活动。'
 Skateboard: 滑板
 Skating: 滑冰
@@ -260,6 +272,7 @@ Socials: 社交
 Speed: 速度
 'Speed distribution': 速度分布
 Splits: 分段
+'Sport variety': 'Sport variety'
 Squash: 壁球
 'Stair Stepper': 楼梯机
 'Stand Up Paddling': 站立划桨
@@ -268,6 +281,7 @@ Squash: 壁球
 'Statistics for Strava': 'Statistics for Strava'
 Stats: 统计
 'Stats per weekday': 按工作日统计
+'Streak started on {date}': 'Streak started on {date}'
 Streaks: 连续记录
 Sun: 周日
 Sunday: 星期日
@@ -282,9 +296,8 @@ Tennis: 网球
 'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.': 在骑行或跑步的场景下，埃丁顿数被定义为运动员在至少E天内至少覆盖E公里的最大数E。
 'These badges are dynamically created. You can use them in any &lt;img&gt; tag': '徽章为动态生成，您可在任意 &lt;img&gt; 标签中使用'
 Thinking...: 思考中...
+'This chart summarizes how you train. Each axis reflects a different normalized training habit, so higher values mean stronger emphasis.': 'This chart summarizes how you train. Each axis reflects a different normalized training habit, so higher values mean stronger emphasis.'
 'This feature is currently disabled': 功能当前被禁用
-'This formula means that riding for an hour at your max heart rate results in a score of 100, which we consider "high intensity"': '这个公式意味着以最大心率骑行一小时的得分为100，我们认为这是"高强度"'
-'This map shows the daily training intensity for the last year. The training intensity for an activity is calculated based on several metrics.': 这张地图显示了过去一年的每日训练强度。活动的训练强度是基于多个指标计算的。
 Thu: 周四
 Thursday: 星期四
 Time: 时间
@@ -320,6 +333,7 @@ Unspecified: 未指定
 'Virtual Row': 虚拟划船
 'Virtual Runs': 虚拟跑步
 'Virtual workout assistant': 虚拟锻炼助手
+Volume: Volume
 Walking: 健步
 Walks: 散步
 'Water Sports': 水上运动
@@ -335,11 +349,11 @@ Weight: 体重
 'Weight Training': 重量训练
 'Weight history': 历史体重
 Wheelchair: 轮椅
-'When power metrics and FTP are available, these metrics are used instead. This formula means that riding for an hour at your FTP results in a score of 100, which we consider "high intensity"': '当功率指标和FTP可用时，将使用这些指标。这个公式意味着以FTP骑行一小时的得分为100，我们认为这是"高强度"'
 'Wind Surf': 风帆冲浪
 'Winter Sports': 冬季运动
 Workout: 锻炼
 'Workout type': 锻炼类型
+YTD: YTD
 Year: 年
 Yearly: Yearly
 'Yearly stats': 年度统计
@@ -362,7 +376,6 @@ Yoga: 瑜伽
 'Zwift badge': Zwift徽章
 'Zwift stats': Zwift统计
 activities: 活动
-age: 年龄
 and: 和
 avg: 平均
 bpm: 拍子数
@@ -374,11 +387,9 @@ days: 天
 history: 历史
 hours: 小时
 hrs: hrs
-intensity: 强度
-intensityFactor: 强度因子
 kudos: 赞
+'last {numberOfDays} days': '最近{numberOfDays}天'
 'max gradient': 最大坡度
-maxHeartRate: 最大心率
 months: 月
 more: 更多
 n/a: 不适用
@@ -395,7 +406,9 @@ workouts: 锻炼
 '{maintenanceTaskLabel} every {interval}': '{maintenanceTaskLabel}每{interval}'
 '{numberOfActivities} activities': '{numberOfActivities}活动'
 '{numberOfActivities} activities in {year}': '{year}年内，{numberOfActivities}项活动'
+'{numberOfMonths} months': '{numberOfMonths} months'
 '{numberOfResults} photos based on your active filters': '{numberOfResults}张照片符合筛选条件'
 '{numberOfResults} results based on your active filters': '{numberOfResults}个结果符合筛选条件'
 '{numberOfResults} routes based on your active filters': '{numberOfResults}条路线符合筛选条件'
+'{numberOfWeeks} weeks': '{numberOfWeeks} weeks'
 '–10 to –30: Build/fatigue zone. Productive heavy-training range': '–10 to –30: 构建/疲劳区。高效的高强度训练范围'

@@ -46,6 +46,9 @@ migrate-run:
 translation-extract:
 	@make console arg="app:translations:extract"
 
+translation-extract-with-remove:
+	@make console arg="app:translations:extract --removeObsoleteTranslatables"
+
 translation-debug:
 	@make console arg="debug:translation en_US"
 
@@ -53,11 +56,11 @@ translation-debug:
 phpunit:
 	@make dcr cmd="vendor/bin/phpunit --order-by=random $(arg)"
 
-phpunit-with-coverage-report:
-	@make phpunit arg="--coverage-clover=clover.xml -d --min-coverage=min-coverage-rules.php -d --clean-up-clover-xml"
+paratest:
+	@make dcr cmd="vendor/bin/paratest --order-by=random --processes=auto $(arg)"
 
 phpunit-html-coverage:
-	@make phpunit arg="--coverage-html var/coverage"
+	@make paratest arg="--coverage-html var/coverage"
 
 phpstan:
 	@make dcr cmd="vendor/bin/phpstan --memory-limit=1G $(arg)"

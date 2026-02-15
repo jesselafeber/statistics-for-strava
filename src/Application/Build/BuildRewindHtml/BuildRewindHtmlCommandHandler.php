@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Application\Build\BuildRewindHtml;
 
-use App\Domain\Activity\ActivitiesEnricher;
-use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\Image\ImageRepository;
 use App\Domain\Activity\SportType\SportTypes;
 use App\Domain\Gear\FindMovingTimePerGear\FindMovingTimePerGear;
@@ -17,7 +15,7 @@ use App\Domain\Rewind\ActivityStartTimesChart;
 use App\Domain\Rewind\DailyActivitiesChart;
 use App\Domain\Rewind\DistancePerMonthChart;
 use App\Domain\Rewind\ElevationPerMonthChart;
-use App\Domain\Rewind\FindActiveDays\FindActiveDays;
+use App\Domain\Rewind\FindActiveAndRestDays\FindActiveAndRestDays;
 use App\Domain\Rewind\FindActivityCountPerMonth\FindActivityCountPerMonth;
 use App\Domain\Rewind\FindActivityLocations\FindActivityLocations;
 use App\Domain\Rewind\FindActivityStartTimesPerHour\FindActivityStartTimesPerHour;
@@ -25,6 +23,7 @@ use App\Domain\Rewind\FindAvailableRewindOptions\FindAvailableRewindOptions;
 use App\Domain\Rewind\FindCarbonSaved\FindCarbonSaved;
 use App\Domain\Rewind\FindDistancePerMonth\FindDistancePerMonth;
 use App\Domain\Rewind\FindElevationPerMonth\FindElevationPerMonth;
+use App\Domain\Rewind\FindLongestActivity\FindLongestActivity;
 use App\Domain\Rewind\FindMovingTimePerDay\FindMovingTimePerDay;
 use App\Domain\Rewind\FindMovingTimePerSportType\FindMovingTimePerSportType;
 use App\Domain\Rewind\FindPersonalRecordsPerMonth\FindPersonalRecordsPerMonth;
@@ -52,8 +51,6 @@ use Twig\Environment;
 final readonly class BuildRewindHtmlCommandHandler implements CommandHandler
 {
     public function __construct(
-        private ActivityRepository $activityRepository,
-        private ActivitiesEnricher $activitiesEnricher,
         private GearRepository $gearRepository,
         private ImageRepository $imageRepository,
         private QueryBus $queryBus,
@@ -85,25 +82,18 @@ final readonly class BuildRewindHtmlCommandHandler implements CommandHandler
             } catch (EntityNotFound) {
             }
 
-            $longestActivity = $this->activitiesEnricher->getEnrichedActivity(
-                $this->activityRepository->findLongestActivityFor($yearsToQuery)->getId()
-            );
+            $longestActivity = $this->queryBus->ask(new FindLongestActivity($yearsToQuery))->getActivity();
             $leafletMap = $longestActivity->getLeafletMap();
 
             $findMovingTimePerDayResponse = $this->queryBus->ask(new FindMovingTimePerDay($yearsToQuery));
             $findMovingTimePerSportTypeResponse = $this->queryBus->ask(new FindMovingTimePerSportType($yearsToQuery));
             $socialsMetricsResponse = $this->queryBus->ask(new FindSocialsMetrics($yearsToQuery));
-            $streaksResponse = $this->queryBus->ask(new FindStreaks($yearsToQuery));
+            $streaksResponse = $this->queryBus->ask(new FindStreaks($yearsToQuery, null));
             $distancePerMonthResponse = $this->queryBus->ask(new FindDistancePerMonth($yearsToQuery));
             $elevationPerMonthResponse = $this->queryBus->ask(new FindElevationPerMonth($yearsToQuery));
-            $activeDaysResponse = $this->queryBus->ask(new FindActiveDays($yearsToQuery));
+            $activeAndRestDaysResponse = $this->queryBus->ask(new FindActiveAndRestDays($yearsToQuery));
             $totalActivityCountResponse = $this->queryBus->ask(new FindTotalActivityCount($yearsToQuery));
 
-            $totalNumberOfDays = array_sum(array_map(
-                fn (Year $year): int => $year->getNumberOfDays(),
-                $yearsToQuery->toArray()
-            ));
-            /** @var RewindItems $rewindItems */
             $rewindItems = RewindItems::empty();
 
             if (FindAvailableRewindOptions::ALL_TIME !== $availableRewindOption) {
@@ -225,9 +215,9 @@ final readonly class BuildRewindHtmlCommandHandler implements CommandHandler
                     title: $this->translator->trans('Streaks'),
                     subTitle: $this->translator->trans('Longest streaks'),
                     content: $this->twig->render('html/rewind/rewind-streaks.html.twig', [
-                        'dayStreak' => $streaksResponse->getDayStreak(),
-                        'weekStreak' => $streaksResponse->getWeekStreak(),
-                        'monthStreak' => $streaksResponse->getMonthStreak(),
+                        'dayStreak' => $streaksResponse->getLongestDayStreak(),
+                        'weekStreak' => $streaksResponse->getLongestWeekStreak(),
+                        'monthStreak' => $streaksResponse->getLongestMonthStreak(),
                     ])
                 ))
                 ->add(RewindItem::from(
@@ -236,12 +226,12 @@ final readonly class BuildRewindHtmlCommandHandler implements CommandHandler
                     subTitle: $this->translator->trans('Rest days vs. active days'),
                     content: $this->twig->render('html/rewind/rewind-chart.html.twig', [
                         'chart' => Json::encode(RestDaysVsActiveDaysChart::create(
-                            numberOfActiveDays: $activeDaysResponse->getNumberOfActiveDays(),
-                            numberOfRestDays: $totalNumberOfDays - $activeDaysResponse->getNumberOfActiveDays(),
+                            numberOfActiveDays: $activeAndRestDaysResponse->getNumberOfActiveDays(),
+                            numberOfRestDays: $activeAndRestDaysResponse->getNumberOfRestDays(),
                             translator: $this->translator,
                         )->build()),
                     ]),
-                    totalMetric: (int) round(($activeDaysResponse->getNumberOfActiveDays() / $totalNumberOfDays) * 100),
+                    totalMetric: (int) round(($activeAndRestDaysResponse->getNumberOfActiveDays() / $activeAndRestDaysResponse->getTotalNumberOfDays()) * 100),
                     totalMetricLabel: '%'
                 ))->add(RewindItem::from(
                     icon: 'clock',
@@ -344,9 +334,8 @@ final readonly class BuildRewindHtmlCommandHandler implements CommandHandler
                 );
             }
         }
-
-        if (count($availableRewindOptions) <= 1) {
-            // No data to compare with, no need to render comparison pages.
+        if (1 === count($availableRewindOptions)) {
+            // "All time" option is the only one. No need to compare rewinds.
             return;
         }
 

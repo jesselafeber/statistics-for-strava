@@ -1,3 +1,99 @@
+# [v4.4.2](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.4.2) - 2026-01-30
+
+## What's Changed
+* ISSUE #1688: Revisit how intensity in the Athlete profile chart is calculated by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1689
+* ISSUE #1691: Pace data smoothing for activity charts by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1692
+* ISSUE #1682: Best effort periods by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1693
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.4.1...v4.4.2
+
+# [v4.4.1](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.4.1) - 2026-01-26
+
+## What's Changed
+* ISSUE #1659: Introduce ActivityIdRepository by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1662
+* ISSUE #1675: Postpone webhooks process when other process is importing data by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1676
+* ISSUE #1677: Webhook fails due to Invalid RESTING_HEART_RATE_FORMULA by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1679
+* Respect app basePath when resolving default route by @luusl in https://github.com/robiningelbrecht/statistics-for-strava/pull/1678
+
+## New Contributors
+* @luusl made their first contribution in https://github.com/robiningelbrecht/statistics-for-strava/pull/1678
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.4.0...v4.4.1
+
+# [v4.4.0](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.4.0) - 2026-01-19
+
+To properly calculate activity intensities, we introduced a new config option:
+
+```yaml
+general:
+  athlete:
+    # The formula used to calculate your resting heart rate. The default is heuristicAgeBased.
+    # Allowed values: a fixed number, heuristicAgeBased or you can set a fixed number for any given date range.  
+    restingHeartRateFormula: 'heuristicAgeBased'
+    # restingHeartRateFormula: 50
+    # restingHeartRateFormula:
+    #    "2020-01-01": 53
+    #    "2025-01-10": 55
+```
+
+## What's Changed
+* ISSUE #1642: Activity heatmap -> activities link does not use subpath by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1643
+* ISSUE #1644: Improve hover states of context buttons by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1645
+* ISSUE #1646: Improve y-axis scaling of segment effort history chart by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1647
+* ISSUE 1648: Improve Eddington page layout by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1650
+* Strava webhook documentation by @lennon101 in https://github.com/robiningelbrecht/statistics-for-strava/pull/1652
+* ISSUE #1651: Fix new app version notification by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1655
+* ISSUE #1656: Fix ActivityGrid widget tabs consistency by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1657
+* ISSUE #1641: ChallengeConsistency allow empty sportTypesToInclude by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1658
+* ISSUE #1660: Fix GPX file check by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1661
+* ISSUE 1653: Rework activity intensity algorithm by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1654
+* Add OpenRouter documentation by @jasonkuperberg in https://github.com/robiningelbrecht/statistics-for-strava/pull/1668
+* Chat design and functionality improvements by @jasonkuperberg in https://github.com/robiningelbrecht/statistics-for-strava/pull/1665
+* ISSUE #1670: Fix Undefined array key in BuildRewindHtmlCommandHandlephp by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1672
+* ISSUE #1669: Gear maintenance - every x days used by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1673
+
+## New Contributors
+* @jasonkuperberg made their first contribution in https://github.com/robiningelbrecht/statistics-for-strava/pull/1668
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.3.6...v4.4.0
+
+# [v4.3.6](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.3.6) - 2026-01-11
+
+## What's Changed
+* ISSUE #1610: Radar chart indicating athlete profile by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1622
+* ISSUE #1631: Streaks add start dates and optional subtitle by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1636
+* ISSUE #1638: Adjustable Limit / Width of Eddington Chart by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1639
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.3.5...v4.3.7
+
+# [v4.3.5](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.3.5) - 2026-01-09
+
+## What's Changed
+* ISSUE #1625: Create tool to fix corrupted data by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1626
+* ISSUE #1627: Download GPX from activity pop-up by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1628
+* ISSUE #1624: trainingGoals widget support new types numberOfActivities and calories by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1630
+* ISSUE #1632: Weekly stats X-Axis scaling fix by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1633
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.3.4...v4.3.5
+
+# [v4.3.4](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.3.4) - 2026-01-05
+
+## What's Changed
+* ISSUE #1579: Add grok, huggingFace, openAILike and openAIResponses as AI providers by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1613
+* ISSUE #1617: Streaks widget not displaying streaks correctly by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1618
+* ISSUE #1608: Segment effort history chart by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1615
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.3.3...v4.3.4
+
+# [v4.3.3](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.3.3) - 2026-01-02
+
+## What's Changed
+* ISSUE #1599: Rewind active vs rest days always takes end of year into account by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1600
+* ISSUE #1587: Current streaks dashboard widget by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1590
+* ISSUE #1605: Improve webhooks documentation by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1606
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.3.2...v4.3.3
+
 # [v4.3.2](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.3.2) - 2025-12-29
 
 ## What's Changed

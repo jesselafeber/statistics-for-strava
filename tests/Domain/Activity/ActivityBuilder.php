@@ -44,7 +44,7 @@ final class ActivityBuilder
     private array $localImagePaths;
     private ?string $polyline;
     private RouteGeography $routeGeography;
-    private readonly string $weather;
+    private readonly ?string $weather;
     private ?GearId $gearId;
     private readonly bool $isCommute;
     private readonly ?WorkoutType $workoutType;
@@ -74,7 +74,7 @@ final class ActivityBuilder
         $this->deviceName = null;
         $this->localImagePaths = [];
         $this->polyline = null;
-        $this->weather = '';
+        $this->weather = null;
         $this->gearId = null;
         $this->routeGeography = RouteGeography::create([]);
         $this->isCommute = false;

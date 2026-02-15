@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Application\Build\BuildSegmentsHtml;
 
 use App\Application\Countries;
-use App\Domain\Activity\ActivitiesEnricher;
+use App\Domain\Activity\EnrichedActivities;
 use App\Domain\Activity\SportType\SportTypeRepository;
 use App\Domain\Segment\Segment;
+use App\Domain\Segment\SegmentEffort\SegmentEffortHistoryChart;
 use App\Domain\Segment\SegmentEffort\SegmentEffortRepository;
 use App\Domain\Segment\SegmentRepository;
 use App\Infrastructure\CQRS\Command\Command;
@@ -24,7 +25,7 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
         private SegmentRepository $segmentRepository,
         private SegmentEffortRepository $segmentEffortRepository,
         private SportTypeRepository $sportTypeRepository,
-        private ActivitiesEnricher $activitiesEnricher,
+        private EnrichedActivities $enrichedActivities,
         private Countries $countries,
         private Environment $twig,
         private FilesystemOperator $buildStorage,
@@ -51,13 +52,13 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
 
                 /** @var \App\Domain\Segment\SegmentEffort\SegmentEffort $segmentEffort */
                 foreach ($segmentEffortsTopTen as $segmentEffort) {
-                    $activity = $this->activitiesEnricher->getEnrichedActivity($segmentEffort->getActivityId());
+                    $activity = $this->enrichedActivities->find($segmentEffort->getActivityId());
                     $segmentEffort->enrichWithActivity($activity);
                 }
 
                 /** @var \App\Domain\Segment\SegmentEffort\SegmentEffort $segmentEffort */
                 foreach ($segmentEffortsHistory as $segmentEffort) {
-                    $activity = $this->activitiesEnricher->getEnrichedActivity($segmentEffort->getActivityId());
+                    $activity = $this->enrichedActivities->find($segmentEffort->getActivityId());
                     $segmentEffort->enrichWithActivity($activity);
                 }
                 if ($lastEffortDate = $segmentEffortsHistory->getFirst()?->getStartDateTime()) {
@@ -71,6 +72,9 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
                         'segment' => $segment,
                         'segmentEffortsTopTen' => $segmentEffortsTopTen,
                         'segmentEffortsHistory' => $segmentEffortsHistory,
+                        'segmentEffortsHistoryChart' => Json::encode(
+                            SegmentEffortHistoryChart::create($segmentEffortsHistory)->build()
+                        ),
                         'leaflet' => $leafletMap ? [
                             'routes' => [$segment->getPolyline()],
                             'map' => $leafletMap,
