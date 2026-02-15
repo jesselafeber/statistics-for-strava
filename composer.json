@@ -11,7 +11,7 @@
     ],
     "keywords": [
         "PHP",
-        "strava",
+        "Strava",
         "self-hosted"
     ],
     "minimum-stability": "stable",
@@ -26,6 +26,7 @@
         "ext-libxml": "*",
         "ext-simplexml": "*",
         "ext-uri": "*",
+        "ext-zstd": "*",
         "adrenalinkin/doctrine-naming-strategy": "^3.0",
         "brick/geo": "^0.13.1",
         "doctrine/dbal": "^4",
@@ -65,9 +66,8 @@
         "dama/doctrine-test-bundle": "^8.3",
         "friendsofphp/php-cs-fixer": "^3.64",
         "phpstan/phpstan": "^2.0",
-        "phpunit/phpunit": "^12",
+        "phpunit/phpunit": "^13",
         "rector/rector": "*",
-        "robiningelbrecht/phpunit-coverage-tools": "^1.8",
         "spatie/phpunit-snapshot-assertions": "^5.1",
         "symfony/phpunit-bridge": "8.0.*",
         "symfony/stopwatch": "8.0.*",

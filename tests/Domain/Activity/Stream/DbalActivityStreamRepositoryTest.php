@@ -22,16 +22,25 @@ class DbalActivityStreamRepositoryTest extends ContainerTestCase
 
         $this->assertEmpty($stream->getBestAverages());
 
-        $stream->updateBestAverages([1 => 1]);
-        $stream->updateValueDistribution([2 => 3.2]);
-        $this->activityStreamRepository->update($stream);
+        $this->activityStreamRepository->update(
+            $stream
+                ->withBestAverages([1 => 1])
+                ->withValueDistribution([2 => 3.2, 3 => 8])
+        );
 
         $streams = $this->activityStreamRepository->findByActivityId($stream->getActivityId());
         /** @var \App\Domain\Activity\Stream\ActivityStream $stream */
         $stream = $streams->getFirst();
 
         $this->assertEquals([1 => 1], $stream->getBestAverages());
-        $this->assertEquals([2 => 3.2], $stream->getValueDistribution());
+        $this->assertEquals([2 => 3.2, 3 => 8], $stream->getValueDistribution());
+        $this->assertEquals(
+            [
+                'bestAverages' => true,
+                'valueDistribution' => true,
+            ],
+            $stream->getComputedFieldsState()
+        );
     }
 
     public function testHasOneForActivityAndStreamType(): void

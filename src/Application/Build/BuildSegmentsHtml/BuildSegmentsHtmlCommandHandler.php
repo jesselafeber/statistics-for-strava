@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Application\Build\BuildSegmentsHtml;
 
 use App\Application\Countries;
-use App\Domain\Activity\EnrichedActivities;
 use App\Domain\Activity\SportType\SportTypeRepository;
 use App\Domain\Segment\Segment;
 use App\Domain\Segment\SegmentEffort\SegmentEffortHistoryChart;
@@ -25,10 +24,10 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
         private SegmentRepository $segmentRepository,
         private SegmentEffortRepository $segmentEffortRepository,
         private SportTypeRepository $sportTypeRepository,
-        private EnrichedActivities $enrichedActivities,
         private Countries $countries,
         private Environment $twig,
         private FilesystemOperator $buildStorage,
+        private FilesystemOperator $apiStorage,
     ) {
     }
 
@@ -47,23 +46,10 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
             foreach ($segments as $segment) {
                 $segmentEffortsTopTen = $this->segmentEffortRepository->findTopXBySegmentId($segment->getId(), 10);
                 $segmentEffortsHistory = $this->segmentEffortRepository->findHistoryBySegmentId($segment->getId());
-                $segment->enrichWithNumberOfTimesRidden($this->segmentEffortRepository->countBySegmentId($segment->getId()));
-                $segment->enrichWithBestEffort($segmentEffortsTopTen->getBestEffort());
-
-                /** @var \App\Domain\Segment\SegmentEffort\SegmentEffort $segmentEffort */
-                foreach ($segmentEffortsTopTen as $segmentEffort) {
-                    $activity = $this->enrichedActivities->find($segmentEffort->getActivityId());
-                    $segmentEffort->enrichWithActivity($activity);
-                }
-
-                /** @var \App\Domain\Segment\SegmentEffort\SegmentEffort $segmentEffort */
-                foreach ($segmentEffortsHistory as $segmentEffort) {
-                    $activity = $this->enrichedActivities->find($segmentEffort->getActivityId());
-                    $segmentEffort->enrichWithActivity($activity);
-                }
-                if ($lastEffortDate = $segmentEffortsHistory->getFirst()?->getStartDateTime()) {
-                    $segment->enrichWithLastEffortDate($lastEffortDate);
-                }
+                $segment = $segment
+                    ->withNumberOfTimesRidden($this->segmentEffortRepository->countBySegmentId($segment->getId()))
+                    ->withBestEffort($segmentEffortsTopTen->getBestEffort())
+                    ->withLastEffortDate($segmentEffortsHistory->getFirst()?->getStartDateTime());
 
                 $leafletMap = $segment->getLeafletMap();
                 $this->buildStorage->write(
@@ -71,7 +57,6 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
                     $this->twig->load('html/segment/segment.html.twig')->render([
                         'segment' => $segment,
                         'segmentEffortsTopTen' => $segmentEffortsTopTen,
-                        'segmentEffortsHistory' => $segmentEffortsHistory,
                         'segmentEffortsHistoryChart' => Json::encode(
                             SegmentEffortHistoryChart::create($segmentEffortsHistory)->build()
                         ),
@@ -96,9 +81,9 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
             $pagination = $pagination->next();
         } while (!$segments->isEmpty());
 
-        $this->buildStorage->write(
-            'fetch-json/segment-data-table.json',
-            Json::encode($dataDatableRows),
+        $this->apiStorage->write(
+            'segment/data-table.json',
+            (string) Json::encodeAndCompress($dataDatableRows),
         );
 
         $this->buildStorage->write(

@@ -1,0 +1,39 @@
+export default class TabsManager {
+    constructor() {
+    }
+
+    init(rootNode) {
+        rootNode.querySelectorAll('[data-tabs]').forEach(($triggerEl) => {
+            const tabItems = [];
+            let defaultTabId = null;
+
+            $triggerEl
+                .querySelectorAll('[role="tab"]')
+                .forEach(function ($triggerEl) {
+                    const dataTabsTarget = $triggerEl.getAttribute('data-tabs-target');
+                    tabItems.push({
+                        id: dataTabsTarget,
+                        triggerEl: $triggerEl,
+                        targetEl: document.querySelector(dataTabsTarget),
+                    });
+                    if ($triggerEl.hasAttribute('data-tab-default')) {
+                        defaultTabId = dataTabsTarget;
+                    }
+                });
+
+            new Tabs($triggerEl, tabItems, {
+                defaultTabId: defaultTabId,
+                activeClasses: $triggerEl.getAttribute('data-tabs-active-classes') || 'text-strava-orange border-strava-orange hover:text-gray-600 hover:border-gray-300',
+                inactiveClasses: $triggerEl.getAttribute('data-tabs-inactive-classes') || 'text-gray-500 hover:text-gray-600 border-gray-100 hover:border-gray-300',
+                onShow: (tabs, activeTab) => {
+                    const activeTabId = activeTab.id.replace('#', '');
+                    // Trigger a chart resize to make sure charts are rendered and displayed.
+                    document.dispatchEvent(new CustomEvent('tabChangeWasTriggered', {
+                        bubbles: true,
+                        detail: {activeTabId: activeTabId}
+                    }));
+                },
+            });
+        });
+    }
+}

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Application\Build\BuildRewindHtml;
 
+use App\Domain\Activity\EnrichedActivities;
+use App\Domain\Activity\Image\Image;
 use App\Domain\Activity\Image\ImageRepository;
 use App\Domain\Activity\SportType\SportTypes;
 use App\Domain\Gear\FindMovingTimePerGear\FindMovingTimePerGear;
@@ -53,6 +55,7 @@ final readonly class BuildRewindHtmlCommandHandler implements CommandHandler
     public function __construct(
         private GearRepository $gearRepository,
         private ImageRepository $imageRepository,
+        private EnrichedActivities $enrichedActivities,
         private QueryBus $queryBus,
         private UnitSystem $unitSystem,
         private Environment $twig,
@@ -288,11 +291,12 @@ final readonly class BuildRewindHtmlCommandHandler implements CommandHandler
                     isPlaceHolderForComparison: true
                 ));
             }
-            if ($randomImage) {
+            if ($randomImage instanceof Image) {
+                $activity = $this->enrichedActivities->find($randomImage->getActivityId());
                 $rewindItems->add(RewindItem::from(
                     icon: 'image',
                     title: $this->translator->trans('Photo'),
-                    subTitle: $randomImage->getActivity()->getStartDate()->translatedFormat('M d, Y'),
+                    subTitle: $activity->getStartDate()->translatedFormat('M d, Y'),
                     content: $this->twig->render('html/rewind/rewind-random-image.html.twig', [
                         'image' => $randomImage,
                     ]),

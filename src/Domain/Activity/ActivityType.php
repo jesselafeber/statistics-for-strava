@@ -86,17 +86,9 @@ enum ActivityType: string implements TranslatableInterface
         };
     }
 
-    public function supportsCombinedStreamCalculation(): bool
-    {
-        return match ($this) {
-            self::RIDE, self::RUN, self::WALK => true,
-            default => false,
-        };
-    }
-
     public function supportsBestEffortsStats(): bool
     {
-        return !empty($this->getDistancesForBestEffortCalculation());
+        return [] !== $this->getDistancesForBestEffortCalculation();
     }
 
     /**

@@ -7,6 +7,9 @@ namespace App\Domain\Activity\Stream\CombinedStream;
 use App\Domain\Activity\ActivityType;
 use App\Infrastructure\ValueObject\Collection;
 
+/**
+ * @extends Collection<CombinedStreamType>
+ */
 final class CombinedStreamTypes extends Collection
 {
     public function getItemClassName(): string
@@ -16,13 +19,13 @@ final class CombinedStreamTypes extends Collection
 
     public static function othersFor(ActivityType $activityType): self
     {
-        if (ActivityType::RIDE === $activityType) {
+        if (in_array($activityType, [ActivityType::RUN, ActivityType::WALK])) {
             return self::fromArray([
                 CombinedStreamType::ALTITUDE,
                 CombinedStreamType::HEART_RATE,
                 CombinedStreamType::WATTS,
-                CombinedStreamType::CADENCE,
-                CombinedStreamType::VELOCITY,
+                CombinedStreamType::STEPS_PER_MINUTE,
+                CombinedStreamType::PACE,
             ]);
         }
 
@@ -30,8 +33,8 @@ final class CombinedStreamTypes extends Collection
             CombinedStreamType::ALTITUDE,
             CombinedStreamType::HEART_RATE,
             CombinedStreamType::WATTS,
-            CombinedStreamType::STEPS_PER_MINUTE,
-            CombinedStreamType::PACE,
+            CombinedStreamType::CADENCE,
+            CombinedStreamType::VELOCITY,
         ]);
     }
 }

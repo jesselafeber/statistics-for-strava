@@ -1,3 +1,90 @@
+# [v4.6.3](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.6.3) - 2026-02-15
+
+## What's Changed
+* ISSUE #1742: Fix duplicate rendering of gear maintenance rows by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1743
+* ISSUE #1746: Re-arrange javascript files by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1747
+* ISSUE #1745: Introduce compressed API calls to reduce file sizes by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1748
+* ISSUE #1745: Introduce compressed API calls to render charts by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1749
+* ISSUE #1745: compress gpx files by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1753
+* Update messages+intl-icu.de_DE.yaml by @effectpears in https://github.com/robiningelbrecht/statistics-for-strava/pull/1752
+* ISSUE #1754: Reduce Docker image size by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1755
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.6.2...v4.6.3
+
+# [v4.6.2](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.6.2) - 2026-02-11
+
+Another day, another release improving the activity metric charts.
+
+## What's Changed
+* ISSUE #1735 & #1736: Activity metrics chart improvements by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1740
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.6.1...v4.6.2
+
+# [v4.6.1](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.6.1) - 2026-02-10
+
+> [!NOTE]  
+> This release needs to recalculate the metrics chart on the activity detail pages.
+> Your next import may take a bit longer, but subsequent imports will run at normal speed.
+
+### Revamped metric charts on activity detail pages
+
+* Charts are now zoomable
+* Charts now use the full raw data instead of simplified data
+
+## What's Changed
+* ISSUE #1724: Dark mode: prevent 'flash' on page load by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1725
+* Adding French translations by @BenjaminDiet in https://github.com/robiningelbrecht/statistics-for-strava/pull/1727
+* ISSUE #1728: Add apple-touch-icon for iOS home screen support by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1729
+* ISSUE #1730: Fix mis-aligned cursor training load analysis by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1731
+* ISSUE #1716: Rework activity profile charts by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1720
+* ISSUE #1716: Fix caching issue while importing activities by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1720
+
+## New Contributors
+* @BenjaminDiet made their first contribution in https://github.com/robiningelbrecht/statistics-for-strava/pull/1727
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.6.0...v4.6.1
+
+# [v4.6.0](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.6.0) - 2026-02-07
+
+## Dark mode is here!
+
+No more getting flash-banged by the UI at night.
+Because your eyes didn't deserve to burn like they were staring into the sun.
+
+## New "profile" dropdown
+
+We’ve moved the following links into a new dropdown in the top-right corner, accessible by clicking your profile picture:
+
+* Workout assistant
+* Badges
+* Strava profile
+
+## What's Changed
+* Update German translations by @luusl in https://github.com/robiningelbrecht/statistics-for-strava/pull/1712
+* ISSUE #1713: Add crossorigin=use-credentials to manifest link by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1717
+* ISSUE #1714: Dark mode by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1715
+* ISSUE #1714: Always show profile drop down by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1719
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.5.0...v4.6.0
+
+# [v4.5.0](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.5.0) - 2026-02-03
+
+> [!WARNING]  
+> Before upgrading to this release, you'll need to upgrade to `v4.4.2` first. 
+> Skipping this step will result in an error.
+
+## What's Changed
+* ISSUE #1696: Refactor enrichers to builders to ensure immutable objects by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1697
+* ISSUE #1698: Squash existing database migrations to one file by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1699
+* feat(training-load): add a forecast tab for training load recovery by @hutchinsp01 in https://github.com/robiningelbrecht/statistics-for-strava/pull/1702
+* ISSUE #1705: New Shoutrrr release available: v0.13.2 by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1706
+* ISSUE #1707: Save the filters of the activities and segments overviews between page refreshes by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1708
+
+## New Contributors
+* @hutchinsp01 made their first contribution in https://github.com/robiningelbrecht/statistics-for-strava/pull/1702
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.4.2...v4.5.0
+
 # [v4.4.2](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.4.2) - 2026-01-30
 
 ## What's Changed

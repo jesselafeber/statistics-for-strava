@@ -1,16 +1,17 @@
-import {DataTableStorage} from "./filters";
+import {DataTableStorage} from "./data-table/storage";
 import Router from "./router";
-import {updateGithubLatestRelease} from "./github";
-import Sidebar from "./ui/sidebar";
-import ChartManager from "./ui/charts";
-import ModalManager from "./ui/modals";
-import PhotoWall from "./ui/photo-wall";
-import MapManager from "./ui/maps";
-import TabsManager from "./ui/tabs";
+import {updateGithubLatestRelease} from "./services/github";
+import Sidebar from "./components/sidebar";
+import ChartManager from "./components/charts";
+import ModalManager from "./components/modals";
+import PhotoWall from "./components/photo-wall";
+import MapManager from "./components/maps";
+import TabsManager from "./components/tabs";
 import LazyLoad from "../libraries/lazyload.min";
-import DataTableManager from "./ui/data-tables";
-import FullscreenManager from "./fullscreen";
-import Heatmap from "./ui/heatmap";
+import DataTableManager from "./components/data-tables";
+import FullscreenManager from "./components/fullscreen";
+import Heatmap from "./components/heatmap";
+import DarkModeManager from "./components/dark-mode";
 
 const $main = document.querySelector("main");
 const dataTableStorage = new DataTableStorage();
@@ -23,9 +24,10 @@ const sidebar = new Sidebar($main);
 const modalManager = new ModalManager(router);
 const chartManager = new ChartManager(router, dataTableStorage, modalManager);
 const mapManager = new MapManager();
-const tabsManager = new TabsManager(chartManager);
+const tabsManager = new TabsManager();
 const dataTableManager = new DataTableManager(dataTableStorage);
 const fullscreenManager = new FullscreenManager(chartManager);
+const darkModeManager = new DarkModeManager();
 const lazyLoad = new LazyLoad({
     thresholds: "50px",
     callback_error: (img) => {
@@ -43,17 +45,27 @@ const initElements = (rootNode) => {
     initAccordions();
 
     modalManager.init(rootNode);
-    chartManager.init(rootNode);
+    dataTableManager.init(rootNode);
+    chartManager.init(rootNode, darkModeManager.isDarkModeEnabled());
     mapManager.init(rootNode);
     fullscreenManager.init(rootNode);
 }
 
-modalManager.setInitElements(initElements)
 sidebar.init();
+darkModeManager.attachEventListeners();
+
+document.addEventListener('darkModeWasToggled', (e) => {
+    chartManager.toggleDarkTheme(e.detail.darkModeEnabled);
+});
+document.addEventListener('fullScreenModeWasEnabled', () => {
+    chartManager.resizeAll();
+});
+document.addEventListener('tabChangeWasTriggered', (e) => {
+    chartManager.resizeInTab(e.detail.activeTabId)
+});
 
 document.addEventListener('pageWasLoaded', (e) => {
     modalManager.close();
-    dataTableManager.init();
 
     chartManager.reset();
     initElements(document);
@@ -62,6 +74,10 @@ document.addEventListener('pageWasLoaded', (e) => {
         // Open modal.
         modalManager.open(e.detail.modalId);
     }
+});
+document.addEventListener('modalWasLoaded', (e) => {
+    const node = e.detail.node;
+    initElements(node);
 });
 document.addEventListener('pageWasLoaded.heatmap', async () => {
     const $heatmapWrapper = document.querySelector('.heatmap-wrapper');
@@ -78,10 +94,14 @@ document.addEventListener('navigationLinkHasBeenClicked', (e) => {
     if (!e.detail.link.hasAttribute('data-dataTable-filters')) {
         return;
     }
-    dataTableStorage.set(JSON.parse(e.detail.link.getAttribute('data-dataTable-filters')));
+    const filters = JSON.parse(e.detail.link.getAttribute('data-dataTable-filters'));
+    Object.entries(filters).forEach(([tableName, tableFilters]) => {
+        dataTableStorage.set(tableName, tableFilters);
+    });
 });
-document.addEventListener('dataTableClusterWasChanged', () => {
-    modalManager.init(document);
+document.addEventListener('dataTableClusterWasChanged', (e) => {
+    const node = e.detail.node;
+    modalManager.init(node);
 });
 window.addEventListener('resize', function () {
     chartManager.resizeAll();
@@ -103,8 +123,8 @@ if ($modalAIChat) {
 }
 
 document.addEventListener('modalWasLoaded.ai-chat', async (e) => {
-    const { default: Chat } = await import(
-        /* webpackChunkName: "chat" */ './ui/chat'
+    const {default: Chat} = await import(
+        /* webpackChunkName: "chat" */ './components/chat'
         );
     const $modal = e.detail.modal;
     new Chat($modal).render();

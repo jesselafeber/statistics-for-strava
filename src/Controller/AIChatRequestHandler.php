@@ -25,7 +25,6 @@ use Symfony\Component\HttpFoundation\EventStreamResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
@@ -45,18 +44,15 @@ final readonly class AIChatRequestHandler
     }
 
     #[Route(path: '/ai/chat', methods: ['GET'], priority: 2)]
-    public function handle(Request $request): Response
+    public function handle(): Response
     {
         if (!$this->buildStorage->fileExists('index.html')) {
             return new RedirectResponse('/', Response::HTTP_FOUND);
         }
-
         if (!AppConfig::isAIIntegrationWithUIEnabled()) {
             return new Response('UI for AI not enabled', Response::HTTP_OK);
         }
-
         $formBuilder = $this->formFactory->createBuilder();
-
         $form = $formBuilder
             ->setAction('/ai/chat/user-message')
             ->add('message', TextType::class, [
@@ -81,11 +77,8 @@ final readonly class AIChatRequestHandler
         return new Response(status: Response::HTTP_NO_CONTENT);
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     #[Route('/chat/sse', methods: ['GET'], priority: 2)]
-    public function chatSse(Request $request): StreamedResponse
+    public function chatSse(Request $request): EventStreamResponse
     {
         return new EventStreamResponse(function (EventStreamResponse $response) use ($request): void {
             /** @var string $message */
@@ -116,10 +109,10 @@ final readonly class AIChatRequestHandler
             try {
                 foreach ($this->neuronAIAgent->stream(new UserMessage($message)) as $chunk) {
                     if ($chunk instanceof ToolCallMessage) {
-                        continue;
+                        continue; // @codeCoverageIgnore
                     }
                     if ($chunk instanceof ToolCallResultMessage) {
-                        continue;
+                        continue; // @codeCoverageIgnore
                     }
                     $response->sendEvent(new ServerSentEvent(
                         data: '',
@@ -139,7 +132,7 @@ final readonly class AIChatRequestHandler
 
                 $message = $e->getMessage().': '.$e->getTraceAsString();
                 if ($e instanceof ClientException) {
-                    $message = $e->getResponse()->getBody()->getContents();
+                    $message = $e->getResponse()->getBody()->getContents(); // @codeCoverageIgnore
                 }
 
                 $fullMessage = 'Oh no, I made a booboo... <br />'.preg_replace('/\s+/', ' ', $message);

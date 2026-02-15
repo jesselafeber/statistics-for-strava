@@ -30,7 +30,8 @@ RUN set -eux; \
         xml \
         xmlreader \
         xmlwriter \
-        pcntl;
+        pcntl \
+        zstd;
 
 COPY docker/app/config/php.ini ${PHP_INI_DIR}/php.ini
 COPY docker/app/config/Caddyfile /etc/frankenphp/Caddyfile
@@ -50,7 +51,7 @@ RUN mkdir -p /var/www/var/log
 # Install Shoutrrr.
 ARG TARGETARCH
 ENV TARGETARCH=${TARGETARCH}
-ARG SHOUTRRR_VERSION="0.13.1"
+ARG SHOUTRRR_VERSION="0.13.2"
 
 RUN if [ "${TARGETARCH}" = "arm64" ]; then \
       curl -L -o shoutrrr.tar.gz "https://github.com/nicholas-fedor/shoutrrr/releases/download/v$SHOUTRRR_VERSION/shoutrrr_linux_arm64v8_${SHOUTRRR_VERSION}.tar.gz"; \

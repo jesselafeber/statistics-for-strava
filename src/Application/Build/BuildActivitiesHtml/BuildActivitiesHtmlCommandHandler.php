@@ -11,14 +11,14 @@ use App\Domain\Activity\Device\DeviceRepository;
 use App\Domain\Activity\EnrichedActivities;
 use App\Domain\Activity\HeartRateDistributionChart;
 use App\Domain\Activity\Lap\ActivityLapRepository;
+use App\Domain\Activity\LeafletMap;
 use App\Domain\Activity\PowerDistributionChart;
 use App\Domain\Activity\Split\ActivitySplitRepository;
 use App\Domain\Activity\SportType\SportTypeRepository;
 use App\Domain\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Activity\Stream\CombinedStream\CombinedActivityStreamRepository;
-use App\Domain\Activity\Stream\CombinedStream\CombinedStreamProfileChart;
-use App\Domain\Activity\Stream\CombinedStream\CombinedStreamType;
+use App\Domain\Activity\Stream\CombinedStream\CombinedStreamProfileCharts;
 use App\Domain\Activity\Stream\StreamType;
 use App\Domain\Activity\VelocityDistributionChart;
 use App\Domain\Athlete\AthleteRepository;
@@ -30,7 +30,6 @@ use App\Infrastructure\CQRS\Command\Command;
 use App\Infrastructure\CQRS\Command\CommandHandler;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
-use App\Infrastructure\Theme\Theme;
 use App\Infrastructure\ValueObject\DataTableRow;
 use App\Infrastructure\ValueObject\Measurement\UnitSystem;
 use App\Infrastructure\ValueObject\Measurement\Velocity\KmPerHour;
@@ -58,6 +57,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
         private UnitSystem $unitSystem,
         private Environment $twig,
         private FilesystemOperator $buildStorage,
+        private FilesystemOperator $apiStorage,
         private TranslatorInterface $translator,
     ) {
     }
@@ -110,7 +110,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
             }
 
             $distributionCharts = [];
-            if ($activity->getAverageHeartRate() && $heartRateStream && !empty($heartRateStream->getValueDistribution())) {
+            if ($activity->getAverageHeartRate() && $heartRateStream && [] !== $heartRateStream->getValueDistribution()) {
                 $distributionCharts[] = [
                     'title' => $this->translator->trans('Heart rate distribution'),
                     'data' => Json::encode(HeartRateDistributionChart::create(
@@ -149,7 +149,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                     ];
                 }
             }
-            if ($velocityStream && !empty($velocityStream->getValueDistribution())) {
+            if ($velocityStream && [] !== $velocityStream->getValueDistribution()) {
                 $velocityUnitPreference = $activity->getSportType()->getVelocityDisplayPreference();
 
                 $velocityDistributionChart = VelocityDistributionChart::create(
@@ -196,68 +196,78 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                 }
             }
 
-            $activityProfileCharts = [];
+            $profileChart = null;
+            $profileChartHeight = 0;
             $coordinateMap = [];
-            if ($activityType->supportsCombinedStreamCalculation()) {
-                try {
-                    $combinedActivityStream = $this->combinedActivityStreamRepository->findOneForActivityAndUnitSystem(
-                        activityId: $activity->getId(),
-                        unitSystem: $this->unitSystem
-                    );
+            try {
+                $combinedActivityStream = $this->combinedActivityStreamRepository->findOneForActivityAndUnitSystem(
+                    activityId: $activity->getId(),
+                    unitSystem: $this->unitSystem
+                );
 
-                    $distances = $combinedActivityStream->getDistances();
-                    $times = $combinedActivityStream->getTimes();
-                    $coordinateMap = $combinedActivityStream->getCoordinates();
+                $maximumNumberOfDigits = $combinedActivityStream->getMaximumNumberOfDigits();
+                $distances = $combinedActivityStream->getDistances();
+                $times = $combinedActivityStream->getTimes();
+                $grades = $combinedActivityStream->getGrades();
+                $coordinateMap = $combinedActivityStream->getCoordinates();
 
-                    $streamTypesForCharts = $combinedActivityStream->getStreamTypesForCharts();
-                    /** @var CombinedStreamType $combinedStreamType */
-                    foreach ($streamTypesForCharts as $index => $combinedStreamType) {
-                        $xAxisPosition = match (true) {
-                            0 === $index => Theme::POSITION_BOTTOM,
-                            $index === count($streamTypesForCharts) - 1 && !empty($times) => Theme::POSITION_TOP,
-                            default => null,
-                        };
-                        $xAxisData = match (true) {
-                            Theme::POSITION_TOP === $xAxisPosition => $times,
-                            default => $distances,
-                        };
-
-                        $chart = CombinedStreamProfileChart::create(
-                            xAxisData: $xAxisData,
-                            xAxisPosition: $xAxisPosition,
-                            xAxisLabelSuffix: Theme::POSITION_BOTTOM === $xAxisPosition ? $this->unitSystem->distanceSymbol() : null,
-                            yAxisData: $combinedActivityStream->getChartStreamData($combinedStreamType),
-                            yAxisStreamType: $combinedStreamType,
-                            unitSystem: $this->unitSystem,
-                            translator: $this->translator
-                        );
-                        $activityProfileCharts[$combinedStreamType->value] = Json::encode($chart->build());
-                    }
-                } catch (EntityNotFound) {
+                $streamTypesForCharts = $combinedActivityStream->getStreamTypesForCharts();
+                $items = [];
+                foreach ($streamTypesForCharts as $combinedStreamType) {
+                    $items[] = [
+                        'yAxisData' => $combinedActivityStream->getChartStreamData($combinedStreamType),
+                        'yAxisStreamType' => $combinedStreamType,
+                    ];
                 }
+
+                $combinedCharts = CombinedStreamProfileCharts::create(
+                    items: array_reverse($items),
+                    topXAxisData: $times,
+                    bottomXAxisData: $distances,
+                    bottomXAxisSuffix: $this->unitSystem->distanceSymbol(),
+                    grades: $grades,
+                    maximumNumberOfDigitsOnYAxis: $maximumNumberOfDigits,
+                    unitSystem: $this->unitSystem,
+                    translator: $this->translator,
+                );
+                $profileChart = $combinedCharts->build();
+                $profileChartHeight = $combinedCharts->getTotalHeight();
+            } catch (EntityNotFound) {
+            }
+
+            if ($profileChart) {
+                $unprefixedActivityId = $activity->getId()->toUnprefixedString();
+                $this->apiStorage->write(
+                    sprintf('activity/%s/metrics.json', $unprefixedActivityId),
+                    (string) Json::encodeAndCompress($profileChart),
+                );
+                $this->apiStorage->write(
+                    sprintf('activity/%s/coordinates.json', $unprefixedActivityId),
+                    (string) Json::encodeAndCompress($coordinateMap),
+                );
             }
 
             $leafletMap = $activity->getLeafletMap();
             $templateName = sprintf('html/activity/%s.html.twig', $activity->getSportType()->getTemplateName());
-            $gpxFileLocation = sprintf('activities/gpx/%s.gpx', $activity->getId());
+            $gpxFileLocation = sprintf('api/activity/%s/route.gpx', $activity->getId()->toUnprefixedString());
             $activityHasTimeStream = $this->activityStreamRepository->hasOneForActivityAndStreamType($activity->getId(), StreamType::TIME);
 
             $this->buildStorage->write(
                 'activity/'.$activity->getId().'.html',
                 $this->twig->load($templateName)->render([
                     'activity' => $activity,
-                    'leaflet' => $leafletMap ? [
+                    'leaflet' => $leafletMap instanceof LeafletMap ? [
                         'routes' => [$activity->getPolyline()],
                         'map' => $leafletMap,
-                        'gpxLink' => $activityHasTimeStream ? 'files/'.$gpxFileLocation : null,
+                        'gpxLink' => $activityHasTimeStream ? $gpxFileLocation : null,
                     ] : null,
                     'distributionCharts' => $distributionCharts,
                     'segmentEfforts' => $this->segmentEffortRepository->findByActivityId($activity->getId()),
                     'splits' => $activitySplits,
                     'laps' => $this->activityLapRepository->findBy($activity->getId()),
-                    'profileCharts' => array_reverse($activityProfileCharts),
+                    'profileChartHeight' => $profileChartHeight,
+                    'hasProfileChart' => null !== $profileChart,
                     'bestEfforts' => $this->bestEffortsCalculator->forActivity($activity->getId()),
-                    'coordinateMap' => Json::encode($coordinateMap),
                 ]),
             );
 
@@ -273,9 +283,9 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
             );
         }
 
-        $this->buildStorage->write(
-            'fetch-json/activity-data-table.json',
-            Json::encode($dataDatableRows),
+        $this->apiStorage->write(
+            'activity/data-table.json',
+            (string) Json::encodeAndCompress($dataDatableRows),
         );
     }
 }

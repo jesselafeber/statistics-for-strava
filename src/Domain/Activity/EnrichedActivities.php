@@ -36,7 +36,7 @@ final class EnrichedActivities
 
     private function enrichAll(): void
     {
-        if (!empty(self::$cachedActivities)) {
+        if ([] !== self::$cachedActivities) {
             return;
         }
 
@@ -59,21 +59,20 @@ final class EnrichedActivities
 
         foreach ($results as $result) {
             $activity = $this->activityRepository->find(ActivityId::fromString($result));
-            if ($gearId = $activity->getGearId()) {
-                $activity->enrichWithGearName($gears->getByGearId($gearId)?->getName());
-            }
-            $bestPowerOutputs = $this->activityPowerRepository->findBest($activity->getId());
-            if (!$bestPowerOutputs->isEmpty()) {
-                $activity->enrichWithBestPowerOutputs($bestPowerOutputs);
-            }
-
-            $activity->enrichWithNormalizedPower(
-                $this->activityPowerRepository->findNormalizedPower($activity->getId())
-            );
-            $activity->enrichWithTags([
-                ...$maintenanceTags,
-                ...$customGearTags,
-            ]);
+            $activity = $activity
+                ->withNormalizedPower(
+                    $this->activityPowerRepository->findNormalizedPower($activity->getId())
+                )
+                ->withBestPowerOutputs(
+                    $this->activityPowerRepository->findBest($activity->getId())
+                )
+                ->withGearName(
+                    $gears->getByGearId($activity->getGearId())?->getName()
+                )
+                ->withTags([
+                    ...$maintenanceTags,
+                    ...$customGearTags,
+                ]);
 
             try {
                 $cadenceStream = $this->activityStreamRepository->findOneByActivityAndStreamType(
@@ -81,8 +80,8 @@ final class EnrichedActivities
                     streamType: StreamType::CADENCE
                 );
 
-                if (!empty($cadenceStream->getData())) {
-                    $activity->enrichWithMaxCadence(max($cadenceStream->getData()));
+                if ([] !== $cadenceStream->getData()) {
+                    $activity = $activity->withMaxCadence(max($cadenceStream->getData()));
                 }
             } catch (EntityNotFound) {
             }
@@ -124,7 +123,7 @@ final class EnrichedActivities
             )
             ->orderBy('startDateTime', 'DESC');
 
-        if ($activityType) {
+        if ($activityType instanceof ActivityType) {
             $queryBuilder->andWhere('sportType IN (:sportTypes)')
                 ->setParameter(
                     key: 'sportTypes',
