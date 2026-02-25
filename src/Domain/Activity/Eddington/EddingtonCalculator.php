@@ -13,14 +13,13 @@ final readonly class EddingtonCalculator
     public function __construct(
         private EnrichedActivities $enrichedActivities,
         private EddingtonConfiguration $eddingtonConfiguration,
-        private UnitSystem $unitSystem,
     ) {
     }
 
     /**
-     * @return array<string, Eddington>
+     * @return list<Eddington>
      */
-    public function calculate(): array
+    public function calculate(UnitSystem $unitSystem): array
     {
         $eddingtons = [];
         /** @var Config\EddingtonConfigItem $eddingtonConfigItem */
@@ -33,12 +32,12 @@ final readonly class EddingtonCalculator
             $eddington = Eddington::getInstance(
                 activities: $activities,
                 config: $eddingtonConfigItem,
-                unitSystem: $this->unitSystem
+                unitSystem: $unitSystem
             );
             if ($eddington->getNumber() <= 0) {
                 continue;
             }
-            $eddingtons[$eddingtonConfigItem->getId()] = $eddington;
+            $eddingtons[] = $eddington;
         }
 
         return $eddingtons;

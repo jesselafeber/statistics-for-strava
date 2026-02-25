@@ -1,32 +1,35 @@
-import {DataTableStorage} from "./data-table/storage";
-import Router from "./router";
+import {eventBus, Events} from "./core/event-bus";
+import {FilterStorage} from "./features/data-table/storage";
+import Router from "./core/router";
 import {updateGithubLatestRelease} from "./services/github";
 import Sidebar from "./components/sidebar";
-import ChartManager from "./components/charts";
+import ChartManager from "./features/charts/chart-manager";
+import {registerEchartsCallbacks} from "./features/charts/echarts-callbacks";
 import ModalManager from "./components/modals";
-import PhotoWall from "./components/photo-wall";
-import MapManager from "./components/maps";
+import PhotoWall from "./features/photos/photo-wall";
+import MapManager from "./features/maps/map-manager";
 import TabsManager from "./components/tabs";
 import LazyLoad from "../libraries/lazyload.min";
-import DataTableManager from "./components/data-tables";
+import DataTableManager from "./features/data-table/data-table-manager";
 import FullscreenManager from "./components/fullscreen";
-import Heatmap from "./components/heatmap";
+import Heatmap from "./features/heatmap/heatmap";
 import DarkModeManager from "./components/dark-mode";
 
 const $main = document.querySelector("main");
-const dataTableStorage = new DataTableStorage();
 
 // Boot router.
 const router = new Router($main);
 router.boot();
 
-const sidebar = new Sidebar($main);
+registerEchartsCallbacks();
+
+const sidebar = new Sidebar();
 const modalManager = new ModalManager(router);
-const chartManager = new ChartManager(router, dataTableStorage, modalManager);
+const chartManager = new ChartManager(router, modalManager);
 const mapManager = new MapManager();
 const tabsManager = new TabsManager();
-const dataTableManager = new DataTableManager(dataTableStorage);
-const fullscreenManager = new FullscreenManager(chartManager);
+const dataTableManager = new DataTableManager();
+const fullscreenManager = new FullscreenManager();
 const darkModeManager = new DarkModeManager();
 const lazyLoad = new LazyLoad({
     thresholds: "50px",
@@ -54,60 +57,50 @@ const initElements = (rootNode) => {
 sidebar.init();
 darkModeManager.attachEventListeners();
 
-document.addEventListener('darkModeWasToggled', (e) => {
-    chartManager.toggleDarkTheme(e.detail.darkModeEnabled);
-});
-document.addEventListener('fullScreenModeWasEnabled', () => {
-    chartManager.resizeAll();
-});
-document.addEventListener('tabChangeWasTriggered', (e) => {
-    chartManager.resizeInTab(e.detail.activeTabId)
+eventBus.on(Events.DARK_MODE_TOGGLED, ({darkModeEnabled}) => {
+    chartManager.toggleDarkTheme(darkModeEnabled);
 });
 
-document.addEventListener('pageWasLoaded', (e) => {
+eventBus.on(Events.PAGE_LOADED, async ({page, modalId}) => {
     modalManager.close();
 
     chartManager.reset();
     initElements(document);
 
-    if (e.detail && e.detail.modalId) {
-        // Open modal.
-        modalManager.open(e.detail.modalId);
+    if (modalId) {
+        modalManager.open(modalId);
+    }
+
+    if (page === 'heatmap') {
+        const $heatmapWrapper = document.querySelector('.heatmap-wrapper');
+        await new Heatmap($heatmapWrapper, modalManager).render();
+    }
+    if (page === 'photos') {
+        const $photoWallWrapper = document.querySelector('.photo-wall-wrapper');
+        await new PhotoWall($photoWallWrapper).render();
     }
 });
-document.addEventListener('modalWasLoaded', (e) => {
-    const node = e.detail.node;
-    initElements(node);
-});
-document.addEventListener('pageWasLoaded.heatmap', async () => {
-    const $heatmapWrapper = document.querySelector('.heatmap-wrapper');
-    await new Heatmap($heatmapWrapper, modalManager).render();
-});
-document.addEventListener('pageWasLoaded.photos', () => {
-    const $photoWallWrapper = document.querySelector('.photo-wall-wrapper');
-    new PhotoWall($photoWallWrapper, dataTableStorage).render();
-});
-document.addEventListener('navigationLinkHasBeenClicked', (e) => {
-    if (!e.detail || !e.detail.link) {
+eventBus.on(Events.NAVIGATION_CLICKED, ({link}) => {
+    if (!link || !link.hasAttribute('data-filters')) {
         return;
     }
-    if (!e.detail.link.hasAttribute('data-dataTable-filters')) {
-        return;
-    }
-    const filters = JSON.parse(e.detail.link.getAttribute('data-dataTable-filters'));
+    const filters = JSON.parse(link.getAttribute('data-filters'));
     Object.entries(filters).forEach(([tableName, tableFilters]) => {
-        dataTableStorage.set(tableName, tableFilters);
+        FilterStorage.set(tableName, tableFilters);
     });
 });
-document.addEventListener('dataTableClusterWasChanged', (e) => {
-    const node = e.detail.node;
+eventBus.on(Events.MODAL_LOADED, async ({node, modalName}) => {
+    initElements(node);
+
+    if (modalName === 'ai-chat') {
+        const {default: Chat} = await import(
+            /* webpackChunkName: "chat" */ './features/chat/chat'
+            );
+        new Chat(node).render();
+    }
+});
+eventBus.on(Events.DATA_TABLE_CLUSTER_CHANGED, ({node}) => {
     modalManager.init(node);
-});
-window.addEventListener('resize', function () {
-    chartManager.resizeAll();
-});
-document.addEventListener('sidebarWasResized', function () {
-    chartManager.resizeAll();
 });
 
 const $modalAIChat = document.querySelector('a[data-modal-custom-ai]');
@@ -117,18 +110,9 @@ if ($modalAIChat) {
         e.stopPropagation();
         const modalId = $modalAIChat.getAttribute('data-modal-custom-ai');
         modalManager.open(modalId);
-        // Add modal to history state.
         router.pushCurrentRouteToHistoryState(modalId);
     });
 }
-
-document.addEventListener('modalWasLoaded.ai-chat', async (e) => {
-    const {default: Chat} = await import(
-        /* webpackChunkName: "chat" */ './components/chat'
-        );
-    const $modal = e.detail.modal;
-    new Chat($modal).render();
-});
 
 (async () => {
     await updateGithubLatestRelease();

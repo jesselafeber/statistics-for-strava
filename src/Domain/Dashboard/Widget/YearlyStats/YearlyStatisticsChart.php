@@ -129,7 +129,7 @@ final readonly class YearlyStatisticsChart
             'animation' => true,
             'backgroundColor' => null,
             'grid' => [
-                'left' => '0',
+                'left' => '2px',
                 'right' => '10px',
                 'bottom' => '50px',
                 'containLabel' => true,
@@ -154,9 +154,9 @@ final readonly class YearlyStatisticsChart
                 'show' => true,
                 'trigger' => 'axis',
                 'valueFormatter' => match ($this->context) {
-                    StatsContext::MOVING_TIME => 'formatHours',
-                    StatsContext::DISTANCE => 'formatDistance',
-                    StatsContext::ELEVATION => 'formatElevation',
+                    StatsContext::MOVING_TIME => 'callback:formatHours',
+                    StatsContext::DISTANCE => 'callback:formatDistance',
+                    StatsContext::ELEVATION => 'callback:formatElevation',
                 },
             ],
             'yAxis' => [

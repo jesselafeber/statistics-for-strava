@@ -8,46 +8,20 @@ use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Repository\DbalRepository;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
-use Doctrine\DBAL\ArrayParameterType;
 
 final readonly class DbalActivityStreamRepository extends DbalRepository implements ActivityStreamRepository
 {
     public function add(ActivityStream $stream): void
     {
-        $sql = 'INSERT INTO ActivityStream (activityId, streamType, data, createdOn, 
-                    bestAverages, normalizedPower, valueDistribution, computedFieldsState)
-        VALUES (:activityId, :streamType, :data, :createdOn, 
-                    :bestAverages, :normalizedPower, :valueDistribution, :computedFieldsState)';
+        $sql = 'INSERT INTO ActivityStream (activityId, streamType, data, dataSize, createdOn)
+                VALUES (:activityId, :streamType, :data, :dataSize, :createdOn)';
 
         $this->connection->executeStatement($sql, [
             'activityId' => $stream->getActivityId(),
             'streamType' => $stream->getStreamType()->value,
-            'data' => Json::encode($stream->getData()),
+            'data' => Json::encodeAndCompress($stream->getData()),
+            'dataSize' => count($stream->getData()),
             'createdOn' => $stream->getCreatedOn(),
-            'computedFieldsState' => Json::encode($stream->getComputedFieldsState()),
-            'bestAverages' => Json::encode($stream->getBestAverages()),
-            'valueDistribution' => Json::encode($stream->getValueDistribution()),
-            'normalizedPower' => $stream->getNormalizedPower(),
-        ]);
-    }
-
-    public function update(ActivityStream $stream): void
-    {
-        $sql = 'UPDATE ActivityStream 
-        SET bestAverages = :bestAverages, 
-            computedFieldsState = :computedFieldsState,
-            normalizedPower = :normalizedPower,
-            valueDistribution = :valueDistribution
-        WHERE activityId = :activityId
-        AND streamType = :streamType';
-
-        $this->connection->executeStatement($sql, [
-            'activityId' => $stream->getActivityId(),
-            'streamType' => $stream->getStreamType()->value,
-            'computedFieldsState' => Json::encode($stream->getComputedFieldsState()),
-            'bestAverages' => Json::encode($stream->getBestAverages()),
-            'valueDistribution' => Json::encode($stream->getValueDistribution()),
-            'normalizedPower' => $stream->getNormalizedPower(),
         ]);
     }
 
@@ -63,14 +37,14 @@ final readonly class DbalActivityStreamRepository extends DbalRepository impleme
     public function hasOneForActivityAndStreamType(ActivityId $activityId, StreamType $streamType): bool
     {
         $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->select('*')
+        $queryBuilder->select('COUNT(*)')
             ->from('ActivityStream')
             ->andWhere('activityId = :activityId')
             ->setParameter('activityId', $activityId)
             ->andWhere('streamType = :streamType')
             ->setParameter('streamType', $streamType->value);
 
-        return !empty($queryBuilder->executeQuery()->fetchOne());
+        return $queryBuilder->executeQuery()->fetchOne() > 0;
     }
 
     public function findByStreamType(StreamType $streamType): ActivityStreams
@@ -132,60 +106,6 @@ final readonly class DbalActivityStreamRepository extends DbalRepository impleme
         ));
     }
 
-    public function findWithoutBestAverages(int $limit): ActivityStreams
-    {
-        $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->select('*')
-            ->from('ActivityStream')
-            ->andWhere(
-                '(JSON_EXTRACT(computedFieldsState, "$.'.ActivityStream::COMPUTED_FIELD_BEST_AVERAGES.'") != true OR JSON_EXTRACT(computedFieldsState, "$.'.ActivityStream::COMPUTED_FIELD_BEST_AVERAGES.'") IS NULL)')
-            ->orderBy('activityId')
-            ->setMaxResults($limit);
-
-        return ActivityStreams::fromArray(array_map(
-            $this->hydrate(...),
-            $queryBuilder->executeQuery()->fetchAllAssociative()
-        ));
-    }
-
-    public function findWithoutNormalizedPower(int $limit): ActivityStreams
-    {
-        $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->select('*')
-            ->from('ActivityStream')
-            ->andWhere('(JSON_EXTRACT(computedFieldsState, "$.'.ActivityStream::COMPUTED_FIELD_NORMALIZED_POWER.'") != true OR JSON_EXTRACT(computedFieldsState, "$.'.ActivityStream::COMPUTED_FIELD_NORMALIZED_POWER.'") IS NULL)')
-            ->andWhere('streamType = :streamType')
-            ->setParameter('streamType', StreamType::WATTS->value)
-            ->orderBy('activityId')
-            ->setMaxResults($limit);
-
-        return ActivityStreams::fromArray(array_map(
-            $this->hydrate(...),
-            $queryBuilder->executeQuery()->fetchAllAssociative()
-        ));
-    }
-
-    public function findWithoutDistributionValues(int $limit): ActivityStreams
-    {
-        $queryBuilder = $this->connection->createQueryBuilder();
-        $queryBuilder->select('*')
-            ->from('ActivityStream')
-            ->andWhere('(JSON_EXTRACT(computedFieldsState, "$.'.ActivityStream::COMPUTED_FIELD_VALUE_DISTRIBUTION.'") != true OR JSON_EXTRACT(computedFieldsState, "$.'.ActivityStream::COMPUTED_FIELD_VALUE_DISTRIBUTION.'") IS NULL)')
-            ->andWhere('streamType IN(:streamTypes)')
-            ->setParameter('streamTypes', [
-                StreamType::WATTS->value,
-                StreamType::HEART_RATE->value,
-                StreamType::VELOCITY->value,
-            ], ArrayParameterType::STRING)
-            ->orderBy('activityId')
-            ->setMaxResults($limit);
-
-        return ActivityStreams::fromArray(array_map(
-            $this->hydrate(...),
-            $queryBuilder->executeQuery()->fetchAllAssociative()
-        ));
-    }
-
     /**
      * @param array<string, mixed> $result
      */
@@ -194,12 +114,8 @@ final readonly class DbalActivityStreamRepository extends DbalRepository impleme
         return ActivityStream::fromState(
             activityId: ActivityId::fromString($result['activityId']),
             streamType: StreamType::from($result['streamType']),
-            streamData: Json::decode($result['data']),
+            streamData: Json::uncompressAndDecode($result['data']),
             createdOn: SerializableDateTime::fromString($result['createdOn']),
-            computedFieldsState: Json::decode($result['computedFieldsState'] ?? '[]'),
-            valueDistribution: Json::decode($result['valueDistribution'] ?? '[]'),
-            bestAverages: Json::decode($result['bestAverages'] ?? '[]'),
-            normalizedPower: $result['normalizedPower'] ?? null
         );
     }
 }

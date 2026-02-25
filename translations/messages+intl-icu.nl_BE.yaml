@@ -35,6 +35,7 @@ Aug: Aug
 Avg: Gem
 'Back Country Ski': 'Langlaufen'
 Badminton: Badminton
+Basketball: Basketball
 Best: Beste
 'Best effort': 'Beste prestatie'
 'Best efforts': 'Beste prestaties'
@@ -56,11 +57,19 @@ Commutes: Woon-werkverkeer
 Compare: Vergelijken
 'Compare to': 'Vergelijken met'
 'Congrats! You achieved personal bests during this activity.': 'Gefeliciteerd! Je hebt persoonlijke records behaald tijdens deze activiteit.'
+'Consider reducing load': 'Overweeg belasting te verminderen'
+Consistency: Consistentie
+Country: Land
+Cricket: Cricket
 Crossfit: Crossfit
+'Current Status': 'Huidige Status'
+'Current streaks': 'Huidige reeksen'
 'Custom gear disabled': 'Aangepaste uitrusting uitgeschakeld'
 Cycling: Fietsen
 'Daily TRIMP': 'Dagelijkse TRIMP'
 'Daily activities': 'Dagelijkse activiteiten'
+Dance: Dans
+'Dark mode': 'Donkere modus'
 Dashboard: Dashboard
 Date: Datum
 'Days needed': 'Dagen nodig'
@@ -70,6 +79,7 @@ Dec: Dec
 Details: Details
 Device: Apparaat
 Distance: Afstand
+'Distance & Elevation': 'Afstand & Hoogte'
 'Distance breakdown': 'Afstandsverdeling'
 'Distance in {unit}': 'Afstand in {unit}'
 'Distance over time per gear': 'Afstand in tijd per uitrusting'
@@ -78,6 +88,7 @@ Distribution: Verdeling
 'E-Bike Rides': 'E-Bike Ritten'
 'E-Mountain Bike Rides': 'E-Mountainbike Ritten'
 Eddington: Eddington
+'Effort vs heart rate': 'Inspanning vs hartslag'
 Elev: Hoogte
 Elevation: Hoogte
 'Elevation in {unit}': 'Hoogte in {unit}'
@@ -96,6 +107,8 @@ Feb: Feb
 'Filter on sport type': 'Filter op sporttype'
 'Filter on starred segments': 'Filter op favoriete segmenten'
 Fitness: Fitheid
+'Fitness may be declining due to low recent training load': 'Fitheid kan afnemen door lage recente trainingsbelasting'
+'Fitness may decline': 'Fitheid kan afnemen'
 'For example, an Eddington number of 70 would imply that a cyclist has cycled at least 70 km or miles in a day on at least 70 occasions. Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance workouts, since any workout shorter than 75 km or miles will no longer be included in the reckoning.': 'Een Eddington-getal van 70 betekent bijvoorbeeld dat een fietser minstens 70 keer op een dag minstens 70 km of mijl heeft gefietst. Het is moeilijk om een hoog Eddington-getal te bereiken, want om van bijvoorbeeld 70 naar 75 te gaan, zijn (waarschijnlijk) meer dan vijf nieuwe langeafstandstrainingen nodig, omdat elke training korter dan 75 km niet meer wordt meegerekend.'
 'Form (TSB)': 'Vorm (TSB)'
 'Fresh – reduced training load': 'Fris – verminderde trainingsbelasting'
@@ -131,9 +144,11 @@ History: Historiek
 'Ice Skate': 'Schaatsen'
 Id: Id
 'Image "{imgSrc}" is referenced in your maintenance config file, but was not found in "storage/gear-maintenance"': 'Afbeelding "{imgSrc}" wordt vermeld in je onderhoudsconfiguratiebestand, maar is niet gevonden in "storage/gear-maintenance"'
+Imperial: Imperiaal
 "In that time, I've covered {totalDistance}, that's {numberOfTripsAroundTheWorld} trips around the world 🌍 or {numberOfTripsToTheMoonPercent}% of the way to the moon 🌕, and climbed an elevation of {totalElevation} which is {timesMountEverest} times Mount Everest 🏔. All up that's {totalTimeRecorded} of moving time 🎉.": "In die tijd heb ik {totalDistance} afgelegd, dat is {numberOfTripsAroundTheWorld} keer rond de wereld 🌍 of {numberOfTripsToTheMoonPercent}% van de weg naar de maan 🌕, en een hoogte beklommen van {totalElevation}, wat {timesMountEverest} keer de Mount Everest is 🏔. In totaal is dat {totalTimeRecorded} aan beweegtijd 🎉."
 'Individual thresholds vary based on fitness level.': 'Individuele drempels variëren op basis van fitnessniveau.'
 'Inline Skate': 'Inline Skaten'
+Intensity: Intensiteit
 'It looks like no valid gear is attached to any of the components. Please check your config file.': 'Het lijkt erop dat er geen geldige uitrusting is gekoppeld aan een van de onderdelen. Controleer je configuratiebestand.'
 Jan: Jan
 Jul: Jul
@@ -165,8 +180,10 @@ Max: Max
 'Max gradient': 'Max helling'
 May: Mei
 Medium: Gemiddeld
+Metric: Metrisch
 Metrics: Metrieken
 'Mind & Body Sports': 'Geest & Lichaam Sporten'
+'Moderate fatigue with stable fitness. Well suited for consistent day-to-day training': 'Matige vermoeidheid met stabiele fitheid. Geschikt voor consistente dagelijkse training'
 'Moderate monotony': 'Matige eentonigheid'
 Mon: Ma
 Monday: Maandag
@@ -192,11 +209,13 @@ Nov: Nov
 'Number of activities per month': 'Aantal activiteiten per maand'
 'Number of times completed': 'Aantal keer voltooid'
 Oct: Okt
+'Older effort': 'Oudere inspanning'
 'On average, that works out to {dailyAverage} per day, a weekly average of {weeklyAverage} and a monthly average of {monthlyAverage} 🐣.': 'Gemiddeld komt dat neer op {dailyAverage} per dag, een weekgemiddelde van {weeklyAverage} en een maandgemiddelde van {monthlyAverage} 🐣.'
 'One of your gear maintenance tasks is due': 'Een van je uitrustingsonderhoudstaken is aan de beurt'
 'Optimal training range': 'Optimale trainingsbereik'
 Other: Overig
 'Outdoor Sports': 'Buitensporten'
+Over-fatigued: Oververmoeid
 'Over-fatigued (–30)': 'Oververmoeid (–30)'
 'Over-fatigued – risk of injury or burnout, extra recovery needed': 'Oververmoeid – risico op blessure of burn-out, extra herstel nodig'
 'Overall weekly training stress': 'Totale wekelijkse trainingsstress'
@@ -206,6 +225,8 @@ PRs: PRs
 'PRs achieved per month': 'PRs behaald per maand'
 Pace: Tempo
 'Pace distribution': 'Tempoverdeling'
+Padel: Padel
+'Peak fresh': 'Topfris'
 'Peak power outputs': 'Piek vermogensoutputs'
 'Peak-fresh, race-ready – ideal taper sweet spot': 'Topfris, wedstrijdklaar – ideale taper sweet spot'
 'Personal Records': 'Persoonlijke Records'
@@ -224,6 +245,9 @@ Race: Wedstrijd
 'Racquet & Paddle Sports': 'Racket & Padelsporten'
 'Racquet Ball': 'Racquetball'
 Ranking: Ranglijst
+'Recent effort': 'Recente inspanning'
+'Recovery Timeline': 'Hersteltijdlijn'
+'Recovery forecast': 'Herstelvoorspelling'
 'Reduced carbon emission by commuting': 'Verminderde CO2-uitstoot door woon-werkverkeer'
 'Relative cost': 'Relatieve kosten'
 'Rest Days': 'Rustdagen'
@@ -278,6 +302,7 @@ Swim: Zwemmen
 Tag: Tag
 'Tag "{maintenanceTaskTag}" was used on "{activityName}", but the gear referenced on that activity is not attached to this component.': 'Tag "{maintenanceTaskTag}" is gebruikt bij "{activityName}", maar de uitrusting die bij die activiteit hoort is niet gekoppeld aan dit onderdeel.'
 'Taper sweet-spot (+15)': 'Taper sweet-spot (+15)'
+'Team Sports': 'Team Sports'
 Tennis: Tennis
 'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.': 'Het Eddington-getal in de context van fietsen of hardlopen is gedefinieerd als het maximale aantal E zodanig dat de atleet ten minste E km heeft afgelegd op ten minste E dagen.'
 'These badges are dynamically created. You can use them in any &lt;img&gt; tag': 'Deze badges worden dynamisch aangemaakt. Je kunt ze gebruiken in elke &lt;img&gt; tag'
@@ -320,6 +345,8 @@ Unspecified: Niet gespecificeerd
 'Virtual Row': 'Virtueel Roeien'
 'Virtual Runs': 'Virtuele Runs'
 'Virtual workout assistant': 'Virtuele workout assistent'
+Volleyball: Volleybal
+Volume: Volume
 Walking: Wandelen
 Walks: Wandelingen
 'Water Sports': 'Watersport'
@@ -377,8 +404,11 @@ hrs: u
 intensity: intensiteit
 intensityFactor: intensiteitsfactor
 kudos: kudos
+'last {numberOfDays} days': 'laatste {numberOfDays} dagen'
+max: max
 'max gradient': 'max helling'
 maxHeartRate: maxHartslag
+min: min
 months: maanden
 more: meer
 n/a: n.v.t.

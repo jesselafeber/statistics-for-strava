@@ -12,25 +12,7 @@ final readonly class EncodedPolyline extends NonEmptyStringLiteral
 
     public function getStartingCoordinate(): Coordinate
     {
-        $encodedPolyline = (string) $this;
-        $points = [];
-        $index = $i = 0;
-        $previous = [0, 0];
-
-        while ($i < strlen($encodedPolyline) && count($points) < 2) {
-            $shift = $result = 0x00;
-            do {
-                $bit = ord($encodedPolyline[$i++]) - 63;
-                $result |= ($bit & 0x1F) << $shift;
-                $shift += 5;
-            } while ($bit >= 0x20);
-
-            $diff = (($result & 1) !== 0) ? ~($result >> 1) : ($result >> 1);
-            $number = $previous[$index % 2] + $diff;
-            $previous[$index % 2] = $number;
-            $points[] = $number / 10 ** self::PRECISION;
-            ++$index;
-        }
+        $points = $this->decodePoints(maxPoints: 2);
 
         return Coordinate::createFromLatAndLng(
             latitude: Latitude::fromString((string) $points[0]),
@@ -43,11 +25,42 @@ final readonly class EncodedPolyline extends NonEmptyStringLiteral
      */
     public function decode(): array
     {
+        return $this->decodePoints();
+    }
+
+    /**
+     * @return array<int, array<float, float>>
+     */
+    public function decodeAndPairLngLat(): array
+    {
+        return array_map(
+            fn (array $pair): array => [$pair[1], $pair[0]],
+            array_chunk($this->decode(), 2)
+        );
+    }
+
+    /**
+     * @return array<int, array<float, float>>
+     */
+    public function decodeAndPairLatLng(): array
+    {
+        return array_map(
+            fn (array $pair): array => [$pair[0], $pair[1]],
+            array_chunk($this->decode(), 2)
+        );
+    }
+
+    /**
+     * @return float[]
+     */
+    private function decodePoints(?int $maxPoints = null): array
+    {
         $encodedPolyline = (string) $this;
         $points = [];
         $index = $i = 0;
         $previous = [0, 0];
-        while ($i < strlen($encodedPolyline)) {
+
+        while ($i < strlen($encodedPolyline) && (null === $maxPoints || count($points) < $maxPoints)) {
             $shift = $result = 0x00;
             do {
                 $bit = ord($encodedPolyline[$i++]) - 63;
@@ -58,21 +71,10 @@ final readonly class EncodedPolyline extends NonEmptyStringLiteral
             $diff = (($result & 1) !== 0) ? ~($result >> 1) : ($result >> 1);
             $number = $previous[$index % 2] + $diff;
             $previous[$index % 2] = $number;
-            ++$index;
             $points[] = $number / 10 ** self::PRECISION;
+            ++$index;
         }
 
         return $points;
-    }
-
-    /**
-     * @return array<int, array<float, float>>
-     */
-    public function decodeAndPairLonLat(): array
-    {
-        return array_map(
-            fn (array $pair): array => [$pair[1], $pair[0]],
-            array_chunk($this->decode(), 2)
-        );
     }
 }

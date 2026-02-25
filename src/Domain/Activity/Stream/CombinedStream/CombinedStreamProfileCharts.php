@@ -172,6 +172,7 @@ final readonly class CombinedStreamProfileCharts
                 'axisLabel' => [
                     'show' => true,
                     'customValues' => [$minYAxis, $maxYAxis],
+                    'formatter' => CombinedStreamType::PACE === $yAxisStreamType ? 'callback:formatSecondsTrimZero' : null,
                     'color' => '#aaa',
                     'verticalAlignMaxLabel' => 'top',
                     'verticalAlignMinLabel' => 'bottom',
@@ -253,7 +254,7 @@ final readonly class CombinedStreamProfileCharts
             ],
             'tooltip' => [
                 'trigger' => 'axis',
-                'formatter' => 'formatCombinedProfileTooltip',
+                'formatter' => 'callback:formatCombinedProfileTooltip',
             ],
             'dataZoom' => [
                 [

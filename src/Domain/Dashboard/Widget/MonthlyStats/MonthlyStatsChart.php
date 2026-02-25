@@ -96,7 +96,7 @@ final readonly class MonthlyStatsChart
             'animation' => false,
             'grid' => [
                 'top' => '50px',
-                'left' => '0',
+                'left' => '2px',
                 'right' => '10px',
                 'bottom' => '2%',
                 'containLabel' => true,
@@ -104,9 +104,9 @@ final readonly class MonthlyStatsChart
             'tooltip' => [
                 'trigger' => 'axis',
                 'valueFormatter' => match ($this->context) {
-                    StatsContext::MOVING_TIME => 'formatHours',
-                    StatsContext::DISTANCE => 'formatDistance',
-                    StatsContext::ELEVATION => 'formatElevation',
+                    StatsContext::MOVING_TIME => 'callback:formatHours',
+                    StatsContext::DISTANCE => 'callback:formatDistance',
+                    StatsContext::ELEVATION => 'callback:formatElevation',
                 },
             ],
             'legend' => [

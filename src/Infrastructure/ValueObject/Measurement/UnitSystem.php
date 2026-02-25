@@ -12,11 +12,21 @@ use App\Infrastructure\ValueObject\Measurement\Mass\Kilogram;
 use App\Infrastructure\ValueObject\Measurement\Mass\Pound;
 use App\Infrastructure\ValueObject\Measurement\Velocity\KmPerHour;
 use App\Infrastructure\ValueObject\Measurement\Velocity\MilesPerHour;
+use Symfony\Contracts\Translation\TranslatableInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-enum UnitSystem: string
+enum UnitSystem: string implements TranslatableInterface
 {
     case METRIC = 'metric';
     case IMPERIAL = 'imperial';
+
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string
+    {
+        return match ($this) {
+            self::METRIC => $translator->trans('Metric', locale: $locale),
+            self::IMPERIAL => $translator->trans('Imperial', locale: $locale),
+        };
+    }
 
     public function distance(float $value): Kilometer|Mile
     {
@@ -81,5 +91,21 @@ enum UnitSystem: string
         }
 
         return '/mi';
+    }
+
+    public function getSvgIcon(): string
+    {
+        return match ($this) {
+            self::METRIC => 'ruler',
+            self::IMPERIAL => 'vader',
+        };
+    }
+
+    /**
+     * @return UnitSystem[]
+     */
+    public function casesWithPreferredFirst(): array
+    {
+        return [$this, ...array_filter(self::cases(), fn (self $case): bool => $case !== $this)];
     }
 }

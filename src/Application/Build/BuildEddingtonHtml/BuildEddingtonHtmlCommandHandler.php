@@ -6,7 +6,6 @@ namespace App\Application\Build\BuildEddingtonHtml;
 
 use App\Domain\Activity\Eddington\EddingtonCalculator;
 use App\Domain\Activity\Eddington\EddingtonChart;
-use App\Domain\Activity\Eddington\EddingtonDaysNeededChart;
 use App\Domain\Activity\Eddington\EddingtonHistoryChart;
 use App\Infrastructure\CQRS\Command\Command;
 use App\Infrastructure\CQRS\Command\CommandHandler;
@@ -31,16 +30,20 @@ final readonly class BuildEddingtonHtmlCommandHandler implements CommandHandler
     {
         assert($command instanceof BuildEddingtonHtml);
 
-        $eddingtons = $this->eddingtonCalculator->calculate();
-
         $eddingtonCharts = [];
         $eddingtonHistoryCharts = [];
-        $eddingtonDaysNeededCharts = [];
-        foreach ($eddingtons as $id => $eddington) {
+        $allEddingtons = [];
+
+        foreach (UnitSystem::cases() as $unitSystem) {
+            $allEddingtons = [...$allEddingtons, ...$this->eddingtonCalculator->calculate($unitSystem)];
+        }
+
+        foreach ($allEddingtons as $eddington) {
+            $id = $eddington->getId();
             $eddingtonCharts[$id] = Json::encode(
                 EddingtonChart::create(
                     eddington: $eddington,
-                    unitSystem: $this->unitSystem,
+                    unitSystem: $eddington->getUnitSystem(),
                     translator: $this->translator,
                 )->build()
             );
@@ -49,21 +52,15 @@ final readonly class BuildEddingtonHtmlCommandHandler implements CommandHandler
                     eddington: $eddington,
                 )->build()
             );
-            $eddingtonDaysNeededCharts[$id] = Json::encode(
-                EddingtonDaysNeededChart::create(
-                    eddington: $eddington,
-                    unitSystem: $this->unitSystem,
-                )->build()
-            );
         }
 
         $this->buildStorage->write(
             'eddington.html',
             $this->twig->load('html/eddington.html.twig')->render([
-                'eddingtons' => $eddingtons,
+                'activeUnitSystem' => $this->unitSystem,
+                'eddingtons' => $allEddingtons,
                 'eddingtonCharts' => $eddingtonCharts,
                 'eddingtonHistoryCharts' => $eddingtonHistoryCharts,
-                'eddingtonDaysNeededCharts' => $eddingtonDaysNeededCharts,
             ]),
         );
     }

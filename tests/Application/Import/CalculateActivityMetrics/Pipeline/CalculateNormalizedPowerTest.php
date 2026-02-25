@@ -5,16 +5,21 @@ namespace App\Tests\Application\Import\CalculateActivityMetrics\Pipeline;
 use App\Application\Import\CalculateActivityMetrics\Pipeline\CalculateNormalizedPower;
 use App\Domain\Activity\ActivityId;
 use App\Domain\Activity\Stream\ActivityStreamRepository;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetric;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetricRepository;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetricType;
 use App\Domain\Activity\Stream\StreamType;
 use App\Infrastructure\Serialization\Json;
 use App\Tests\ContainerTestCase;
 use App\Tests\Domain\Activity\Stream\ActivityStreamBuilder;
+use App\Tests\ProvideSnapshotAssertion;
 use App\Tests\SpyOutput;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class CalculateNormalizedPowerTest extends ContainerTestCase
 {
     use MatchesSnapshots;
+    use ProvideSnapshotAssertion;
 
     private CalculateNormalizedPower $calculateNormalizedPower;
 
@@ -47,16 +52,22 @@ class CalculateNormalizedPowerTest extends ContainerTestCase
             ->withActivityId(ActivityId::fromUnprefixed(5))
             ->withStreamType(StreamType::WATTS)
             ->withData([])
-            ->withNormalizedPower(10)
             ->build();
         $this->getContainer()->get(ActivityStreamRepository::class)->add($stream);
+
+        $this->getContainer()->get(ActivityStreamMetricRepository::class)->add(ActivityStreamMetric::create(
+            activityId: ActivityId::fromUnprefixed(5),
+            streamType: StreamType::WATTS,
+            metricType: ActivityStreamMetricType::NORMALIZED_POWER,
+            data: [10],
+        ));
 
         $this->calculateNormalizedPower->process($output);
 
         $this->assertMatchesTextSnapshot($output);
-        $this->assertMatchesJsonSnapshot(
-            Json::encode($this->getConnection()
-                ->executeQuery('SELECT activityId, streamType, normalizedPower FROM ActivityStream')->fetchAllAssociative())
+        $this->assertCompressedDatabaseQueryMatchesSnapshot(
+            'SELECT activityId, streamType, metricType, data FROM ActivityStreamMetric WHERE metricType = :metricType',
+            ['metricType' => ActivityStreamMetricType::NORMALIZED_POWER->value],
         );
     }
 

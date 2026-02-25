@@ -19,7 +19,7 @@ Keep track of your gear and stay on top of maintenance tasks with our **Gear Mai
 
 ## Setup
 
-* Make sure you referenced the directory where you want to manage your config as a volume
+* Make sure you referenced the directory where you want to manage your gear images as a volume
 
 ```yaml
 services:
@@ -29,19 +29,34 @@ services:
     volumes:
       - ./config:/var/www/config/app
       # ...
-      - ./storage/gear-maintenance:/var/www/storage/gear-maintenance
+      - ./storage/gear-maintenance:/var/www/storage/gear-maintenance # Gear maintenance images
   daemon:
     image: robiningelbrecht/strava-statistics:latest
     container_name: statistics-for-strava-daemon
     volumes:
       - ./config:/var/www/config/app
       # ...
-      - ./storage/gear-maintenance:/var/www/storage/gear-maintenance
+      - ./storage/gear-maintenance:/var/www/storage/gear-maintenance # Gear maintenance images
 ```
 
 * Create a new file `gear-maintenance.yaml` in `./config`
 
-## Example
+### Example structure
+
+You should end up with the following directory structure:
+
+```bash
+  project/
+  ├── config/
+  │   ├── config.yaml
+  │   └── gear-maintenance.yaml   # config file lives here
+  └── storage/
+      └── gear-maintenance/
+          ├── chain.png           # Images go here
+          └── gear1.png
+```
+
+## Example config
 
 ```yml
 # Set to true to enable the gear maintenance feature

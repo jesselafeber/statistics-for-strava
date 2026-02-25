@@ -19,6 +19,8 @@ use App\Domain\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Activity\Stream\CombinedStream\CombinedActivityStreamRepository;
 use App\Domain\Activity\Stream\CombinedStream\CombinedStreamProfileCharts;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetricRepository;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetricType;
 use App\Domain\Activity\Stream\StreamType;
 use App\Domain\Activity\VelocityDistributionChart;
 use App\Domain\Athlete\AthleteRepository;
@@ -43,6 +45,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
         private AthleteRepository $athleteRepository,
         private EnrichedActivities $enrichedActivities,
         private ActivityStreamRepository $activityStreamRepository,
+        private ActivityStreamMetricRepository $activityStreamMetricRepository,
         private CombinedActivityStreamRepository $combinedActivityStreamRepository,
         private ActivitySplitRepository $activitySplitRepository,
         private ActivityLapRepository $activityLapRepository,
@@ -94,27 +97,23 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
             $activityType = $activity->getSportType()->getActivityType();
 
             $heartRateStream = null;
-            $powerStream = null;
-            $velocityStream = null;
             try {
                 $heartRateStream = $this->activityStreamRepository->findOneByActivityAndStreamType($activity->getId(), StreamType::HEART_RATE);
             } catch (EntityNotFound) {
             }
-            try {
-                $powerStream = $this->activityStreamRepository->findOneByActivityAndStreamType($activity->getId(), StreamType::WATTS);
-            } catch (EntityNotFound) {
-            }
-            try {
-                $velocityStream = $this->activityStreamRepository->findOneByActivityAndStreamType($activity->getId(), StreamType::VELOCITY);
-            } catch (EntityNotFound) {
-            }
+
+            $valueDistributionMetrics = $this->activityStreamMetricRepository->findByActivityIdAndMetricType(
+                $activity->getId(),
+                ActivityStreamMetricType::VALUE_DISTRIBUTION
+            );
 
             $distributionCharts = [];
-            if ($activity->getAverageHeartRate() && $heartRateStream && [] !== $heartRateStream->getValueDistribution()) {
+            $heartRateDistribution = $valueDistributionMetrics->filterOnStreamType(StreamType::HEART_RATE)?->getData() ?? [];
+            if ($activity->getAverageHeartRate() && [] !== $heartRateDistribution) {
                 $distributionCharts[] = [
                     'title' => $this->translator->trans('Heart rate distribution'),
                     'data' => Json::encode(HeartRateDistributionChart::create(
-                        heartRateData: $heartRateStream->getValueDistribution(),
+                        heartRateData: $heartRateDistribution,
                         averageHeartRate: $activity->getAverageHeartRate(),
                         athleteMaxHeartRate: $athlete->getMaxHeartRate($activity->getStartDate()),
                         heartRateZones: $this->heartRateZoneConfiguration->getHeartRateZonesFor(
@@ -125,8 +124,9 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                 ];
             }
 
+            $powerDistribution = $valueDistributionMetrics->filterOnStreamType(StreamType::WATTS)?->getData() ?? [];
             if ($activityType->supportsPowerData() && $activity->getAveragePower()
-                && $powerStream && count($powerStream->getValueDistribution()) > 1) {
+                && count($powerDistribution) > 1) {
                 $ftp = null;
                 try {
                     $ftp = $this->ftpHistory->find(
@@ -137,7 +137,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                 }
 
                 $powerDistributionChart = PowerDistributionChart::create(
-                    powerData: $powerStream->getValueDistribution(),
+                    powerData: $powerDistribution,
                     averagePower: $activity->getAveragePower(),
                     ftp: $ftp,
                 )->build();
@@ -149,11 +149,13 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                     ];
                 }
             }
-            if ($velocityStream && [] !== $velocityStream->getValueDistribution()) {
+
+            $velocityDistribution = $valueDistributionMetrics->filterOnStreamType(StreamType::VELOCITY)?->getData() ?? [];
+            if ([] !== $velocityDistribution) {
                 $velocityUnitPreference = $activity->getSportType()->getVelocityDisplayPreference();
 
                 $velocityDistributionChart = VelocityDistributionChart::create(
-                    velocityData: $velocityStream->getValueDistribution(),
+                    velocityData: $velocityDistribution,
                     averageSpeed: $activity->getAverageSpeed(),
                     sportType: $activity->getSportType(),
                     unitSystem: $this->unitSystem,
@@ -235,8 +237,8 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
             } catch (EntityNotFound) {
             }
 
+            $unprefixedActivityId = $activity->getId()->toUnprefixedString();
             if ($profileChart) {
-                $unprefixedActivityId = $activity->getId()->toUnprefixedString();
                 $this->apiStorage->write(
                     sprintf('activity/%s/metrics.json', $unprefixedActivityId),
                     (string) Json::encodeAndCompress($profileChart),
@@ -247,9 +249,16 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                 );
             }
 
-            $leafletMap = $activity->getLeafletMap();
+            $polylinesFileLocation = sprintf('activity/%s/polylines.json', $unprefixedActivityId);
+            if (($leafletMap = $activity->getLeafletMap()) instanceof LeafletMap) {
+                $coordinates = $coordinateMap ?: $activity->getEncodedPolyline()?->decodeAndPairLatLng();
+                $this->apiStorage->write(
+                    $polylinesFileLocation,
+                    (string) Json::encodeAndCompress([$coordinates]),
+                );
+            }
             $templateName = sprintf('html/activity/%s.html.twig', $activity->getSportType()->getTemplateName());
-            $gpxFileLocation = sprintf('api/activity/%s/route.gpx', $activity->getId()->toUnprefixedString());
+            $gpxFileLocation = sprintf('api/activity/%s/route.gpx', $unprefixedActivityId);
             $activityHasTimeStream = $this->activityStreamRepository->hasOneForActivityAndStreamType($activity->getId(), StreamType::TIME);
 
             $this->buildStorage->write(
@@ -257,7 +266,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                 $this->twig->load($templateName)->render([
                     'activity' => $activity,
                     'leaflet' => $leafletMap instanceof LeafletMap ? [
-                        'routes' => [$activity->getPolyline()],
+                        'polylineUrl' => $polylinesFileLocation,
                         'map' => $leafletMap,
                         'gpxLink' => $activityHasTimeStream ? $gpxFileLocation : null,
                     ] : null,
@@ -277,7 +286,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                     'activity' => $activity,
                 ]),
                 searchables: $activity->getSearchables(),
-                filterables: $activity->getFilterables(),
+                filterables: $activity->getFilterables($this->unitSystem),
                 sortValues: $activity->getSortables(),
                 summables: $activity->getSummables($this->unitSystem),
             );

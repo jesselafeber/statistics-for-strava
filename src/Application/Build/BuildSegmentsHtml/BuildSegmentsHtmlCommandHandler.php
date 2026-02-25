@@ -9,13 +9,16 @@ use App\Domain\Activity\SportType\SportTypeRepository;
 use App\Domain\Segment\Segment;
 use App\Domain\Segment\SegmentEffort\SegmentEffortHistoryChart;
 use App\Domain\Segment\SegmentEffort\SegmentEffortRepository;
+use App\Domain\Segment\SegmentEffort\SegmentEffortVsHeartRateChart;
 use App\Domain\Segment\SegmentRepository;
 use App\Infrastructure\CQRS\Command\Command;
 use App\Infrastructure\CQRS\Command\CommandHandler;
 use App\Infrastructure\Repository\Pagination;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\DataTableRow;
+use App\Infrastructure\ValueObject\Measurement\UnitSystem;
 use League\Flysystem\FilesystemOperator;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
@@ -28,6 +31,8 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
         private Environment $twig,
         private FilesystemOperator $buildStorage,
         private FilesystemOperator $apiStorage,
+        private UnitSystem $unitSystem,
+        private TranslatorInterface $translator,
     ) {
     }
 
@@ -45,23 +50,38 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
             /** @var Segment $segment */
             foreach ($segments as $segment) {
                 $segmentEffortsTopTen = $this->segmentEffortRepository->findTopXBySegmentId($segment->getId(), 10);
-                $segmentEffortsHistory = $this->segmentEffortRepository->findHistoryBySegmentId($segment->getId());
+                $segmentEfforts = $this->segmentEffortRepository->findBySegmentId($segment->getId());
                 $segment = $segment
                     ->withNumberOfTimesRidden($this->segmentEffortRepository->countBySegmentId($segment->getId()))
                     ->withBestEffort($segmentEffortsTopTen->getBestEffort())
-                    ->withLastEffortDate($segmentEffortsHistory->getFirst()?->getStartDateTime());
+                    ->withLastEffortDate($segmentEfforts->getFirst()?->getStartDateTime());
 
-                $leafletMap = $segment->getLeafletMap();
+                $polylinesFileLocation = sprintf('segment/%s/polylines.json', $segment->getId()->toUnprefixedString());
+                if (($leafletMap = $segment->getLeafletMap()) && !$this->apiStorage->fileExists($polylinesFileLocation)) {
+                    $this->apiStorage->write(
+                        $polylinesFileLocation,
+                        (string) Json::encodeAndCompress([$segment->getPolyline()?->decodeAndPairLatLng()]),
+                    );
+                }
+
                 $this->buildStorage->write(
                     'segment/'.$segment->getId().'.html',
                     $this->twig->load('html/segment/segment.html.twig')->render([
                         'segment' => $segment,
                         'segmentEffortsTopTen' => $segmentEffortsTopTen,
+                        'segmentEffortsVsHeartRateChart' => Json::encode(
+                            SegmentEffortVsHeartRateChart::create(
+                                segmentEfforts: $segmentEfforts,
+                                sportType: $segment->getSportType(),
+                                unitSystem: $this->unitSystem,
+                                translator: $this->translator
+                            )->build()
+                        ),
                         'segmentEffortsHistoryChart' => Json::encode(
-                            SegmentEffortHistoryChart::create($segmentEffortsHistory)->build()
+                            SegmentEffortHistoryChart::create($segmentEfforts)->build()
                         ),
                         'leaflet' => $leafletMap ? [
-                            'routes' => [$segment->getPolyline()],
+                            'polylineUrl' => $polylinesFileLocation,
                             'map' => $leafletMap,
                         ] : null,
                     ]),

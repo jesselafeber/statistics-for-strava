@@ -3,12 +3,14 @@
 namespace App\Tests\Domain\Activity;
 
 use App\Domain\Activity\ActivityIntensity;
+use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\ActivityWithRawData;
-use App\Domain\Activity\ActivityWithRawDataRepository;
 use App\Domain\Activity\DailyTrainingLoad;
 use App\Domain\Activity\EnrichedActivities;
 use App\Domain\Activity\SportType\SportType;
-use App\Domain\Activity\Stream\ActivityStreamRepository;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetric;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetricRepository;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetricType;
 use App\Domain\Activity\Stream\StreamType;
 use App\Domain\Athlete\Athlete;
 use App\Domain\Athlete\AthleteRepository;
@@ -19,7 +21,6 @@ use App\Domain\Ftp\FtpHistory;
 use App\Infrastructure\KeyValue\KeyValueStore;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\ContainerTestCase;
-use App\Tests\Domain\Activity\Stream\ActivityStreamBuilder;
 
 class DailyTrainingLoadTest extends ContainerTestCase
 {
@@ -39,17 +40,16 @@ class DailyTrainingLoadTest extends ContainerTestCase
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10'))
             ->build();
 
-        $this->getContainer()->get(ActivityWithRawDataRepository::class)->add(ActivityWithRawData::fromState(
+        $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
             $activity,
             []
         ));
-        $this->getContainer()->get(ActivityStreamRepository::class)->add(
-            ActivityStreamBuilder::fromDefaults()
-                ->withActivityId($activity->getId())
-                ->withStreamType(StreamType::WATTS)
-                ->withNormalizedPower(250)
-                ->build()
-        );
+        $this->getContainer()->get(ActivityStreamMetricRepository::class)->add(ActivityStreamMetric::create(
+            activityId: $activity->getId(),
+            streamType: StreamType::WATTS,
+            metricType: ActivityStreamMetricType::NORMALIZED_POWER,
+            data: [250],
+        ));
 
         $this->assertEquals(
             100,
@@ -89,17 +89,16 @@ class DailyTrainingLoadTest extends ContainerTestCase
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10'))
             ->build();
 
-        $this->getContainer()->get(ActivityWithRawDataRepository::class)->add(ActivityWithRawData::fromState(
+        $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
             $activity,
             []
         ));
-        $this->getContainer()->get(ActivityStreamRepository::class)->add(
-            ActivityStreamBuilder::fromDefaults()
-                ->withActivityId($activity->getId())
-                ->withStreamType(StreamType::WATTS)
-                ->withNormalizedPower(250)
-                ->build()
-        );
+        $this->getContainer()->get(ActivityStreamMetricRepository::class)->add(ActivityStreamMetric::create(
+            activityId: $activity->getId(),
+            streamType: StreamType::WATTS,
+            metricType: ActivityStreamMetricType::NORMALIZED_POWER,
+            data: [250],
+        ));
 
         $this->assertEquals(
             277,
@@ -115,7 +114,7 @@ class DailyTrainingLoadTest extends ContainerTestCase
             ->withStartDateTime(SerializableDateTime::fromString('2023-10-10'))
             ->build();
 
-        $this->getContainer()->get(ActivityWithRawDataRepository::class)->add(ActivityWithRawData::fromState(
+        $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
             $activity,
             []
         ));
@@ -138,7 +137,7 @@ class DailyTrainingLoadTest extends ContainerTestCase
             ->withAverageHeartRate(0)
             ->build();
 
-        $this->getContainer()->get(ActivityWithRawDataRepository::class)->add(ActivityWithRawData::fromState(
+        $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
             $activity,
             []
         ));

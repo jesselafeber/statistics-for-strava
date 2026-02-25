@@ -1,7 +1,14 @@
 @import "tailwindcss" source(none);
 @import "../../node_modules/flowbite/src/themes/default.css";
-@import "./chat.css";
-@import "./dark-mode.css";
+@import "./components/chat.css";
+@import "./components/dark-mode.css";
+@import "./components/filter-dropdown.css";
+@import "./components/tabs.css";
+@import "./components/popover.css";
+@import "./components/modal.css";
+@import "./components/badge.css";
+@import "./components/leaflet.css";
+@import "./components/sidebar.css";
 
 @source "../../templates/**/*.html.twig";
 @source "../../public/*.html";
@@ -22,6 +29,8 @@
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 @custom-variant aria-asc (&[aria-sort="ascending"]);
 @custom-variant aria-desc (&[aria-sort="descending"]);
+@custom-variant sidebar-collapsed (&:where([data-sidebar-collapsed], [data-sidebar-collapsed] *));
+@custom-variant fullscreen-enabled (&:where([data-fullscreen-enabled], [data-fullscreen-enabled] *));
 
 @layer base {
     *,
@@ -47,68 +56,12 @@
         @apply scrollbar-thin;
     }
 
-    .leaflet-tile-pane {
-        -webkit-filter: grayscale(100%);
-        filter: grayscale(100%);
-    }
-
-    #heatmap .leaflet-tile-pane {
-        -webkit-filter: grayscale(0);
-        filter: grayscale(0);
-    }
-
-    #heatmap.enable-grey-scale .leaflet-tile-pane {
-        -webkit-filter: grayscale(100%) brightness(75%);
-        filter: grayscale(100%) brightness(75%);
-    }
-
-    .leaflet-popup-content-wrapper .leaflet-popup-content{
-        @apply text-base! m-0! leading-none!;
-    }
-
-    .leaflet-control--custom {
-        @apply rounded-sm border-2 border-black/30 bg-white bg-clip-padding divide-y divide-grey-yo;
-
-        & li {
-            @apply p-1 cursor-pointer hover:bg-[#f4f4f4];
-        }
-    }
 }
 
 @layer components {
-    div.filter-dropdown > button[data-dropdown-toggle]{
-        @apply cursor-pointer w-fit text-strava-orange border border-strava-orange [&.active]:text-white [&.active]:bg-strava-orange [&.active]:hover:bg-orange-600 [&.active]:hover:border-orange-600 hover:ring-3 hover:outline-hidden hover:ring-orange-300 font-medium rounded-lg text-sm px-3 py-2 inline-flex items-center justify-between
-    }
-
-    div.tabs.tabs--default{
-        @apply mb-4 border-b-2 border-gray-100;
-
-        & > ul{
-            @apply flex gap-x-2 overflow-x-auto -mb-0.5 text-sm font-medium text-center;
-
-            & > li {
-                @apply shrink-0;
-
-                & > a {
-                    @apply inline-flex items-center justify-center p-2 border-b-2;
-                }
-            }
-        }
-    }
-
-    ul.tabs.tabs--pills{
-        @apply inline-flex rounded-md shadow-xs divide-x divide-gray-200;
-
-        & > li {
-            @apply flex gap-x-1 shrink-0 cursor-pointer bg-white border-gray-200 border-t border-b first:border-l last:border-r first:rounded-s-lg last:rounded-e-lg;
-
-            & > a {
-                @apply inline-flex gap-x-1 items-center px-4 py-1 text-sm font-medium hover:text-strava-orange;
-
-                &.active {
-                    @apply text-strava-orange;
-                }
-            }
+    div[data-datatable-settings]{
+        .clusterize-data-empty td{
+            @apply text-left p-4;
         }
     }
 }

@@ -6,26 +6,25 @@ use App\Application\Import\CalculateActivityMetrics\Pipeline\CalculateCombinedSt
 use App\Domain\Activity\ActivityId;
 use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\ActivityWithRawData;
-use App\Domain\Activity\ActivityWithRawDataRepository;
 use App\Domain\Activity\SportType\SportType;
 use App\Domain\Activity\Stream\ActivityStreamRepository;
 use App\Domain\Activity\Stream\CombinedStream\CombinedActivityStreamRepository;
 use App\Domain\Activity\Stream\StreamType;
 use App\Infrastructure\Daemon\Mutex\LockName;
 use App\Infrastructure\Daemon\Mutex\Mutex;
-use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Measurement\UnitSystem;
-use App\Infrastructure\ValueObject\String\CompressedString;
 use App\Tests\ContainerTestCase;
 use App\Tests\Domain\Activity\ActivityBuilder;
 use App\Tests\Domain\Activity\Stream\ActivityStreamBuilder;
 use App\Tests\Infrastructure\Time\Clock\PausedClock;
+use App\Tests\ProvideSnapshotAssertion;
 use App\Tests\SpyOutput;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class CalculateCombinedStreamsTest extends ContainerTestCase
 {
     use MatchesSnapshots;
+    use ProvideSnapshotAssertion;
 
     private CalculateCombinedStreams $calculateCombinedStreams;
 
@@ -38,7 +37,7 @@ class CalculateCombinedStreamsTest extends ContainerTestCase
             omitDistanceStream: false,
         );
         $this->calculateCombinedStreams->process($output);
-        $this->assertDatabaseResults();
+        $this->assertCompressedDatabaseQueryMatchesSnapshot('SELECT * FROM CombinedActivityStream');
 
         $this->calculateCombinedStreams->process($output);
         $this->assertMatchesTextSnapshot($output);
@@ -65,7 +64,7 @@ class CalculateCombinedStreamsTest extends ContainerTestCase
             )
         )->process($output);
 
-        $this->assertDatabaseResults();
+        $this->assertCompressedDatabaseQueryMatchesSnapshot('SELECT * FROM CombinedActivityStream');
     }
 
     public function testProcessWithEmptyDistanceStream(): void
@@ -77,7 +76,7 @@ class CalculateCombinedStreamsTest extends ContainerTestCase
             omitDistanceStream: true,
         );
         $this->calculateCombinedStreams->process($output);
-        $this->assertDatabaseResults();
+        $this->assertCompressedDatabaseQueryMatchesSnapshot('SELECT * FROM CombinedActivityStream');
     }
 
     public function testProcessForRun(): void
@@ -89,18 +88,18 @@ class CalculateCombinedStreamsTest extends ContainerTestCase
             omitDistanceStream: false,
         );
         $this->calculateCombinedStreams->process($output);
-        $this->assertDatabaseResults();
+        $this->assertCompressedDatabaseQueryMatchesSnapshot('SELECT * FROM CombinedActivityStream');
     }
 
     public function testProcessWhenStreamDataIsMissingOrEmpty(): void
     {
         $output = new SpyOutput();
 
-        $activityWithRawDataRepository = $this->getContainer()->get(ActivityWithRawDataRepository::class);
+        $activityRepository = $this->getContainer()->get(ActivityRepository::class);
         $streamRepository = $this->getContainer()->get(ActivityStreamRepository::class);
 
         $activityId = ActivityId::fromUnprefixed('one');
-        $activityWithRawDataRepository->add(
+        $activityRepository->add(
             ActivityWithRawData::fromState(
                 ActivityBuilder::fromDefaults()
                     ->withSportType(SportType::RIDE)
@@ -132,18 +131,18 @@ class CalculateCombinedStreamsTest extends ContainerTestCase
         );
 
         $this->calculateCombinedStreams->process($output);
-        $this->assertDatabaseResults();
+        $this->assertCompressedDatabaseQueryMatchesSnapshot('SELECT * FROM CombinedActivityStream');
     }
 
     private function provideGeneralTestData(
         SportType $sportType,
         bool $omitDistanceStream,
     ): void {
-        $activityWithRawDataRepository = $this->getContainer()->get(ActivityWithRawDataRepository::class);
+        $activityRepository = $this->getContainer()->get(ActivityRepository::class);
         $streamRepository = $this->getContainer()->get(ActivityStreamRepository::class);
 
         $activityId = ActivityId::fromUnprefixed('one');
-        $activityWithRawDataRepository->add(
+        $activityRepository->add(
             ActivityWithRawData::fromState(
                 ActivityBuilder::fromDefaults()
                     ->withSportType($sportType)
@@ -235,20 +234,6 @@ class CalculateCombinedStreamsTest extends ContainerTestCase
                     [51.200700, 3.216900],
                 ])
                 ->build()
-        );
-    }
-
-    private function assertDatabaseResults(): void
-    {
-        $results = $this->getConnection()
-            ->executeQuery('SELECT * FROM CombinedActivityStream')->fetchAllAssociative();
-
-        foreach ($results as &$result) {
-            $result['data'] = CompressedString::fromCompressed($result['data'])->uncompress();
-        }
-
-        $this->assertMatchesJsonSnapshot(
-            Json::encode($results)
         );
     }
 

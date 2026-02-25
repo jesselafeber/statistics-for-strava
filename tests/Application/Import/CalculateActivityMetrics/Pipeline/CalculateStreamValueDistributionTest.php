@@ -6,9 +6,11 @@ use App\Application\Import\CalculateActivityMetrics\Pipeline\CalculateStreamValu
 use App\Domain\Activity\ActivityId;
 use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\ActivityWithRawData;
-use App\Domain\Activity\ActivityWithRawDataRepository;
 use App\Domain\Activity\SportType\SportType;
 use App\Domain\Activity\Stream\ActivityStreamRepository;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetric;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetricRepository;
+use App\Domain\Activity\Stream\Metric\ActivityStreamMetricType;
 use App\Domain\Activity\Stream\StreamType;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Measurement\UnitSystem;
@@ -16,6 +18,7 @@ use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\ContainerTestCase;
 use App\Tests\Domain\Activity\ActivityBuilder;
 use App\Tests\Domain\Activity\Stream\ActivityStreamBuilder;
+use App\Tests\ProvideSnapshotAssertion;
 use App\Tests\SpyOutput;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Spatie\Snapshots\MatchesSnapshots;
@@ -23,6 +26,7 @@ use Spatie\Snapshots\MatchesSnapshots;
 class CalculateStreamValueDistributionTest extends ContainerTestCase
 {
     use MatchesSnapshots;
+    use ProvideSnapshotAssertion;
 
     private CalculateStreamValueDistribution $calculateStreamValueDistribution;
 
@@ -31,7 +35,7 @@ class CalculateStreamValueDistributionTest extends ContainerTestCase
     {
         $output = new SpyOutput();
 
-        $this->getContainer()->get(ActivityWithRawDataRepository::class)->add(ActivityWithRawData::fromState(
+        $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(4))
                 ->withSportType(SportType::RUN)
@@ -39,7 +43,7 @@ class CalculateStreamValueDistributionTest extends ContainerTestCase
                 ->build(),
             []
         ));
-        $this->getContainer()->get(ActivityWithRawDataRepository::class)->add(ActivityWithRawData::fromState(
+        $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(3))
                 ->withSportType(SportType::RIDE)
@@ -47,7 +51,7 @@ class CalculateStreamValueDistributionTest extends ContainerTestCase
                 ->build(),
             []
         ));
-        $this->getContainer()->get(ActivityWithRawDataRepository::class)->add(ActivityWithRawData::fromState(
+        $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
             ActivityBuilder::fromDefaults()
                 ->withActivityId(ActivityId::fromUnprefixed(1))
                 ->withSportType(SportType::SWIM)
@@ -102,20 +106,27 @@ class CalculateStreamValueDistributionTest extends ContainerTestCase
             ->withActivityId(ActivityId::fromUnprefixed(5))
             ->withStreamType(StreamType::WATTS)
             ->withData([])
-            ->withValueDistribution([4 => 3, 2 => 3])
             ->build();
         $this->getContainer()->get(ActivityStreamRepository::class)->add($stream);
 
+        $this->getContainer()->get(ActivityStreamMetricRepository::class)->add(ActivityStreamMetric::create(
+            activityId: ActivityId::fromUnprefixed(5),
+            streamType: StreamType::WATTS,
+            metricType: ActivityStreamMetricType::VALUE_DISTRIBUTION,
+            data: [4 => 3, 2 => 3],
+        ));
+
         new CalculateStreamValueDistribution(
             $this->getContainer()->get(ActivityStreamRepository::class),
+            $this->getContainer()->get(ActivityStreamMetricRepository::class),
             $this->getContainer()->get(ActivityRepository::class),
             $unitSystem,
         )->process($output);
 
         $this->assertMatchesTextSnapshot($output);
-        $this->assertMatchesJsonSnapshot(
-            Json::encode($this->getConnection()
-                ->executeQuery('SELECT activityId, streamType, valueDistribution FROM ActivityStream')->fetchAllAssociative())
+        $this->assertCompressedDatabaseQueryMatchesSnapshot(
+            'SELECT activityId, streamType, metricType, data FROM ActivityStreamMetric WHERE metricType = :metricType',
+            ['metricType' => ActivityStreamMetricType::VALUE_DISTRIBUTION->value],
         );
     }
 

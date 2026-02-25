@@ -1,8 +1,6 @@
+import {eventBus, Events} from "../core/event-bus";
+
 export default class FullscreenManager {
-    constructor() {
-
-    }
-
     init(rootNode) {
         rootNode.querySelectorAll('[data-fullscreen-trigger]').forEach((el) => {
             el.addEventListener('click', (e) => {
@@ -14,15 +12,11 @@ export default class FullscreenManager {
 
                 const fullScreenContent = el.closest('[data-fullscreen-content]');
                 fullScreenContent.requestFullscreen().then(() => {
-                    document.dispatchEvent(new CustomEvent('fullScreenModeWasEnabled', {
-                        bubbles: true,
-                    }));
+                    eventBus.emit(Events.FULLSCREEN_ENABLED);
                 });
 
                 fullScreenContent.addEventListener('fullscreenchange', () => {
-                    el.classList.toggle('hidden', Boolean(document.fullscreenElement));
-                    fullScreenContent.classList.toggle('fullscreen-is-enabled', Boolean(document.fullscreenElement));
-                    fullScreenContent.classList.toggle('group', Boolean(document.fullscreenElement));
+                    fullScreenContent.toggleAttribute('data-fullscreen-enabled', Boolean(document.fullscreenElement))
                 });
 
             });

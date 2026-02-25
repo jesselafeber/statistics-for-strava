@@ -33,17 +33,17 @@
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
-                                <div id="dropdownSportTypes" class="z-1002 w-fit hidden border border-gray-200 bg-white divide-y divide-gray-100 rounded-lg shadow-xs">
-                                    <ul class="max-h-48 overflow-y-auto px-1 py-2 text-sm text-gray-700" aria-labelledby="dropdownSportTypesButton">
+                                <div id="dropdownSportTypes" class="divide-y divide-gray-100">
+                                    <ul aria-labelledby="dropdownSportTypesButton">
                                         {% for sportType in sportTypes %}
                                             <li>
-                                                <div class="flex items-center gap-x-2 p-2 rounded-xs hover:bg-gray-100">
-                                                    <input type="checkbox" id="{{ sportType.value }}" data-dataTable-filter="sportType" name="sportType[{{ sportType.value }}]" value="{{ sportType.value }}" class="w-4 h-4 peer text-strava-orange bg-gray-100 border-gray-300 focus:ring-orange-500 focus:ring-2" />
-                                                    <label for="{{ sportType.value }}" class="flex gap-x-1 items-center text-sm font-medium text-gray-500 cursor-pointer peer-checked:text-strava-orange hover:text-gray-600 hover:bg-gray-100">
+                                                <div>
+                                                    <input type="checkbox" id="{{ sportType.value }}" data-dataTable-filter="sportType" name="sportType[{{ sportType.value }}]" value="{{ sportType.value }}" class="peer" />
+                                                    <label for="{{ sportType.value }}" class="flex gap-x-1 items-center">
                                                         {{ svgSportType(sportType) }}
                                                         <div>{{ sportType|trans }}</div>
                                                     </label>
-                                                    <a href="#" class="text-strava-orange text-sm underline invisible peer-checked:visible ml-auto" data-datatable-filter-clear="sportType[{{ sportType.value }}]">{{ "clear"|trans }}</a>
+                                                    <a href="#" data-datatable-filter-clear="sportType[{{ sportType.value }}]">{{ "clear"|trans }}</a>
                                                 </div>
                                             </li>
                                         {% endfor %}
@@ -54,17 +54,17 @@
                         <div class="filter-dropdown">
                             <button id="dropdownDateRangeButton"
                                     data-dropdown-toggle="dropdownDateRange" type="button">
-                                <span>{{ "From"|trans }} - {{ "To"|trans }}</span>
+                                <span>{{ "Date"|trans }}</span>
                                 <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                 </svg>
                             </button>
-                            <div id="dropdownDateRange" class="z-1002 w-fit hidden border border-gray-200 bg-white divide-y divide-gray-100 rounded-lg shadow-xs">
+                            <div id="dropdownDateRange" class="divide-y divide-gray-100">
                                 <div class="flex items-center gap-x-2 p-3" aria-labelledby="dropdownDateRangeButton">
                                     <div class="flex items-center" data-dataTable-filter="start-date[]">
                                         <input name="start-date[from]" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
-                                        <span class="mx-2 text-gray-500">{{ "To"|trans }}</span>
-                                        <input name="start-date[to]" type="date" data-default-to-today class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                        <span class="mx-2 text-gray-500">{{ "to"|trans }}</span>
+                                        <input name="start-date[to]" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
                                     </div>
                                     <a href="#" class="text-strava-orange text-sm text-right underline" data-datatable-filter-clear="start-date">{{ "clear"|trans }}</a>
                                 </div>
@@ -74,22 +74,22 @@
                             <div class="filter-dropdown">
                                 <button id="dropdownCountriesButton"
                                         data-dropdown-toggle="dropdownCountries" data-dropdown-offset-distance="10" data-dropdown-offset-skidding="0" type="button">
-                                    <span>{{ "Filter on country"|trans }}</span>
+                                    <span>{{ "Country"|trans }}</span>
                                     <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
-                                <div id="dropdownCountries" class="z-1002 w-fit hidden border border-gray-200 bg-white divide-y divide-gray-100 rounded-lg shadow-xs">
-                                    <ul class="max-h-48 overflow-y-auto px-1 py-2 text-sm text-gray-700" aria-labelledby="dropdownCountriesButton">
+                                <div id="dropdownCountries" class="divide-y divide-gray-100">
+                                    <ul aria-labelledby="dropdownCountriesButton">
                                         {% for countryCode,countryName in countries %}
                                             <li>
-                                                <div class="flex items-center gap-x-2 p-2 rounded-xs hover:bg-gray-100">
-                                                    <input type="radio" id="{{ countryCode }}" data-dataTable-filter="countryCode" name="countryCode" value="{{ countryCode }}" class="w-4 h-4 peer text-strava-orange bg-gray-100 border-gray-300 focus:ring-orange-500 focus:ring-2" />
-                                                    <label for="{{ countryCode }}" class="flex gap-x-1 items-center text-sm font-medium text-gray-500 cursor-pointer peer-checked:text-strava-orange hover:text-gray-600 hover:bg-gray-100">
+                                                <div>
+                                                    <input type="radio" id="{{ countryCode }}" data-dataTable-filter="countryCode" name="countryCode" value="{{ countryCode }}" class="peer" />
+                                                    <label for="{{ countryCode }}" class="flex gap-x-1 items-center">
                                                         <img src="{{ relativeUrl('assets/images/flags/' ~ countryCode|lower ~ '.svg') }}" width="15" class="rounded-xs" title="{{ countryName }}" alt="{{ countryName }}">
                                                         <span>{{ countryName }}</span>
                                                     </label>
-                                                    <a href="#" class="text-strava-orange text-sm underline invisible peer-checked:visible ml-auto" data-datatable-filter-clear="countryCode">{{ "clear"|trans }}</a>
+                                                    <a href="#" data-datatable-filter-clear="countryCode">{{ "clear"|trans }}</a>
                                                 </div>
                                             </li>
                                         {% endfor %}
@@ -101,31 +101,31 @@
                             <div class="filter-dropdown">
                                 <button id="dropdownGearsButton"
                                         data-dropdown-toggle="dropdownGears" data-dropdown-offset-distance="10" data-dropdown-offset-skidding="0" type="button">
-                                    <span>{{ "Filter on gear"|trans }}</span>
+                                    <span>{{ "Gear"|trans }}</span>
                                     <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
-                                <div id="dropdownGears" class="z-1002 w-fit hidden border border-gray-200 bg-white divide-y divide-gray-100 rounded-lg shadow-xs">
-                                    <ul class="max-h-48 overflow-y-auto px-1 py-2 text-sm text-gray-700" aria-labelledby="dropdownGearsButton">
+                                <div id="dropdownGears" class="divide-y divide-gray-100">
+                                    <ul aria-labelledby="dropdownGearsButton">
                                         {% for gear in gears %}
                                             <li>
-                                                <div class="flex items-center gap-x-2 p-2 rounded-xs hover:bg-gray-100">
-                                                    <input type="radio" id="{{ gear.getId() }}" data-dataTable-filter="gear" name="gear" value="{{ gear.getId() }}" class="w-4 h-4 peer text-strava-orange bg-gray-100 border-gray-300 focus:ring-orange-500 focus:ring-2" />
-                                                    <label for="{{ gear.getId() }}" class="flex gap-x-1 items-center text-sm font-medium text-gray-500 cursor-pointer peer-checked:text-strava-orange hover:text-gray-600 hover:bg-gray-100">
+                                                <div>
+                                                    <input type="radio" id="{{ gear.getId() }}" data-dataTable-filter="gear" name="gear" value="{{ gear.getId() }}" class="peer" />
+                                                    <label for="{{ gear.getId() }}">
                                                         <span>{{ gear.getName() }}</span>
                                                     </label>
-                                                    <a href="#" class="text-strava-orange text-sm underline invisible peer-checked:visible ml-auto" data-datatable-filter-clear="gear">{{ "clear"|trans }}</a>
+                                                    <a href="#" data-datatable-filter-clear="gear">{{ "clear"|trans }}</a>
                                                 </div>
                                             </li>
                                         {% endfor %}
                                         <li>
-                                            <div class="flex items-center gap-x-2 p-2 rounded-xs hover:bg-gray-100">
-                                                <input type="radio" id="gear-none" data-dataTable-filter="gear" name="gear" value="gear-none" class="w-4 h-4 peer text-strava-orange bg-gray-100 border-gray-300 focus:ring-orange-500 focus:ring-2" />
-                                                <label for="gear-none" class="flex gap-x-1 items-center text-sm font-medium text-gray-500 cursor-pointer peer-checked:text-strava-orange hover:text-gray-600 hover:bg-gray-100">
+                                            <div>
+                                                <input type="radio" id="gear-none" data-dataTable-filter="gear" name="gear" value="gear-none" class="peer" />
+                                                <label for="gear-none">
                                                     <span>{{ "Unspecified"|trans }}</span>
                                                 </label>
-                                                <a href="#" class="text-strava-orange text-sm underline invisible peer-checked:visible ml-auto" data-datatable-filter-clear="gear">{{ "clear"|trans }}</a>
+                                                <a href="#" data-datatable-filter-clear="gear">{{ "clear"|trans }}</a>
                                             </div>
                                         </li>
                                     </ul>
@@ -136,31 +136,31 @@
                             <div class="filter-dropdown">
                                 <button id="dropdownDevicesButton"
                                         data-dropdown-toggle="dropdownDevices" data-dropdown-offset-distance="10" data-dropdown-offset-skidding="0" type="button">
-                                    <span>{{ "Filter on device"|trans }}</span>
+                                    <span>{{ "Device"|trans }}</span>
                                     <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                     </svg>
                                 </button>
-                                <div id="dropdownDevices" class="z-1002 w-fit hidden border border-gray-200 bg-white divide-y divide-gray-100 rounded-lg shadow-xs">
-                                    <ul class="max-h-48 overflow-y-auto px-1 py-2 text-sm text-gray-700" aria-labelledby="dropdownGearsButton">
+                                <div id="dropdownDevices" class="divide-y divide-gray-100">
+                                    <ul aria-labelledby="dropdownGearsButton">
                                         {% for device in devices %}
                                             <li>
-                                                <div class="flex items-center gap-x-2 p-2 rounded-xs hover:bg-gray-100">
-                                                    <input type="radio" id="{{ device.getId() }}" data-dataTable-filter="device" name="device" value="{{ device.getId() }}" class="w-4 h-4 peer text-strava-orange bg-gray-100 border-gray-300 focus:ring-orange-500 focus:ring-2" />
-                                                    <label for="{{ device.getId() }}" class="flex gap-x-1 items-center text-sm font-medium text-gray-500 cursor-pointer peer-checked:text-strava-orange hover:text-gray-600 hover:bg-gray-100">
+                                                <div>
+                                                    <input type="radio" id="{{ device.getId() }}" data-dataTable-filter="device" name="device" value="{{ device.getId() }}" class="peer" />
+                                                    <label for="{{ device.getId() }}">
                                                         <span>{{ device.getName() }}</span>
                                                     </label>
-                                                    <a href="#" class="text-strava-orange text-sm underline invisible peer-checked:visible ml-auto" data-datatable-filter-clear="device">{{ "clear"|trans }}</a>
+                                                    <a href="#" data-datatable-filter-clear="device">{{ "clear"|trans }}</a>
                                                 </div>
                                             </li>
                                         {% endfor %}
                                         <li>
-                                            <div class="flex items-center gap-x-2 p-2 rounded-xs hover:bg-gray-100">
-                                                <input type="radio" id="device-none" data-dataTable-filter="device" name="device" value="device-none" class="w-4 h-4 peer text-strava-orange bg-gray-100 border-gray-300 focus:ring-orange-500 focus:ring-2" />
-                                                <label for="device-none" class="flex gap-x-1 items-center text-sm font-medium text-gray-500 cursor-pointer peer-checked:text-strava-orange hover:text-gray-600 hover:bg-gray-100">
+                                            <div>
+                                                <input type="radio" id="device-none" data-dataTable-filter="device" name="device" value="device-none" class="peer" />
+                                                <label for="device-none">
                                                     <span>{{ "Unspecified"|trans }}</span>
                                                 </label>
-                                                <a href="#" class="text-strava-orange text-sm underline invisible peer-checked:visible ml-auto" data-datatable-filter-clear="device">{{ "clear"|trans }}</a>
+                                                <a href="#" data-datatable-filter-clear="device">{{ "clear"|trans }}</a>
                                             </div>
                                         </li>
                                     </ul>
@@ -168,33 +168,93 @@
                             </div>
                         {% endif %}
                         <div class="filter-dropdown">
+                            <button id="distanceElevationButton" data-dropdown-toggle="dropdownDistanceElevation" data-dropdown-offset-distance="10" data-dropdown-offset-skidding="0" type="button">
+                                <span>{{ "Distance & Elevation"|trans }}</span>
+                                <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                </svg>
+                            </button>
+                            <div id="dropdownDistanceElevation">
+                                <div class="p-3 flex flex-col gap-y-2">
+                                    <div class="flex flex-col gap-y-2">
+                                        <label for="distance[from]" class="flex gap-x-1 items-center text-sm font-medium text-gray-500">
+                                            {{ svg('distance', 'size-4', 'text-gray-500') }}
+                                            <span>{{ "Distance"|trans }}</span>
+                                        </label>
+                                        <div class="group/range-filter flex items-center justify-between gap-x-2">
+                                            <div class="flex items-center justify-between w-full" data-dataTable-filter="distance[]">
+                                                <div class="flex items-center">
+                                                    <input name="distance[from]" type="number" min="0" step="0.1" placeholder="{{ "min"|trans }}" class="z-20 w-23 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                                                    <span class="flex items-center py-3 px-3 bg-gray-100 text-gray-500 border border-l-0 border-gray-300 text-xs rounded-e-lg">
+                                                      {{ renderUnitSymbol('distance') }}
+                                                    </span>
+                                                </div>
+                                                <span class="mx-2 text-gray-500">{{ "to"|trans }}</span>
+                                                <div class="flex items-center">
+                                                    <input name="distance[to]" type="number" min="0" step="0.1" placeholder="{{ "max"|trans }}" class="z-20 w-23 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                                                    <span class="flex items-center py-3 px-3 bg-gray-100 text-gray-500 border border-l-0 border-gray-300 text-xs rounded-e-lg">
+                                                      {{ renderUnitSymbol('distance') }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <a href="#" class="invisible group-has-[input:not(:placeholder-shown)]/range-filter:visible text-strava-orange text-sm text-right underline" data-datatable-filter-clear="distance">{{ "clear"|trans }}</a>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col gap-y-2">
+                                        <label for="elevation[from]" class="flex gap-x-1 items-center text-sm font-medium text-gray-500">
+                                            {{ svg('elevation', 'size-4', 'text-gray-500') }}
+                                            <span>{{ "Elevation"|trans }}</span>
+                                        </label>
+                                        <div class="group/range-filter flex items-center justify-between gap-x-2">
+                                            <div class="flex items-center justify-between w-full" data-dataTable-filter="elevation[]">
+                                                <div class="flex items-center">
+                                                    <input name="elevation[from]" type="number" min="0" step="0.1" placeholder="{{ "min"|trans }}" class="z-20 w-23 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                                                    <span class="flex items-center py-3 px-3 bg-gray-100 text-gray-500 border border-l-0 border-gray-300 text-xs rounded-e-lg">
+                                                      {{ renderUnitSymbol('elevation') }}
+                                                    </span>
+                                                </div>
+                                                <span class="mx-2 text-gray-500">{{ "to"|trans }}</span>
+                                                <div class="flex items-center">
+                                                    <input name="elevation[to]" type="number" min="0" step="0.1" placeholder="{{ "max"|trans }}" class="z-20 w-23 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-s-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+                                                    <span class="flex items-center py-3 px-3 bg-gray-100 text-gray-500 border border-l-0 border-gray-300 text-xs rounded-e-lg">
+                                                      {{ renderUnitSymbol('elevation') }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <a href="#" class="invisible group-has-[input:not(:placeholder-shown)]/range-filter:visible text-strava-orange text-sm text-right underline" data-datatable-filter-clear="elevation">{{ "clear"|trans }}</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filter-dropdown">
                             <button id="otherButton" data-dropdown-toggle="dropdownOther" data-dropdown-offset-distance="10" data-dropdown-offset-skidding="0" type="button">
                                 <span>{{ "Other"|trans }}</span>
                                 <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
                                 </svg>
                             </button>
-                            <div id="dropdownOther" class="z-1002 w-fit hidden border border-gray-200 bg-white rounded-lg shadow-xs">
+                            <div id="dropdownOther">
                                 <div class="px-1 py-2 flex gap-x-2 divide-x divide-gray-100">
                                     <div class="flex flex-col items-center">
                                         <div class="text-xs font-medium items-center">{{ "Commutes"|trans }}</div>
                                         <ul class="text-sm text-gray-700">
                                             <li>
-                                                <div class="flex items-center gap-x-2 p-2 rounded-xs hover:bg-gray-100">
-                                                    <input type="radio" id="true" data-dataTable-filter="isCommute" name="isCommute" value="true" class="w-4 h-4 peer text-strava-orange bg-gray-100 border-gray-300 focus:ring-orange-500 focus:ring-2" />
-                                                    <label for="true" class="text-sm font-medium text-gray-500 cursor-pointer peer-checked:text-strava-orange hover:text-gray-600 hover:bg-gray-100">
+                                                <div>
+                                                    <input type="radio" id="true" data-dataTable-filter="isCommute" name="isCommute" value="true" class="peer" />
+                                                    <label for="true">
                                                         {{ "Commutes only"|trans }}
                                                     </label>
-                                                    <a href="#" class="text-strava-orange text-sm underline invisible peer-checked:visible ml-auto" data-datatable-filter-clear="isCommute">{{ "clear"|trans }}</a>
+                                                    <a href="#" data-datatable-filter-clear="isCommute">{{ "clear"|trans }}</a>
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="flex items-center gap-x-2 p-2 rounded-xs hover:bg-gray-100">
-                                                    <input type="radio" id="false" data-dataTable-filter="isCommute" name="isCommute" value="false" class="w-4 h-4 peer text-strava-orange bg-gray-100 border-gray-300 focus:ring-orange-500 focus:ring-2" />
-                                                    <label for="false" class="text-sm font-medium text-gray-500 cursor-pointer peer-checked:text-strava-orange hover:text-gray-600 hover:bg-gray-100">
+                                                <div>
+                                                    <input type="radio" id="false" data-dataTable-filter="isCommute" name="isCommute" value="false" class="peer" />
+                                                    <label for="false">
                                                         {{ "Excludes commutes"|trans }}
                                                     </label>
-                                                    <a href="#" class="text-strava-orange text-sm underline invisible peer-checked:visible ml-auto" data-datatable-filter-clear="isCommute">{{ "clear"|trans }}</a>
+                                                    <a href="#" data-datatable-filter-clear="isCommute">{{ "clear"|trans }}</a>
                                                 </div>
                                             </li>
                                         </ul>
@@ -204,12 +264,12 @@
                                         <ul class="text-sm text-gray-700">
                                             {% for workoutType in enum('App\\Domain\\Activity\\WorkoutType').cases() %}
                                                 <li>
-                                                    <div class="flex items-center gap-x-2 p-2 rounded-xs hover:bg-gray-100">
-                                                        <input type="radio" id="{{ workoutType.value }}" data-dataTable-filter="workoutType" name="workoutType" value="{{ workoutType.value }}" class="w-4 h-4 peer text-strava-orange bg-gray-100 border-gray-300 focus:ring-orange-500 focus:ring-2" />
-                                                        <label for="{{ workoutType.value }}" class="text-sm font-medium text-gray-500 cursor-pointer peer-checked:text-strava-orange hover:text-gray-600 hover:bg-gray-100">
+                                                    <div>
+                                                        <input type="radio" id="{{ workoutType.value }}" data-dataTable-filter="workoutType" name="workoutType" value="{{ workoutType.value }}" class="peer" />
+                                                        <label for="{{ workoutType.value }}">
                                                             {{ workoutType|trans }}
                                                         </label>
-                                                        <a href="#" class="text-strava-orange text-sm underline invisible peer-checked:visible ml-auto" data-datatable-filter-clear="workoutType">{{ "clear"|trans }}</a>
+                                                        <a href="#" data-datatable-filter-clear="workoutType">{{ "clear"|trans }}</a>
                                                     </div>
                                                 </li>
                                             {% endfor %}
