@@ -27,6 +27,7 @@ Apr: Apr
 'Ask Mark something...': 'Fråga Mark någonting...'
 'Athlete profile': 'Athlete profile'
 Aug: Aug
+'Average gradient': 'Average gradient'
 Avg: Med
 'Back Country Ski': Utförsåkning
 Badges: Badges
@@ -53,6 +54,7 @@ Commutes: Pendling
 'Commutes only': 'Endast pendling'
 Compare: Jämför
 'Compare to': 'Jämför med'
+'Completed {threshold} activities': 'Completed {threshold} activities'
 'Congrats! You achieved personal bests during this activity.': 'Grattis! Du slog ditt tidigare rekord i den här aktiviteten.'
 'Consider reducing load': 'Consider reducing load'
 Consistency: Consistency
@@ -105,6 +107,8 @@ Feb: Feb
 'Filter on country': 'Filtrera på land'
 'Filter on sport type': 'Filtrera på sport'
 'Filter on starred segments': 'Filtrera på favorit segment'
+'First-ever activity recorded': 'First-ever activity recorded'
+Firsts: Firsts
 Fitness: Träning
 'Fitness may be declining due to low recent training load': 'Fitness may be declining due to low recent training load'
 'Fitness may decline': 'Fitness may decline'
@@ -177,7 +181,9 @@ Load: Load
 Loading...: Laddar...
 'Locations over the globe': 'Platser runt jorden'
 'Long run': Långdistanslöpning
+'Longest activity': 'Longest activity'
 'Longest activity (h)': 'Längsta aktiviteten (h)'
+'Longest distance': 'Longest distance'
 'Longest streaks': 'Längsta obrutna serie'
 Low: Låg
 'Low risk': 'Low risk'
@@ -186,11 +192,11 @@ Maintenance: Underhåll
 'Maintenance history': Underhållshistorik
 Mar: Mar
 Max: Max
-'Max gradient': 'Max lutning'
 May: May
 Medium: Mellan
 Metric: Metric
 Metrics: Mätvärden
+Milestones: Milestones
 'Mind & Body Sports': 'Sinne- och kroppssporter'
 'Moderate fatigue with stable fitness. Well suited for consistent day-to-day training': 'Moderate fatigue with stable fitness. Well suited for consistent day-to-day training'
 'Moderate monotony': 'Måttlig monotoni'
@@ -200,15 +206,19 @@ Monotony: Monotoni
 Monthly: Monthly
 'Monthly stats': Sammanställning
 Morning: Morgon
+'Most elevation': 'Most elevation'
 'Most recent activities': 'Nyligen loggade aktiviteter'
 'Most recent challenges': 'Senaste utmaningar'
+'Most recent milestones': 'Most recent milestones'
 'Mountain Bike Rides': 'Mountain Bike Cykling'
 'Moving time': 'Tid i rörelse'
 Name: Namn
 Neutral: Neutral
+'New personal best for': 'New personal best for'
 Night: Natt
 'No activities': 'Inga aktivieter'
 'No data available': 'Ingen data tillgänglig'
+'No milestones achieved yet': 'No milestones achieved yet'
 'No other options to compare with': 'Inga andra alternativ att jämföra med'
 None: Inga
 'Nordic Ski': 'Telemark skidåkning'
@@ -238,6 +248,7 @@ Padel: Padel
 'Peak fresh': 'Peak fresh'
 'Peak power outputs': Toppeffekt
 'Personal Records': 'Personliga Rekord'
+'Personal bests': 'Personal bests'
 Photo: Bild
 Photos: Bilder
 'Pickle Ball': 'Pickle Ball'
@@ -248,12 +259,18 @@ Power: Effekt
 'Power distribution': Effektfördelning
 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.'
 'Prev year': 'Tidigare år'
+Previous: Previous
 Race: Tävling
 'Racing Score': Tävlingspoäng
 'Racquet & Paddle Sports': 'Rack & Paddel Sporter'
 'Racquet Ball': Racketboll
 Ranking: Rankning
+'Reached {threshold} hours total moving time': 'Reached {threshold} hours total moving time'
+'Reached {threshold} total distance': 'Reached {threshold} total distance'
+'Reached {threshold} total elevation': 'Reached {threshold} total elevation'
 'Recent effort': 'Recent effort'
+'Recording devices': 'Recording devices'
+'Recording devices details': 'Recording devices details'
 'Recovery Timeline': 'Recovery Timeline'
 'Recovery forecast': 'Recovery forecast'
 'Reduced carbon emission by commuting': 'Minskade koldioxidutsläpp tack vare pendling'
@@ -301,7 +318,6 @@ Squash: Squash
 'Start slideshow': 'Starta bildspel'
 'Start times': Starttider
 'Statistics for Strava': 'Statistics for Strava'
-Stats: Sammanställning
 'Stats per weekday': 'Sammanställning veckodagar'
 Status: Status
 'Strava profile': 'Strava profile'
@@ -319,6 +335,93 @@ Tag: Tag
 'Taper sweet-spot (+15)': 'Ideal träningsform (+15)'
 'Team Sports': 'Team Sports'
 Tennis: Tennis
+"That's 1.5 times the distance to the edge of space": "That's 1.5 times the distance to the edge of space"
+"That's 100 days of commitment, triple digits!": "That's 100 days of commitment, triple digits!"
+"That's 2 activities per week for nearly 5 years": "That's 2 activities per week for nearly 5 years"
+"That's 2 full days of non-stop activity": "That's 2 full days of non-stop activity"
+"That's 2 full years of daily activity, incredible!": "That's 2 full years of daily activity, incredible!"
+"That's 2 months without missing a day": "That's 2 months without missing a day"
+"That's 2 months without stopping": "That's 2 months without stopping"
+"That's 250 days, over two thirds of a year": "That's 250 days, over two thirds of a year"
+"That's 3 activities per week for nearly 5 years": "That's 3 activities per week for nearly 5 years"
+"That's 3 weeks straight, they say it takes 21 days to build a habit": "That's 3 weeks straight, they say it takes 21 days to build a habit"
+"That's 4 months of unbroken daily activity": "That's 4 months of unbroken daily activity"
+"That's 45 days, halfway to a full quarter": "That's 45 days, halfway to a full quarter"
+"That's 5 months, nearly half a year without a rest day": "That's 5 months, nearly half a year without a rest day"
+"That's 500 days, well beyond a year of daily activity": "That's 500 days, well beyond a year of daily activity"
+"That's a full day of non-stop movement": "That's a full day of non-stop movement"
+"That's a full fortnight of daily activity": "That's a full fortnight of daily activity"
+"That's a full month of non-stop activity": "That's a full month of non-stop activity"
+"That's a full month without a rest day": "That's a full month without a rest day"
+"That's a full quarter of daily activity": "That's a full quarter of daily activity"
+"That's a full week of daily activity": "That's a full week of daily activity"
+"That's a full week of non-stop movement": "That's a full week of non-stop movement"
+"That's a full year of daily activity": "That's a full year of daily activity"
+"That's about 3.5 months of continuous movement": "That's about 3.5 months of continuous movement"
+"That's about one activity per week for a year": "That's about one activity per week for a year"
+"That's about one activity per week for half a year": "That's about one activity per week for half a year"
+"That's about one activity per week for two months": "That's about one activity per week for two months"
+"That's almost 2 activities per week for a year": "That's almost 2 activities per week for a year"
+"That's almost 21 days of continuous movement": "That's almost 21 days of continuous movement"
+"That's almost 3 activities per week for 7 years": "That's almost 3 activities per week for 7 years"
+"That's an activity almost every day for 27 years": "That's an activity almost every day for 27 years"
+"That's an activity every day for almost 7 years": "That's an activity every day for almost 7 years"
+"That's an activity every day for nearly 11 years": "That's an activity every day for nearly 11 years"
+"That's an activity every day for nearly 14 years": "That's an activity every day for nearly 14 years"
+"That's an activity every day for over 20 years": "That's an activity every day for over 20 years"
+"That's an activity every day for over 8 years": "That's an activity every day for over 8 years"
+"That's climbing Mount Everest twice": "That's climbing Mount Everest twice"
+"That's climbing to the edge of space and back 5 times": "That's climbing to the edge of space and back 5 times"
+"That's cruising altitude of a commercial airplane": "That's cruising altitude of a commercial airplane"
+"That's deeper than the deepest known cave on Earth": "That's deeper than the deepest known cave on Earth"
+"That's five times around the Earth": "That's five times around the Earth"
+"That's half a year without skipping a single day": "That's half a year without skipping a single day"
+"That's higher than Felix Baumgartner's space jump": "That's higher than Felix Baumgartner's space jump"
+"That's higher than the International Space Station's orbit": "That's higher than the International Space Station's orbit"
+"That's higher than the summit of Mont Blanc": "That's higher than the summit of Mont Blanc"
+"That's more than 10 days of non-stop movement": "That's more than 10 days of non-stop movement"
+"That's more than 10 months of continuous movement": "That's more than 10 months of continuous movement"
+"That's more than 2 Eiffel Towers stacked up": "That's more than 2 Eiffel Towers stacked up"
+"That's more than 2.5 times around the Earth": "That's more than 2.5 times around the Earth"
+"That's more than 4 days of continuous activity": "That's more than 4 days of continuous activity"
+"That's more than 4 months of non-stop activity": "That's more than 4 months of non-stop activity"
+"That's more than 41 days of non-stop movement": "That's more than 41 days of non-stop movement"
+"That's more than 5 activities per week for 7 years": "That's more than 5 activities per week for 7 years"
+"That's more than 8 times the height of Mount Everest": "That's more than 8 times the height of Mount Everest"
+"That's more than a full year of non-stop movement": "That's more than a full year of non-stop movement"
+"That's more than halfway around the Earth": "That's more than halfway around the Earth"
+"That's more than halfway to the ISS": "That's more than halfway to the ISS"
+"That's more than the circumference of Mars": "That's more than the circumference of Mars"
+"That's more than the distance from Earth to the Moon": "That's more than the distance from Earth to the Moon"
+"That's nearly 3 months of non-stop activity": "That's nearly 3 months of non-stop activity"
+"That's nearly 4 activities per week for 7 years": "That's nearly 4 activities per week for 7 years"
+"That's nearly 5 activities per week for a year": "That's nearly 5 activities per week for a year"
+"That's nearly 7 months of non-stop activity": "That's nearly 7 months of non-stop activity"
+"That's nearly climbing Mount Everest 3 times": "That's nearly climbing Mount Everest 3 times"
+"That's nearly the altitude of the International Space Station": "That's nearly the altitude of the International Space Station"
+"That's nearly twice around the Earth": "That's nearly twice around the Earth"
+"That's nearly twice the altitude of the International Space Station": "That's nearly twice the altitude of the International Space Station"
+"That's over 5.5 months of continuous movement": "That's over 5.5 months of continuous movement"
+"That's roughly a quarter of the way around the Earth": "That's roughly a quarter of the way around the Earth"
+"That's roughly the diameter of Jupiter": "That's roughly the diameter of Jupiter"
+"That's roughly the diameter of Neptune": "That's roughly the diameter of Neptune"
+"That's roughly the distance from London to Perth": "That's roughly the distance from London to Perth"
+"That's roughly the distance from Madrid to Barcelona": "That's roughly the distance from Madrid to Barcelona"
+"That's roughly the distance light travels in one second": "That's roughly the distance light travels in one second"
+"That's roughly the length of France": "That's roughly the length of France"
+"That's roughly the length of the Danube river": "That's roughly the length of the Danube river"
+"That's roughly the length of the island of Jamaica": "That's roughly the length of the island of Jamaica"
+"That's taller than the Empire State Building": "That's taller than the Empire State Building"
+"That's the altitude of a satellite in low Earth orbit": "That's the altitude of a satellite in low Earth orbit"
+"That's the circumference of the Earth": "That's the circumference of the Earth"
+"That's the distance from Earth to the Moon": "That's the distance from Earth to the Moon"
+"That's the distance to the edge of space, straight up": "That's the distance to the edge of space, straight up"
+"That's the edge of space, the Kármán line": "That's the edge of space, the Kármán line"
+"That's the height of Mount Everest": "That's the height of Mount Everest"
+"That's the height of the Eiffel Tower": "That's the height of the Eiffel Tower"
+"That's the length of the Great Wall of China": "That's the length of the Great Wall of China"
+"That's three quarters of the way around the Earth": "That's three quarters of the way around the Earth"
+"That's {number} days of at least {distance}": "That's {number} days of at least {distance}"
 'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.': 'Eddingtontalet i samband med cykling eller löpning definieras som det maximala antalet E så att idrottaren har tillryggalagt minst E km under minst E dagar.'
 'These badges are dynamically created. You can use them in any &lt;img&gt; tag': 'Dessa märken skapas dynamiskt. Du kan använda dem i vilken &lt;img&gt; tagg som helst'
 Thinking...: Tänker...
@@ -404,6 +507,7 @@ Yoga: Yoga
 'Zwift stats': 'Sammanställning Zwift'
 activities: aktiviteter
 and: och
+'average gradient': 'average gradient'
 avg: snitt
 bpm: bpm
 clear: rensa
@@ -427,11 +531,13 @@ never: aldrig
 'on': på
 'per activity': 'per aktivitet'
 'per hour': 'per timma'
+'reached Eddington number {number}': 'reached Eddington number {number}'
 to: till
 total: totalt
 weeks: veckor
 workouts: träningspass
 '{daysSinceLastTagged} days': '{daysSinceLastTagged} dagar'
+'{days} consecutive days of activity': '{days} consecutive days of activity'
 '{hoursSinceLastTagged} hours': '{hoursSinceLastTagged} timmar'
 '{maintenanceTaskLabel} every {interval}': '{maintenanceTaskLabel} varje {interval}'
 '{numberOfActivities} activities': '{numberOfActivities} aktiviteter'
@@ -441,3 +547,6 @@ workouts: träningspass
 '{numberOfResults} results based on your active filters': '{numberOfResults} resultat utifrån dina aktiva filter'
 '{numberOfResults} routes based on your active filters': '{numberOfResults} turer utifrån dina aktiva filter'
 '{numberOfWeeks} weeks': '{numberOfWeeks} weeks'
+'{threshold} hours using {gearName}': '{threshold} hours using {gearName}'
+'{threshold} total distance using {gearName}': '{threshold} total distance using {gearName}'
+'{threshold} total elevation using {gearName}': '{threshold} total elevation using {gearName}'

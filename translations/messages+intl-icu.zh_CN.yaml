@@ -27,6 +27,7 @@ Apr: 四月
 'Ask Mark something...': 问问Mark...
 'Athlete profile': 'Athlete profile'
 Aug: 八月
+'Average gradient': 'Average gradient'
 Avg: 平均
 'Back Country Ski': 越野滑雪
 Badges: Badges
@@ -53,6 +54,7 @@ Commutes: 通勤
 'Commutes only': 仅通勤
 Compare: 对比
 'Compare to': 对比
+'Completed {threshold} activities': 'Completed {threshold} activities'
 'Congrats! You achieved personal bests during this activity.': 恭喜！您在此活动中取得了个人最佳成绩。
 'Consider reducing load': 'Consider reducing load'
 Consistency: Consistency
@@ -105,6 +107,8 @@ Feb: 二月
 'Filter on country': 按国家筛选
 'Filter on sport type': 按运动类型筛选
 'Filter on starred segments': 筛选星标路段
+'First-ever activity recorded': 'First-ever activity recorded'
+Firsts: Firsts
 Fitness: 健身
 'Fitness may be declining due to low recent training load': 'Fitness may be declining due to low recent training load'
 'Fitness may decline': 'Fitness may decline'
@@ -177,7 +181,9 @@ Load: Load
 Loading...: 加载中...
 'Locations over the globe': 全球位置
 'Long run': 长跑
+'Longest activity': 'Longest activity'
 'Longest activity (h)': '最久运动 (h)'
+'Longest distance': 'Longest distance'
 'Longest streaks': 最长连续记录
 Low: 低
 'Low risk': 'Low risk'
@@ -186,11 +192,11 @@ Maintenance: 维护
 'Maintenance history': 维护历史
 Mar: 三月
 Max: 最大
-'Max gradient': 最大坡度
 May: 五月
 Medium: 中等
 Metric: Metric
 Metrics: Metrics
+Milestones: Milestones
 'Mind & Body Sports': 心灵与身体运动
 'Moderate fatigue with stable fitness. Well suited for consistent day-to-day training': 'Moderate fatigue with stable fitness. Well suited for consistent day-to-day training'
 'Moderate monotony': 适度单调性
@@ -200,15 +206,19 @@ Monotony: 单调性
 Monthly: Monthly
 'Monthly stats': 每月统计
 Morning: 早晨
+'Most elevation': 'Most elevation'
 'Most recent activities': 最近的活动
 'Most recent challenges': 最近的挑战
+'Most recent milestones': 'Most recent milestones'
 'Mountain Bike Rides': 山地车骑行
 'Moving time': 移动时间
 Name: 名称
 Neutral: Neutral
+'New personal best for': 'New personal best for'
 Night: 夜晚
 'No activities': 没有活动
 'No data available': 没有可用数据
+'No milestones achieved yet': 'No milestones achieved yet'
 'No other options to compare with': 无可供比较的其他选项
 None: 无
 'Nordic Ski': 北欧滑雪
@@ -238,6 +248,7 @@ Padel: Padel
 'Peak fresh': 'Peak fresh'
 'Peak power outputs': 峰值功率输出
 'Personal Records': 个人记录
+'Personal bests': 'Personal bests'
 Photo: 照片
 Photos: 照片
 'Pickle Ball': 匹克球
@@ -248,12 +259,18 @@ Power: 功率
 'Power distribution': 功率分布
 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': '消耗了约{caloriesBurned}卡路里，或大约{numberOfPizzaSlices}片披萨🍕。'
 'Prev year': 去年
+Previous: Previous
 Race: 比赛
 'Racing Score': 赛车成绩
 'Racquet & Paddle Sports': 球拍和桨类运动
 'Racquet Ball': 壁球
 Ranking: Ranking
+'Reached {threshold} hours total moving time': 'Reached {threshold} hours total moving time'
+'Reached {threshold} total distance': 'Reached {threshold} total distance'
+'Reached {threshold} total elevation': 'Reached {threshold} total elevation'
 'Recent effort': 'Recent effort'
+'Recording devices': 'Recording devices'
+'Recording devices details': 'Recording devices details'
 'Recovery Timeline': 'Recovery Timeline'
 'Recovery forecast': 'Recovery forecast'
 'Reduced carbon emission by commuting': 通勤减少的碳排放
@@ -301,7 +318,6 @@ Squash: 壁球
 'Start slideshow': 播放幻灯片
 'Start times': 开始时间
 'Statistics for Strava': 'Statistics for Strava'
-Stats: 统计
 'Stats per weekday': 按工作日统计
 Status: Status
 'Strava profile': 'Strava profile'
@@ -319,6 +335,93 @@ Tag: 标签
 'Taper sweet-spot (+15)': '最佳减量期 (+15)'
 'Team Sports': 'Team Sports'
 Tennis: 网球
+"That's 1.5 times the distance to the edge of space": "That's 1.5 times the distance to the edge of space"
+"That's 100 days of commitment, triple digits!": "That's 100 days of commitment, triple digits!"
+"That's 2 activities per week for nearly 5 years": "That's 2 activities per week for nearly 5 years"
+"That's 2 full days of non-stop activity": "That's 2 full days of non-stop activity"
+"That's 2 full years of daily activity, incredible!": "That's 2 full years of daily activity, incredible!"
+"That's 2 months without missing a day": "That's 2 months without missing a day"
+"That's 2 months without stopping": "That's 2 months without stopping"
+"That's 250 days, over two thirds of a year": "That's 250 days, over two thirds of a year"
+"That's 3 activities per week for nearly 5 years": "That's 3 activities per week for nearly 5 years"
+"That's 3 weeks straight, they say it takes 21 days to build a habit": "That's 3 weeks straight, they say it takes 21 days to build a habit"
+"That's 4 months of unbroken daily activity": "That's 4 months of unbroken daily activity"
+"That's 45 days, halfway to a full quarter": "That's 45 days, halfway to a full quarter"
+"That's 5 months, nearly half a year without a rest day": "That's 5 months, nearly half a year without a rest day"
+"That's 500 days, well beyond a year of daily activity": "That's 500 days, well beyond a year of daily activity"
+"That's a full day of non-stop movement": "That's a full day of non-stop movement"
+"That's a full fortnight of daily activity": "That's a full fortnight of daily activity"
+"That's a full month of non-stop activity": "That's a full month of non-stop activity"
+"That's a full month without a rest day": "That's a full month without a rest day"
+"That's a full quarter of daily activity": "That's a full quarter of daily activity"
+"That's a full week of daily activity": "That's a full week of daily activity"
+"That's a full week of non-stop movement": "That's a full week of non-stop movement"
+"That's a full year of daily activity": "That's a full year of daily activity"
+"That's about 3.5 months of continuous movement": "That's about 3.5 months of continuous movement"
+"That's about one activity per week for a year": "That's about one activity per week for a year"
+"That's about one activity per week for half a year": "That's about one activity per week for half a year"
+"That's about one activity per week for two months": "That's about one activity per week for two months"
+"That's almost 2 activities per week for a year": "That's almost 2 activities per week for a year"
+"That's almost 21 days of continuous movement": "That's almost 21 days of continuous movement"
+"That's almost 3 activities per week for 7 years": "That's almost 3 activities per week for 7 years"
+"That's an activity almost every day for 27 years": "That's an activity almost every day for 27 years"
+"That's an activity every day for almost 7 years": "That's an activity every day for almost 7 years"
+"That's an activity every day for nearly 11 years": "That's an activity every day for nearly 11 years"
+"That's an activity every day for nearly 14 years": "That's an activity every day for nearly 14 years"
+"That's an activity every day for over 20 years": "That's an activity every day for over 20 years"
+"That's an activity every day for over 8 years": "That's an activity every day for over 8 years"
+"That's climbing Mount Everest twice": "That's climbing Mount Everest twice"
+"That's climbing to the edge of space and back 5 times": "That's climbing to the edge of space and back 5 times"
+"That's cruising altitude of a commercial airplane": "That's cruising altitude of a commercial airplane"
+"That's deeper than the deepest known cave on Earth": "That's deeper than the deepest known cave on Earth"
+"That's five times around the Earth": "That's five times around the Earth"
+"That's half a year without skipping a single day": "That's half a year without skipping a single day"
+"That's higher than Felix Baumgartner's space jump": "That's higher than Felix Baumgartner's space jump"
+"That's higher than the International Space Station's orbit": "That's higher than the International Space Station's orbit"
+"That's higher than the summit of Mont Blanc": "That's higher than the summit of Mont Blanc"
+"That's more than 10 days of non-stop movement": "That's more than 10 days of non-stop movement"
+"That's more than 10 months of continuous movement": "That's more than 10 months of continuous movement"
+"That's more than 2 Eiffel Towers stacked up": "That's more than 2 Eiffel Towers stacked up"
+"That's more than 2.5 times around the Earth": "That's more than 2.5 times around the Earth"
+"That's more than 4 days of continuous activity": "That's more than 4 days of continuous activity"
+"That's more than 4 months of non-stop activity": "That's more than 4 months of non-stop activity"
+"That's more than 41 days of non-stop movement": "That's more than 41 days of non-stop movement"
+"That's more than 5 activities per week for 7 years": "That's more than 5 activities per week for 7 years"
+"That's more than 8 times the height of Mount Everest": "That's more than 8 times the height of Mount Everest"
+"That's more than a full year of non-stop movement": "That's more than a full year of non-stop movement"
+"That's more than halfway around the Earth": "That's more than halfway around the Earth"
+"That's more than halfway to the ISS": "That's more than halfway to the ISS"
+"That's more than the circumference of Mars": "That's more than the circumference of Mars"
+"That's more than the distance from Earth to the Moon": "That's more than the distance from Earth to the Moon"
+"That's nearly 3 months of non-stop activity": "That's nearly 3 months of non-stop activity"
+"That's nearly 4 activities per week for 7 years": "That's nearly 4 activities per week for 7 years"
+"That's nearly 5 activities per week for a year": "That's nearly 5 activities per week for a year"
+"That's nearly 7 months of non-stop activity": "That's nearly 7 months of non-stop activity"
+"That's nearly climbing Mount Everest 3 times": "That's nearly climbing Mount Everest 3 times"
+"That's nearly the altitude of the International Space Station": "That's nearly the altitude of the International Space Station"
+"That's nearly twice around the Earth": "That's nearly twice around the Earth"
+"That's nearly twice the altitude of the International Space Station": "That's nearly twice the altitude of the International Space Station"
+"That's over 5.5 months of continuous movement": "That's over 5.5 months of continuous movement"
+"That's roughly a quarter of the way around the Earth": "That's roughly a quarter of the way around the Earth"
+"That's roughly the diameter of Jupiter": "That's roughly the diameter of Jupiter"
+"That's roughly the diameter of Neptune": "That's roughly the diameter of Neptune"
+"That's roughly the distance from London to Perth": "That's roughly the distance from London to Perth"
+"That's roughly the distance from Madrid to Barcelona": "That's roughly the distance from Madrid to Barcelona"
+"That's roughly the distance light travels in one second": "That's roughly the distance light travels in one second"
+"That's roughly the length of France": "That's roughly the length of France"
+"That's roughly the length of the Danube river": "That's roughly the length of the Danube river"
+"That's roughly the length of the island of Jamaica": "That's roughly the length of the island of Jamaica"
+"That's taller than the Empire State Building": "That's taller than the Empire State Building"
+"That's the altitude of a satellite in low Earth orbit": "That's the altitude of a satellite in low Earth orbit"
+"That's the circumference of the Earth": "That's the circumference of the Earth"
+"That's the distance from Earth to the Moon": "That's the distance from Earth to the Moon"
+"That's the distance to the edge of space, straight up": "That's the distance to the edge of space, straight up"
+"That's the edge of space, the Kármán line": "That's the edge of space, the Kármán line"
+"That's the height of Mount Everest": "That's the height of Mount Everest"
+"That's the height of the Eiffel Tower": "That's the height of the Eiffel Tower"
+"That's the length of the Great Wall of China": "That's the length of the Great Wall of China"
+"That's three quarters of the way around the Earth": "That's three quarters of the way around the Earth"
+"That's {number} days of at least {distance}": "That's {number} days of at least {distance}"
 'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.': 在骑行或跑步的场景下，埃丁顿数被定义为运动员在至少E天内至少覆盖E公里的最大数E。
 'These badges are dynamically created. You can use them in any &lt;img&gt; tag': '徽章为动态生成，您可在任意 &lt;img&gt; 标签中使用'
 Thinking...: 思考中...
@@ -404,6 +507,7 @@ Yoga: 瑜伽
 'Zwift stats': Zwift统计
 activities: 活动
 and: 和
+'average gradient': 'average gradient'
 avg: 平均
 bpm: 拍子数
 clear: 清除
@@ -427,11 +531,13 @@ never: 从不
 'on': 在
 'per activity': 每项活动
 'per hour': 每小时
+'reached Eddington number {number}': 'reached Eddington number {number}'
 to: 至
 total: 总计
 weeks: 周
 workouts: 锻炼
 '{daysSinceLastTagged} days': '{daysSinceLastTagged}天'
+'{days} consecutive days of activity': '{days} consecutive days of activity'
 '{hoursSinceLastTagged} hours': '{hoursSinceLastTagged}小时'
 '{maintenanceTaskLabel} every {interval}': '{maintenanceTaskLabel}每{interval}'
 '{numberOfActivities} activities': '{numberOfActivities}活动'
@@ -441,3 +547,6 @@ workouts: 锻炼
 '{numberOfResults} results based on your active filters': '{numberOfResults}个结果符合筛选条件'
 '{numberOfResults} routes based on your active filters': '{numberOfResults}条路线符合筛选条件'
 '{numberOfWeeks} weeks': '{numberOfWeeks} weeks'
+'{threshold} hours using {gearName}': '{threshold} hours using {gearName}'
+'{threshold} total distance using {gearName}': '{threshold} total distance using {gearName}'
+'{threshold} total elevation using {gearName}': '{threshold} total elevation using {gearName}'

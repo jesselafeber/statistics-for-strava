@@ -3,22 +3,21 @@
     <h3 class="text-lg font-semibold">
         {{ "Monthly stats"|trans }}
     </h3>
-    <ul class="tabs tabs--pills" id="monthlyStatsTab{{ uniqueId }}" data-tabs="#monthlyStatsTabContent{{ uniqueId }}"
-        data-tabs-active-classes="active" data-tabs-inactive-classes="inactive" role="tablist">
+    <ul class="tabs tabs--pills" id="monthlyStatsTab{{ uniqueId }}" data-tabs="#monthlyStatsTabContent{{ uniqueId }}" role="tablist">
         {% for context in metricsDisplayOrder %}
             <li role="presentation">
                 <a href="#" data-tabs-target="#monthlyStats{{ context.value }}{{ uniqueId }}" role="tab"
                    aria-controls="monthlyStats{{ context.value }}{{ uniqueId }}">
-                    {{ svg(context.getSvgIcon(), 'size-5', 'text-grey-900') }}
+                    {{ svg(context.getSvgIcon(), 'size-5', '') }}
                     <span class="hidden md:block">{{ context|trans }}</span>
                 </a>
             </li>
         {% endfor %}
     </ul>
 </div>
-<div id="monthlyStatsTabContent{{ uniqueId }}">
+<div class="flex flex-col grow" id="monthlyStatsTabContent{{ uniqueId }}">
     {% for context in metricsDisplayOrder %}
-        <div id="monthlyStats{{ context.value }}{{ uniqueId }}" role="tabpanel"
+        <div class="flex flex-col grow" id="monthlyStats{{ context.value }}{{ uniqueId }}" role="tabpanel"
              aria-labelledby="monthlyStats{{ context.value }}{{ uniqueId }}">
             {% set monthlyStatsCharts = monthlyStatsChartsPerContext[context.value] %}
             {% if monthlyStatsCharts|length > 1 %}
@@ -36,11 +35,11 @@
                     </ul>
                 </div>
             {% endif %}
-            <div id="monthlyStatsActivityType{{ context.value }}TabContent{{ uniqueId }}">
+            <div class="flex flex-col grow" id="monthlyStatsActivityType{{ context.value }}TabContent{{ uniqueId }}">
                 {% for activityType,chart in monthlyStatsCharts %}
-                    <div id="monthlyStats{{ activityType }}{{ context.value }}{{ uniqueId }}" role="tabpanel"
+                    <div class="flex flex-col grow" id="monthlyStats{{ activityType }}{{ context.value }}{{ uniqueId }}" role="tabpanel"
                          aria-labelledby="monthlyStats{{ activityType }}{{ context.value }}{{ uniqueId }}-tab">
-                        <div class="h-80" data-echarts-options='{{ chart }}' data-echarts-click="handleMonthlyStatsClick"></div>
+                        <div class="grow min-h-80" data-echarts-options='{{ chart }}' data-echarts-click="handleMonthlyStatsClick"></div>
                     </div>
                 {% endfor %}
             </div>

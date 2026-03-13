@@ -1,3 +1,88 @@
+# [v4.7.1](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.7.1) - 2026-03-09
+
+## New features
+* Added a new dashboard widget showing your most recent milestones.
+
+## Improvements
+* Improved the descriptions for gear milestones.
+* Improved the mobile layout for milestones.
+* Improved milestone comparisons.
+* Updated the German translation file.
+
+## Technical details
+* ISSUE #1852: Improve gear milestone descriptions by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1853
+* Update messages+intl-icu.de_DE.yaml by @effectpears in https://github.com/robiningelbrecht/statistics-for-strava/pull/1858
+* ISSUE #1854: Dashboard widget for most recent milestones by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1859
+* ISSUE #1861: Improve milestones mobile layout by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1862
+* ISSUE #1863: Switch var annotations in favour of asserts by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1864
+* ISSUE #1865: Improve milestone comparisons by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1868
+* ISSUE #1865: Supported providers link broken by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1871
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.7.0...v4.7.1
+
+# [v4.7.0](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.7.0) - 2026-03-05
+
+## New features
+* Added a timeline view of your key achievements and milestones over time.
+
+## Bug fixes
+* Fixed a calculation bug that caused the yearly statistics graph to incorrectly drop downward.
+
+## Technical details
+* ISSUE #1837: Milestones timeline by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1839
+* ISSUE #1848: Yearly Stats graph calculation error - went downward by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1850
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.6.8...v4.7.0
+
+# [v4.6.8](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.6.8) - 2026-03-03
+
+## New features
+* Added [statistics for recording devices](https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration), giving you more insight into which devices you use for your activities.
+
+```yaml
+gear:
+  recordingDevices:
+    - gearId: garmin-forerunner-265
+      purchasePrice:
+        amountInCents: 29950
+        currency: EUR
+```
+
+## Improvements
+* Made submenu items consistent across the entire app for a more uniform user experience.
+* Reorganized the src/Infrastructure directory to improve project structure and maintainability.
+
+## Technical details
+* ISSUE #1826: Rearrange src/Infrastructure by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1827
+* ISSUE #1833: Submenu items should be consistent throughout the app by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1834
+* ISSUE #1835: Recording devices stats by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1836
+* ISSUE #1841: Move rewind svg icons from twig files to SvgsTwigExtension by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1842
+* ISSUE #1819: Update neuron-core/neuron-ai to v3 by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1820
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.6.7...v4.6.8
+
+# [v4.6.7](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.6.7) - 2026-02-26
+
+## New features
+* You can now view Eddington metrics in both metric and imperial units, regardless of your default unit system.
+
+## Bug fixes
+* Fixed a small visual issue where Y-axis labels were slightly clipped on charts.
+* Resolved a bug in the Athlete Weight History chart where the unit system wasn’t applied correctly.
+* Fixed an alignment issue with elevation data in the "Most Recent Activities" widget.
+* Corrected inverted colors in the Segment Effort vs Heart Rate chart.
+* Fixed an issue where the pace tooltip displayed incorrect values in the Combined Stream Profile charts.
+
+## Technical details
+* ISSUE #1803: Allow to view Eddington metrics for both unit systems by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1813
+* ISSUE #1808: Fix slight clipping of Y-Labels by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1814
+* ISSUE #1815: Fix AthleteWeightHistoryChart unit system bug by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1817
+* ISSUE #1816: widget:mostRecentActivities - fix elevation alignment by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1818
+* ISSUE #1821: Segment effort vs heart rate chart inverted colors by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1822
+* ISSUE #1823: Fix pace tooltip in CombinedStreamProfileCharts by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1824
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.6.6...V4.6.7
+
 # [v4.6.6](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.6.6) - 2026-02-24
 
 ## What's Changed

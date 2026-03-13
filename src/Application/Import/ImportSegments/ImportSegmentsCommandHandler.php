@@ -10,9 +10,9 @@ use App\Domain\Strava\RateLimit\StravaRateLimitHasBeenReached;
 use App\Domain\Strava\Strava;
 use App\Infrastructure\CQRS\Command\Command;
 use App\Infrastructure\CQRS\Command\CommandHandler;
-use App\Infrastructure\Daemon\Mutex\LockName;
-use App\Infrastructure\Daemon\Mutex\Mutex;
 use App\Infrastructure\DependencyInjection\Mutex\WithMutex;
+use App\Infrastructure\Mutex\LockName;
+use App\Infrastructure\Mutex\Mutex;
 use App\Infrastructure\ValueObject\Geography\EncodedPolyline;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
@@ -73,8 +73,7 @@ final readonly class ImportSegmentsCommandHandler implements CommandHandler
             } catch (ClientException|RequestException $exception) {
                 if (404 === $exception->getResponse()?->getStatusCode()) {
                     // Segment does not exist anymore. Mark as imported.
-                    $segment->flagDetailsAsImported();
-                    $this->segmentRepository->update($segment);
+                    $this->segmentRepository->update($segment->flagDetailsAsImported());
                 }
 
                 $command->getOutput()->writeln(sprintf('<error>Strava API threw error: %s</error>', $exception->getMessage()));

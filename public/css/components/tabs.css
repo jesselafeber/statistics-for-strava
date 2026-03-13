@@ -1,8 +1,8 @@
 @layer components {
-    div.tabs.tabs--default{
+    div.tabs.tabs--default {
         @apply mb-4 border-b-2 border-gray-100;
 
-        & > ul{
+        & > ul {
             @apply flex gap-x-2 overflow-x-auto -mb-0.5 text-sm font-medium text-center;
 
             & > li {
@@ -10,12 +10,31 @@
 
                 & > a {
                     @apply inline-flex items-center justify-center p-2 border-b-2;
+                    @apply text-gray-500 border-gray-100;
+                    @apply hover:text-gray-600 hover:border-gray-300;
+
+                    &.active{
+                        @apply text-strava-orange border-strava-orange;
+                    }
+                }
+            }
+        }
+
+        &.tabs--vertical{
+            & > ul {
+                @apply mr-2 flex-col gap-y-1 gap-x-0 text-left;
+
+                & > li {
+
+                    & > a {
+                        @apply border-l-2 border-b-0;
+                    }
                 }
             }
         }
     }
 
-    ul.tabs.tabs--pills{
+    ul.tabs.tabs--pills {
         @apply inline-flex rounded-md shadow-xs divide-x divide-gray-200;
 
         & > li {
@@ -26,6 +45,24 @@
 
                 &.active {
                     @apply text-strava-orange;
+                }
+            }
+        }
+    }
+
+    ul.tabs.tabs--menu-item {
+        @apply inline-flex flex-nowrap gap-x-px max-w-full overflow-x-auto scrollbar-thin;;
+        @apply text-sm font-medium text-center text-gray-500;
+        @apply p-0.5 border border-gray-200 bg-gray-100 rounded-lg mb-0.5;
+
+        & > li {
+            @apply shrink-0;
+
+            & > a {
+                @apply inline-block px-4 py-2 rounded-lg hover:text-gray-900;
+
+                &.active {
+                    @apply shadow-xs bg-white text-gray-900 dark:bg-[#151b23];
                 }
             }
         }

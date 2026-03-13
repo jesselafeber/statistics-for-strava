@@ -3,8 +3,7 @@
 <div class="flex items-center justify-between">
     <h3 class="text-lg font-semibold">{{ "Training goals"|trans }}</h3>
     {% if calculatedTrainingGoalsPerPeriod|length > 1 %}
-        <ul class="tabs tabs--pills" id="trainingGoalsTab{{ uniqueId }}" data-tabs="#trainingGoalsTabContent{{ uniqueId }}"
-            data-tabs-active-classes="active" data-tabs-inactive-classes="inactive" role="tablist">
+        <ul class="tabs tabs--pills" id="trainingGoalsTab{{ uniqueId }}" data-tabs="#trainingGoalsTabContent{{ uniqueId }}" role="tablist">
             {% for period,goals in calculatedTrainingGoalsPerPeriod %}
                 <li role="presentation">
                     <a href="#" data-tabs-target="#trainingGoals{{ period }}{{ uniqueId }}" role="tab"
@@ -26,7 +25,7 @@
                         {% set trainingGoal = calculatedtrainingGoal.trainingGoal %}
                         <div class="pb-4">
                             <div class="mb-1 flex justify-between">
-                                <div class="flex items-center gap-x-0.5 text-sm text-grey-900">
+                                <div class="flex items-center gap-x-0.5 text-sm">
                                     <div>{{ svg(trainingGoal.getType().getSvgIcon(), 'size-4') }}</div>
                                     {% set presicion = trainingGoal.getType() == enum('App\\Domain\\Dashboard\\Widget\\TrainingGoals\\TrainingGoalType').MOVING_TIME ? 1 : 0 %}
                                     {% set leftToDo = calculatedtrainingGoal.progressLeftToDo %}
@@ -36,15 +35,15 @@
                                         <div>{{ trainingGoal.getLabel() }} - {{ calculatedtrainingGoal.absoluteProgress|renderMeasurement(presicion) }}</div>
                                     {% endif %}
                                 </div>
-                                <div class="text-sm text-grey-900">{{ "Goal"|trans }}: {{ trainingGoal.getGoal()|renderMeasurement(0) }}</div>
+                                <div class="text-sm">{{ "Goal"|trans }}: {{ trainingGoal.getGoal()|renderMeasurement(0) }}</div>
                             </div>
                             <div class="w-full rounded-full bg-gray-200">
                                 {% if calculatedtrainingGoal.relativeProgress > 0 %}
-                                    <div class="rounded-full bg-strava-orange p-0.5 text-center text-xs leading-none font-medium text-white" style="width: {{ max(10, calculatedtrainingGoal.relativeProgress) }}%">
+                                    <div class="rounded-full bg-strava-orange p-0.5 text-center text-xs leading-none font-medium text-white no-dark" style="width: {{ max(10, calculatedtrainingGoal.relativeProgress) }}%">
                                         {{ calculatedtrainingGoal.relativeProgress }}%
                                     </div>
                                 {% else %}
-                                    <div class="rounded-full p-0.5 text-center text-xs leading-none font-medium text-grey-900" style="width: 10%">
+                                    <div class="rounded-full p-0.5 text-center text-xs leading-none font-medium" style="width: 10%">
                                         0%
                                     </div>
                                 {% endif %}

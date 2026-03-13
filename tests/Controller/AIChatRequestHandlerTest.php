@@ -12,16 +12,16 @@ use App\Domain\Integration\AI\Chat\ChatMessageId;
 use App\Domain\Integration\AI\Chat\ChatRepository;
 use App\Domain\Integration\AI\Chat\DbalChatRepository;
 use App\Infrastructure\Config\AppConfig;
+use App\Infrastructure\Config\PlatformEnvironment;
 use App\Infrastructure\CQRS\Command\Bus\CommandBus;
 use App\Infrastructure\ValueObject\String\KernelProjectDir;
-use App\Infrastructure\ValueObject\String\PlatformEnvironment;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\ContainerTestCase;
 use App\Tests\Infrastructure\CQRS\Command\Bus\SpyCommandBus;
 use App\Tests\Infrastructure\Time\Clock\PausedClock;
 use League\Flysystem\FilesystemOperator;
-use NeuronAI\Agent;
-use NeuronAI\AgentInterface;
+use NeuronAI\Agent\Agent;
+use NeuronAI\Agent\AgentInterface;
 use NeuronAI\Chat\Enums\MessageRole;
 use NeuronAI\Chat\Messages\AssistantMessage;
 use NeuronAI\Testing\FakeAIProvider;
@@ -165,7 +165,7 @@ class AIChatRequestHandlerTest extends ContainerTestCase
             clock: PausedClock::on(SerializableDateTime::fromString('2025-05-05')),
         );
 
-        $agent = Agent::make()->withProvider(
+        $agent = Agent::make()->setAiProvider(
             new FakeAIProvider()
         );
 

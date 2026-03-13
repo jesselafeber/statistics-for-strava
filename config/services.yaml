@@ -28,7 +28,7 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    App\Infrastructure\Exception\ErrorResponseExceptionListener:
+    App\Infrastructure\Http\ErrorResponseExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
 
@@ -45,7 +45,7 @@ services:
         factory: [ null, 'fromString' ]
         arguments: ['%kernel.project_dir%']
 
-    App\Infrastructure\ValueObject\String\PlatformEnvironment:
+    App\Infrastructure\Config\PlatformEnvironment:
         public: true
         autoconfigure: false
         factory: [ null, 'fromServer' ]
@@ -121,7 +121,7 @@ services:
       factory: [ null, 'fromBool' ]
       arguments: [ '@=app_config("import.optInToSegmentDetailImport", false)' ]
 
-    NeuronAI\AgentInterface:
+    NeuronAI\Agent\AgentInterface:
         class: App\Domain\Integration\AI\NeuronAIAgent
 
     NeuronAI\Chat\History\ChatHistoryInterface:
@@ -212,6 +212,10 @@ services:
     App\Domain\Gear\Maintenance\GearMaintenanceConfig:
         factory: [ null, 'fromArray' ]
         arguments: ['@=app_config("gearMaintenance", [])']
+
+    App\Domain\Gear\RecordingDevice\RecordingDevicesConfig:
+        factory: [ null, 'fromArray' ]
+        arguments: ['@=app_config("gear.recordingDevices", [])']
 
     App\Domain\Strava\Webhook\WebhookConfig:
       factory: [ null, 'fromArray' ]
