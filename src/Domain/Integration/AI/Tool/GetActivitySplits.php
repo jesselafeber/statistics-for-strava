@@ -29,12 +29,6 @@ final class GetActivitySplits extends Tool
         );
     }
 
-    #[\Override]
-    public function getMaxRuns(): int
-    {
-        return 100;
-    }
-
     /**
      * @return \NeuronAI\Tools\ToolPropertyInterface[]
      *

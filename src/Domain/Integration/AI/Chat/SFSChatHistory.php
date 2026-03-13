@@ -7,6 +7,7 @@ namespace App\Domain\Integration\AI\Chat;
 use App\Domain\Integration\AI\Chat\AddChatMessage\AddChatMessage;
 use App\Infrastructure\CQRS\Command\Bus\CommandBus;
 use NeuronAI\Chat\Enums\MessageRole;
+use NeuronAI\Chat\History\ChatHistoryInterface;
 use NeuronAI\Chat\History\InMemoryChatHistory as BaseInMemoryChatHistory;
 use NeuronAI\Chat\Messages\Message;
 
@@ -22,15 +23,15 @@ final class SFSChatHistory extends BaseInMemoryChatHistory
     }
 
     #[\Override]
-    public function setMessages(array $messages): void
+    public function setMessages(array $messages): ChatHistoryInterface
     {
-        // TODO: Implement setMessages() method.
+        return $this;
     }
 
     #[\Override]
-    protected function clear(): void
+    protected function clear(): ChatHistoryInterface
     {
-        // TODO: Implement clear() method.
+        return $this;
     }
 
     #[\Override]
