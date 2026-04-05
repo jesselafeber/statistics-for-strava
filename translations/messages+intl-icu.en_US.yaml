@@ -107,6 +107,7 @@ Feb: Feb
 'Filter on country': 'Filter on country'
 'Filter on sport type': 'Filter on sport type'
 'Filter on starred segments': 'Filter on starred segments'
+'First activity in {countryName}': 'First activity in {countryName}'
 'First-ever activity recorded': 'First-ever activity recorded'
 Firsts: Firsts
 Fitness: Fitness
@@ -127,6 +128,7 @@ Goal: Goal
 Golf: Golf
 'Good training variety': 'Good training variety'
 'Google searches': 'Google searches'
+Gradient: Gradient
 'Gravel Rides': 'Gravel Rides'
 "Guidelines vary by individual; for more information see Joe Friel's 'The Cyclist's Training Bible' or TrainingPeaks' research documentation.": "Guidelines vary by individual; for more information see Joe Friel's 'The Cyclist's Training Bible' or TrainingPeaks' research documentation."
 HIIT: HIIT
@@ -171,6 +173,7 @@ Laps: Laps
 'Last 7 days training load': 'Last 7 days training load'
 'Last activity': 'Last activity'
 'Last effort': 'Last effort'
+'Last effort date': 'Last effort date'
 'Last maintenance': 'Last maintenance'
 'Last {numberOfDays} days': 'Last {numberOfDays} days'
 Lifetime: Lifetime
@@ -192,6 +195,7 @@ Maintenance: Maintenance
 'Maintenance history': 'Maintenance history'
 Mar: Mar
 Max: Max
+'Max gradient': 'Max gradient'
 May: May
 Medium: Medium
 Metric: Metric
@@ -529,6 +533,7 @@ more: more
 n/a: n/a
 never: never
 'on': 'on'
+per: per
 'per activity': 'per activity'
 'per hour': 'per hour'
 'reached Eddington number {number}': 'reached Eddington number {number}'

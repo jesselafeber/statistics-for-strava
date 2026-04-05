@@ -8,6 +8,7 @@ use App\Application\AppUrl;
 use App\Domain\Activity\Activity;
 use App\Domain\Activity\Image\ImageOrientation;
 use App\Domain\Segment\Segment;
+use App\Infrastructure\ValueObject\String\Path;
 use Twig\Attribute\AsTwigFilter;
 use Twig\Attribute\AsTwigFunction;
 
@@ -23,12 +24,7 @@ final readonly class UrlTwigExtension
     #[AsTwigFunction('relativeUrl')]
     public function toRelativeUrl(string $path): string
     {
-        $path = '/'.ltrim($path, '/');
-        if (null === $this->appUrl->getBasePath()) {
-            return $path;
-        }
-
-        return '/'.trim($this->appUrl->getBasePath(), '/').$path;
+        return Path::from($path, $this->appUrl)->toRelativePath();
     }
 
     #[AsTwigFunction('placeholderImage')]
@@ -39,6 +35,12 @@ final readonly class UrlTwigExtension
         }
 
         return $this->toRelativeUrl('/assets/placeholder.webp');
+    }
+
+    #[AsTwigFilter('countryIcon')]
+    public function countryIcon(string $countryCode): string
+    {
+        return $this->toRelativeUrl('/assets/images/flags/'.strtolower($countryCode).'.svg');
     }
 
     #[AsTwigFilter('activityLink', isSafe: ['html'])]

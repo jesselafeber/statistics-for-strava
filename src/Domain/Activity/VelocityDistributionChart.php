@@ -80,17 +80,22 @@ final readonly class VelocityDistributionChart
 
         $yAxisMax = max($data) * 1.2;
 
+        $steppedTarget = match (true) {
+            $velocityUnitPreference instanceof SecPer100Meter => $this->averageSpeed->toMetersPerSecond()->toSecPerKm()->toSecPer100Meter()->toFloat(),
+            $velocityUnitPreference instanceof SecPerKm => $this->averageSpeed->toMetersPerSecond()->toSecPerKm()->toUnitSystem($this->unitSystem)->toFloat(),
+            default => $this->averageSpeed->toUnitSystem($this->unitSystem)->toFloat(),
+        };
+
         $xAxisValueAverageVelocity = array_search($this->findClosestSteppedValue(
             min: $minVelocity,
             max: $maxVelocity,
             step: $step,
-            target: $velocityUnitPreference instanceof Pace ? $this->averageSpeed->toMetersPerSecond()->toSecPerKm()->toFloat() : $this->averageSpeed->toFloat()
+            target: $steppedTarget
         ), $xAxisValues);
 
         $convertedAverageVelocity = match (true) {
-            $velocityUnitPreference instanceof SecPer100Meter => round($this->averageSpeed->toMetersPerSecond()->toSecPerKm()->toSecPer100Meter()->toFloat(), 1),
-            $velocityUnitPreference instanceof SecPerKm => $this->formatDurationAsClock((int) round($this->averageSpeed->toMetersPerSecond()->toSecPerKm()->toUnitSystem($this->unitSystem)->toFloat())),
-            default => round($this->averageSpeed->toUnitSystem($this->unitSystem)->toFloat(), 1),
+            $velocityUnitPreference instanceof SecPerKm => $this->formatDurationAsClock((int) round($steppedTarget)),
+            default => round($steppedTarget, 1),
         };
 
         if ($velocityUnitPreference instanceof Pace) {

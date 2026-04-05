@@ -6,7 +6,8 @@ namespace App\Domain\Milestone\Discoverer;
 
 use App\Domain\Activity\ActivityId;
 use App\Domain\Activity\SportType\SportType;
-use App\Domain\Milestone\Context\FirstContext;
+use App\Domain\Activity\WorldType;
+use App\Domain\Milestone\Context\FirstActivityInCountryContext;
 use App\Domain\Milestone\Milestone;
 use App\Domain\Milestone\MilestoneCategory;
 use App\Domain\Milestone\MilestoneIdFactory;
@@ -14,7 +15,7 @@ use App\Domain\Milestone\Milestones;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\DBAL\Connection;
 
-final readonly class FirstsMilestoneDiscoverer implements MilestoneDiscoverer
+final readonly class FirstActivityInCountryMilestoneDiscoverer implements MilestoneDiscoverer
 {
     public function __construct(
         private Connection $connection,
@@ -25,34 +26,39 @@ final readonly class FirstsMilestoneDiscoverer implements MilestoneDiscoverer
     public function discover(): Milestones
     {
         $rows = $this->connection->executeQuery(
-            'SELECT activityId, startDateTime, sportType, name
+            "SELECT activityId, startDateTime, sportType, name,
+                    JSON_EXTRACT(routeGeography, '$.country_code') AS countryCode
              FROM Activity
-             ORDER BY startDateTime ASC'
+             WHERE JSON_EXTRACT(routeGeography, '$.country_code') IS NOT NULL
+             AND worldType = :worldType
+             ORDER BY startDateTime ASC",
+            [
+                'worldType' => WorldType::REAL_WORLD->value,
+            ],
         )->fetchAllAssociative();
 
         $milestones = [];
-        /** @var array<string, true> $seenSportTypes */
-        $seenSportTypes = [];
+        /** @var array<string, true> $seenCountries */
+        $seenCountries = [];
 
         foreach ($rows as $row) {
-            $sportTypeValue = $row['sportType'];
-            if (isset($seenSportTypes[$sportTypeValue])) {
+            $countryCode = strtolower((string) $row['countryCode']);
+            if (isset($seenCountries[$countryCode])) {
                 continue;
             }
 
-            $sportType = SportType::from($sportTypeValue);
-            $seenSportTypes[$sportTypeValue] = true;
+            $seenCountries[$countryCode] = true;
 
             $milestones[] = Milestone::create(
                 id: $this->milestoneIdFactory->random(),
                 achievedOn: SerializableDateTime::fromString($row['startDateTime']),
-                category: MilestoneCategory::FIRST,
-                context: new FirstContext(
-                    sportType: $sportType,
+                category: MilestoneCategory::FIRST_ACTIVITY_IN_COUNTRY,
+                context: new FirstActivityInCountryContext(
+                    countryCode: $countryCode,
                     activityName: $row['name'],
                 ),
             )
-            ->withSportType($sportType)
+            ->withSportType(SportType::from($row['sportType']))
             ->withActivityId(ActivityId::fromString($row['activityId']));
         }
 

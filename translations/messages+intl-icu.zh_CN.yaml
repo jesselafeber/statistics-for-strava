@@ -107,6 +107,7 @@ Feb: 二月
 'Filter on country': 按国家筛选
 'Filter on sport type': 按运动类型筛选
 'Filter on starred segments': 筛选星标路段
+'First activity in {countryName}': 'First activity in {countryName}'
 'First-ever activity recorded': 'First-ever activity recorded'
 Firsts: Firsts
 Fitness: 健身
@@ -127,6 +128,7 @@ Goal: Goal
 Golf: 高尔夫
 'Good training variety': 良好的训练多样性
 'Google searches': Google搜索
+Gradient: Gradient
 'Gravel Rides': 砾石骑行
 "Guidelines vary by individual; for more information see Joe Friel's 'The Cyclist's Training Bible' or TrainingPeaks' research documentation.": '指导原则因人而异；欲了解更多信息，请参阅乔·弗里尔的《自行车训练圣经》或 TrainingPeaks 的研究文档。'
 HIIT: 高强度间歇训练
@@ -171,6 +173,7 @@ Laps: 圈
 'Last 7 days training load': 最近7天训练负荷
 'Last activity': 'Last activity'
 'Last effort': 最后努力
+'Last effort date': 'Last effort date'
 'Last maintenance': 最后维护
 'Last {numberOfDays} days': '最近{numberOfDays}天'
 Lifetime: Lifetime
@@ -192,6 +195,7 @@ Maintenance: 维护
 'Maintenance history': 维护历史
 Mar: 三月
 Max: 最大
+'Max gradient': 'Max gradient'
 May: 五月
 Medium: 中等
 Metric: Metric
@@ -529,6 +533,7 @@ more: 更多
 n/a: 不适用
 never: 从不
 'on': 在
+per: per
 'per activity': 每项活动
 'per hour': 每小时
 'reached Eddington number {number}': 'reached Eddington number {number}'

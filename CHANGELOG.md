@@ -1,3 +1,93 @@
+# [v4.7.5](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.7.5) - 2026-04-01
+
+## Improvements
+* Updated Italian translations: Improved and corrected several Italian UI translations.
+* Enhanced Power Output chart: The power output chart has been improved for better readability and accuracy.
+
+## Bug fixes
+* Fixed crash related to missing indices: Resolved an issue that caused errors like "Couldn't read the indices [Names][XK]".
+* Fixed milestone duration formatting: Previous milestone durations are now displayed in the correct format.
+* Fixed speed distribution graph for imperial unit system.
+
+## Technical details
+* ISSUE #1931: Fix milestones format previous durations by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1932
+* ISSUE #1930: Speed Distribution is not hitting X-Axis properly by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1933
+* chore(i18n): improve Italian translations by @franzudev in https://github.com/robiningelbrecht/statistics-for-strava/pull/1934
+* ISSUE #1937: Improve power output chart by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1938
+* ISSUE #1944: Couldn't read the indices [Names][XK] by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1945
+
+## New Contributors
+* @franzudev made their first contribution in https://github.com/robiningelbrecht/statistics-for-strava/pull/1934
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.7.4...v4.7.5
+
+# [v4.7.4](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.7.4) - 2026-03-23
+
+## New features
+* Added a new milestone: your first activity in a new country is now tracked.
+
+## Improvements
+* Redact AI API keys and improve the documentation.
+* Improved how time is displayed for Personal Best milestones.
+* You can now open an activity’s detail page by clicking its image on the Photos page.
+* Updated German translations.
+* Fixed a layout issue so recent milestones now align properly, even when other widgets in the same row are taller.
+
+## Bug fixes
+* Fixed an issue in the Workout Assistant by switching to relative URLs.
+
+## Technical details
+* Docs: FAQ improvement by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1907
+* ISSUE #1909: Use relative URLs while using the workout assistant by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1910
+* ISSUE #1908: Add AI api key to redactions + improve AI docs by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1911
+* ISSUE #1916: Add first activity in a new country as a new milestone by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1917
+* ISSUE #1915: Milestones - Personal Bests: time notation by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1918
+* ISSUE #1914: Open activity detail when clicking an image on the Photos page by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1919
+* Update messages+intl-icu.de_DE.yaml by @effectpears in https://github.com/robiningelbrecht/statistics-for-strava/pull/1920
+* ISSUE #1923: Make Most recent milestones same height when another widget on same row is taller by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1924
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.7.3...v4.7.4
+
+# [v4.7.3](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.7.3) - 2026-03-17
+
+## Improvements
+* Added extra filters to the segment overview page
+* Introduced relative cost per distance unit for gear and recording devices
+
+## Bug fixes
+* Fixed a division by zero issue in weekday statistics
+
+## Technical details
+* ISSUE #1897: Extra filters on the segment overview page by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1898
+* ISSUE #1899: Relative cost per km by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1900
+* ISSUE #1901: Filter segment page for a specific period on last effort… by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1902
+* ISSUE #1904: Division by zero in WeekdayStats.php by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1905
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.7.2...v4.7.3
+
+# [v4.7.2](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.7.2) - 2026-03-14
+
+## New features
+* Average gradient on segments page
+
+## Improvements
+* Multi-select filters for heatmaps
+* Updated Shoutrrr to v0.14.0
+* German translation updates
+
+## Bug fixes
+* Fixed pace distribution for imperial units
+
+## Technical details
+* ISSUE #1867: Add average gradient on segments page by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1874
+* Update messages+intl-icu.de_DE.yaml by @effectpears in https://github.com/robiningelbrecht/statistics-for-strava/pull/1883
+* ISSUE #1884: Update Shoutrrr to v0.14.0 by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1885
+* ISSUE #1887: Sunset challenge import from public profile by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1888
+* ISSUE #1891: Fix pace distribution issue for imerial system by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1894
+* ISSUE #1893: Allow heatmap activities / filters to be multi-select by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1895
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.7.1...v4.7.2
+
 # [v4.7.1](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.7.1) - 2026-03-09
 
 ## New features
