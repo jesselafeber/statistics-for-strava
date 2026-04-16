@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Domain\Activity\Stream;
 
 enum StreamType: string
@@ -22,7 +24,7 @@ enum StreamType: string
     public static function thatSupportDistributionValues(): array
     {
         return [
-            self::WATTS, self::HEART_RATE, self::VELOCITY,
+            self::WATTS, self::HEART_RATE, self::VELOCITY, self::CADENCE,
         ];
     }
 }
