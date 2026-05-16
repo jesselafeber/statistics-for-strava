@@ -97,6 +97,7 @@ Elev: Höjd
 Elevation: Höjdmeter
 'Elevation in {unit}': 'Höjdmeter i {unit}'
 Elliptical: Elliptisk
+Energy: Energy
 'Enter fullscreen mode': 'Enter fullscreen mode'
 Evening: Kväll
 'Excludes commutes': 'Uteslut pendling'
@@ -118,6 +119,7 @@ Fitness: Träning
 'Form (TSB)': 'Träningsform (TSB)'
 Fri: Fre
 Friday: Fredag
+GAP: GAP
 Gear: Utrustning
 'Gear "{gearId}" is referenced in your maintenance config file, but was not imported from Strava. Please check that the gear exists and is correctly synced.': 'Utrusning "{gearId}" refereras i din underhållskonfigurationsfil, men importerades inte från Strava. Kontrollera att utrustningen finns och är korrekt synkroniserad..'
 'Gear details': 'Utrustning detaljer'
@@ -171,11 +173,14 @@ Kayaking: Kayak
 'Kite Surf': Draksurfning
 Lap: Varv
 Laps: Varv
+'Last 30 days': 'Last 30 days'
 'Last 7 days training load': 'Belastning de senaste 7 dagarna'
 'Last activity': 'Last activity'
 'Last effort': 'Senaste prestation'
 'Last effort date': 'Last effort date'
 'Last maintenance': 'Senast underhållet'
+'Last month': 'Last month'
+'Last week': 'Last week'
 'Last {numberOfDays} days': 'Senaste {numberOfDays} dagarna'
 Lifetime: Lifetime
 'Light fatigue with good readiness. A great balance for quality training or longer efforts': 'Light fatigue with good readiness. A great balance for quality training or longer efforts'
@@ -432,6 +437,8 @@ Tennis: Tennis
 Thinking...: Tänker...
 'This chart summarizes how you train. Each axis reflects a different normalized training habit, so higher values mean stronger emphasis.': 'This chart summarizes how you train. Each axis reflects a different normalized training habit, so higher values mean stronger emphasis.'
 'This feature is currently disabled': 'Den här funktionen är avstängd'
+'This month': 'This month'
+'This week': 'This week'
 Thu: Tor
 Thursday: Torsdag
 Time: Tid
@@ -488,7 +495,6 @@ Wheelchair: Rullstol
 Workout: Träning
 'Workout assistant': 'Workout assistant'
 'Workout type': Träningsform
-YTD: YTD
 Year: År
 Yearly: Yearly
 'Yearly stats': Årsstatistik
@@ -496,7 +502,6 @@ Yoga: Yoga
 "You recorded workouts in {numberOfCountriesWithWorkouts} different countries, that's {percentage} of all countries 🌍": 'Du har registrerat träningspass i {numberOfCountriesWithWorkouts} olika länder, vilket motsvarar {percentage} av alla länder 🌍'
 'Your PB badge': 'Ditt PB märke'
 'Your Strava badge': 'Ditt strava märke'
-'Your Strava {year} rewind will be available on the 24th of December.': 'Din Strava {year} återspegling kommer vara tillgänglig på den 24:e December.'
 'Your Zwift badge': 'Ditt Zwift märke'
 'Your badge(s)': 'Ditt/Dina märke(n)'
 'Z1-2 (Low)': 'Z1-2 (Låg)'
