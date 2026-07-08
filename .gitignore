@@ -39,3 +39,4 @@ phpstan.neon
 /tests/strava*.db*
 ###> app-build ###
 /.env
+.DS_Store
