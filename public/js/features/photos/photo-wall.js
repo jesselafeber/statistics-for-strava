@@ -1,6 +1,5 @@
 import {FilterStorage, FilterName} from "../data-table/storage";
 import {FilterManager} from "../data-table/filter-manager";
-import LightGallery from "./light-gallery";
 
 export default class PhotoWall {
     constructor(wrapper) {
@@ -12,13 +11,19 @@ export default class PhotoWall {
             filterables: JSON.parse(el.getAttribute('data-filterables')),
             active: true
         }));
-        this.lightGallery = new LightGallery(this.wrapper);
     }
 
     async render() {
-        const redraw = () => {
+        const {default: LightGallery} = await import(
+            /* webpackChunkName: "lightgallery" */ './light-gallery'
+        );
+        this.lightGallery = new LightGallery(this.wrapper);
+        const redraw = (updateStorage = true) => {
             const activeFilters = this.filterManager.getActiveFilters();
             this.filterManager.updateDropdownState(activeFilters);
+            if (updateStorage) {
+                this.filterManager.updateStorage(FilterName.PHOTO_WALL, activeFilters);
+            }
 
             const images = this.filterManager.applyFiltersToRows(this.allImages);
             for (const {element, active} of images) {
@@ -34,9 +39,8 @@ export default class PhotoWall {
             this.lightGallery.refresh(activeImages);
         };
 
-        FilterStorage.set(FilterName.PHOTO_WALL, JSON.parse(this.wrapper.getAttribute('data-default-filters')));
         this.filterManager.prefillFromStorage(FilterName.PHOTO_WALL);
-        redraw();
+        redraw(false);
 
         this.wrapper.querySelectorAll('[data-dataTable-filter]').forEach(el => el.addEventListener('input', redraw));
         this.lightGallery.bindEvents();
@@ -44,7 +48,7 @@ export default class PhotoWall {
         if (this.resetBtn) {
             this.resetBtn.addEventListener('click', e => {
                 e.preventDefault();
-                this.filterManager.resetAll();
+                this.filterManager.resetAll(FilterName.PHOTO_WALL);
                 redraw();
             });
         }

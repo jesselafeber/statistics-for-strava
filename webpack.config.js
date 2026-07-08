@@ -4,11 +4,11 @@ module.exports = {
     mode: 'production',
     context: __dirname,
     entry: {
-        'app.min': './public/js/app.js',
-        'leaflet.controls.min': './public/js/features/maps/leaflet-controls.js',
+        'app.min': './public/js/app.js'
     },
     optimization: {
-        minimize: true
+        minimize: true,
+        splitChunks: false,
     },
     output: {
         path: path.resolve(__dirname, 'public/js/dist'),

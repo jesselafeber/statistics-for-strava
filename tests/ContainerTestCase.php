@@ -43,6 +43,7 @@ abstract class ContainerTestCase extends KernelTestCase
         StreamBasedActivityPowerRepository::$cachedPowerOutputs = [];
         StreamBasedActivityHeartRateRepository::$cachedHeartRateZones = [];
         StreamBasedActivityHeartRateRepository::$cachedHeartRateZonesPerActivityType = [];
+        StreamBasedActivityHeartRateRepository::$cachedHeartRateZonesPerActivity = [];
         StreamBasedActivityHeartRateRepository::$cachedHeartRateZonesInLastXDays = [];
         Eddington::$instances = [];
         ActivityTotals::$instance = null;
@@ -52,9 +53,9 @@ abstract class ContainerTestCase extends KernelTestCase
         /** @var \League\Flysystem\FilesystemOperator[] $fileSystems */
         $fileSystems = [
             // $this->getContainer()->get('default.storage'),
-            $this->getContainer()->get('public.storage'),
             $this->getContainer()->get('file.storage'),
-            $this->getContainer()->get('build.storage'),
+            $this->getContainer()->get('build_html.storage'),
+            $this->getContainer()->get('build_api.storage'),
         ];
 
         foreach ($fileSystems as $fileSystem) {

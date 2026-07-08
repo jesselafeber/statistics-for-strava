@@ -1,4 +1,5 @@
 import {eventBus, Events} from "../core/event-bus";
+import { Modal } from 'flowbite';
 
 export default class ModalManager {
     constructor(router) {
@@ -9,8 +10,11 @@ export default class ModalManager {
         this.modal = null;
     }
 
-    init(rootNode) {
-        rootNode.addEventListener('click', (e) => {
+    // Must be called exactly once at boot. The handler relies on closest(), so
+    // a single delegated listener on document covers page content, (re)loaded
+    // modal content and dynamically added rows.
+    init() {
+        document.addEventListener('click', (e) => {
             const node = e.target.closest('a[data-model-content-url]');
             if (!node) return;
 

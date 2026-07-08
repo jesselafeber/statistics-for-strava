@@ -1,4 +1,7 @@
 import {pointToLineDistance, point, lineString} from "../../../libraries/turf";
+import L from 'leaflet';
+import {createFlyToPlacesControl, createMapToolsControl} from "../maps/leaflet-controls";
+import '../maps/ctrl-scroll-zoom';
 
 export default class HeatmapDrawer {
     constructor(wrapper, config, modalManager) {
@@ -6,12 +9,14 @@ export default class HeatmapDrawer {
         this.config = config;
         this.modalManager = modalManager;
         this.placesControl = null;
+        this.mapToolsControl = null;
         this.mainFeatureGroup = L.featureGroup();
         this.routePolylines = [];
         this.map = L.map(this.wrapper, {
-            scrollWheelZoom: true,
+            ctrlScrollZoom: true,
             minZoom: 1,
             maxZoom: 21,
+            preferCanvas: true,
         });
         this.config.tileLayerUrls.forEach((tileLayerUrl) => {
             L.tileLayer(tileLayerUrl).addTo(this.map);
@@ -138,7 +143,7 @@ export default class HeatmapDrawer {
 
             const polyline = L.polyline(
                 route.coordinates,
-                this.defaultPolylineStyle
+                {...this.defaultPolylineStyle, smoothFactor: 2.0}
             ).addTo(countryFeatureGroups.get(countryCode));
 
             this.routePolylines.push({
@@ -161,8 +166,13 @@ export default class HeatmapDrawer {
         });
         this.mainFeatureGroup.addTo(this.map);
 
-        this.placesControl = L.control.flyToPlaces({places});
-        this.placesControl.addTo(this.map);
+        this.placesControl = createFlyToPlacesControl({places});
+        this.map.addControl(this.placesControl);
+
+        if (!this.mapToolsControl) {
+            this.mapToolsControl = createMapToolsControl({showReset: false});
+            this.map.addControl(this.mapToolsControl);
+        }
 
         if (this.config.initialCenter && this.config.initialZoom) {
             this.map.setView(this.config.initialCenter, this.config.initialZoom);

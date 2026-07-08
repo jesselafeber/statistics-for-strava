@@ -17,6 +17,8 @@
 	}
 }
 
+import /etc/frankenphp/snippets/paths.caddyfile
+
 :8080 {
 	root /var/www/public
 	encode zstd br gzip
@@ -27,54 +29,8 @@
 		?Permissions-Policy "browsing-topics=()"
 	}
 
-	# Serve static .html from build/html
-	@staticBuildFiles {
-		path *.html
-	}
-	handle @staticBuildFiles {
-		handle /manifest.json {
-			root /var/www/public
-		}
-
-		handle {
-			root * /var/www/build/html
-			file_server
-		}
-	}
-
-	# Serve badge SVGs — no cache
-	@badges path /files/*-badge.svg
-	handle @badges {
-		header {
-			Cache-Control "no-cache, no-store, must-revalidate"
-		}
-
-		root * /var/www/storage
-		file_server
-	}
-
-	# Serve other /files/* from storage
-	handle /files/* {
-		header {
-			Cache-Control "public, max-age=31536000, immutable"
-		}
-
-		root * /var/www/storage
-		file_server
-	}
-
-	# Serve /gear-maintenance/* from storage.
-	handle /gear-maintenance/* {
-		root * /var/www/storage
-		file_server
-	}
-
-	# Cache static assets.
-	handle /assets/* {
-		header {
-			Cache-Control "public, max-age=86400"
-		}
-	}
+	# Path-routing rules (static html, /files/*, /gear-maintenance/*, /assets/*).
+	import paths
 
 	# Serve everything else trough Symfony.
 	handle {
@@ -105,9 +61,9 @@
 		respond "{err.status_code} {err.status_text}"
 	}
 
-	# Hide php and yaml file from filesystem
+	# Hide sensitive files from filesystem
 	file_server {
-		hide *.php *.yaml *.yml
+		hide *.php *.yaml *.yml */log
 	}
 }
 

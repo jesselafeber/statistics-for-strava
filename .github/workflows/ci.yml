@@ -12,37 +12,11 @@ jobs:
     name: Run CI
     runs-on: ubuntu-latest
     steps:
-      - name: Install geos
-        run: sudo apt install -y geos-bin
-
-      # https://github.com/marketplace/actions/setup-php-action
-      - name: Setup PHP 8.5
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.5'
-          coverage: xdebug
-          extensions: zstd
-
-      # https://github.com/marketplace/actions/checkout
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Copy .env file
-        run: cp .env.test .env
-
-      - name: Get Composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache Composer dependencies
-        uses: actions/cache@v5
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install dependencies
-        run: composer install --prefer-dist
+      - name: Setup CI environment
+        uses: ./.github/actions/setup-env
 
       - name: Validate composer.json
         run: composer validate --strict
@@ -62,8 +36,19 @@ jobs:
       - name: Run test suite
         run: vendor/bin/paratest --order-by=random --fail-on-incomplete --log-junit junit.xml --coverage-clover=clover.xml
 
+      - name: Setup Caddy
+        run: |
+          curl -fsSL -o caddy.tar.gz https://github.com/caddyserver/caddy/releases/download/v2.10.2/caddy_2.10.2_linux_amd64.tar.gz
+          tar -xzf caddy.tar.gz caddy
+          sudo install -m 0755 caddy /usr/bin/caddy
+          rm caddy.tar.gz
+          caddy version
+
+      - name: Run Caddy test suite
+        run: vendor/bin/paratest --testsuite caddy
+
       - name: Generate coverage report
-        uses: clearlyip/code-coverage-report-action@v6
+        uses: clearlyip/code-coverage-report-action@v7
         id: code_coverage_report_action
         with:
           filename: 'clover.xml'

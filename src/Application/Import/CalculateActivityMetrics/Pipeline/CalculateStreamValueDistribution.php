@@ -17,7 +17,9 @@ use App\Infrastructure\ValueObject\Measurement\Velocity\MetersPerSecond;
 use App\Infrastructure\ValueObject\Measurement\Velocity\SecPer100Meter;
 use App\Infrastructure\ValueObject\Measurement\Velocity\SecPerKm;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
+#[AsTaggedItem(priority: 10)]
 final readonly class CalculateStreamValueDistribution implements CalculateActivityMetricsStep
 {
     public function __construct(
@@ -64,11 +66,11 @@ final readonly class CalculateStreamValueDistribution implements CalculateActivi
                     ksort($valueDistribution);
                 } elseif (StreamType::HEART_RATE === $streamType) {
                     /** @var array<int, int<1, max>> $valueDistribution */
-                    $valueDistribution = array_count_values($stream->getData());
+                    $valueDistribution = array_count_values(array_filter($stream->getData(), fn (mixed $item): bool => !is_null($item)));
                     ksort($valueDistribution);
                 } elseif (StreamType::CADENCE === $streamType) {
                     /** @var array<int, int<1, max>> $valueDistribution */
-                    $valueDistribution = array_count_values($stream->getData());
+                    $valueDistribution = array_count_values(array_filter($stream->getData(), fn (mixed $item): bool => !is_null($item)));
                     ksort($valueDistribution);
                 } elseif (StreamType::VELOCITY === $streamType) {
                     $velocityUnitPreference = $sportType->getVelocityDisplayPreference();

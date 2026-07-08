@@ -22,7 +22,9 @@ use App\Infrastructure\ValueObject\Measurement\Length\Meter;
 use App\Infrastructure\ValueObject\Measurement\UnitSystem;
 use App\Infrastructure\ValueObject\Measurement\Velocity\MetersPerSecond;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
 
+#[AsTaggedItem(priority: 40)]
 #[WithMutex(lockName: LockName::IMPORT_DATA_OR_BUILD_APP)]
 final readonly class CalculateCombinedStreams implements CalculateActivityMetricsStep
 {
@@ -136,7 +138,7 @@ final readonly class CalculateCombinedStreams implements CalculateActivityMetric
                 ];
 
                 if ($hasDistanceData) {
-                    $distance = Meter::from($distanceData[$i])->toKilometer()->toUnitSystem($this->unitSystem)->toFloat();
+                    $distance = Meter::from($distanceData[$i] ?? 0)->toKilometer()->toUnitSystem($this->unitSystem)->toFloat();
                     $combinedPoint[] = match ($activityType) {
                         ActivityType::RIDE => $distance < 1 ? round($distance, 1) : round($distance),
                         default => round($distance, 1),

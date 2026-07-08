@@ -46,14 +46,6 @@ export default class Router {
             );
         }
 
-        this.showLoader();
-
-        const response = await fetch(`${page}.html`, {cache: 'no-store'});
-        this.appContent.innerHTML = await response.text();
-        window.scrollTo(0, 0);
-
-        this.hideLoader();
-
         this.app.setAttribute('data-router-current', page);
         this.app.setAttribute('data-modal-current', modalId);
 
@@ -66,6 +58,14 @@ export default class Router {
         if (activeLink?.hasAttribute('data-router-sub-menu')) {
             activeLink.closest('ul')?.classList.remove('hidden');
         }
+
+        this.showLoader();
+
+        const response = await fetch(`${page}.html`, {cache: 'no-store'});
+        this.appContent.innerHTML = await response.text();
+        window.scrollTo(0, 0);
+
+        this.hideLoader();
 
         // Re-register nav items that may have been added dynamically
         const newNavItems = document.querySelectorAll('main a[data-router-navigate]:not([data-router-disabled])');
@@ -99,6 +99,13 @@ export default class Router {
     registerBrowserBackAndForth() {
         window.onpopstate = e => {
             if (!e.state) return;
+
+            if (e.state.route === this.app.getAttribute('data-router-current')) {
+                this.app.setAttribute('data-modal-current', e.state.modal);
+                eventBus.emit(Events.MODAL_HISTORY_CHANGED, {modalId: e.state.modal});
+                return;
+            }
+
             this.renderContent(e.state.route, e.state.modal);
         };
     }

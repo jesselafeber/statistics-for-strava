@@ -80,7 +80,7 @@ components:
     # The image must be located in the `storage/gear-maintenance` volume.
     imgSrc: 'chain.png'
     # List of gear ids this component is attached to
-    # See: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/gear-maintenance?id=strava-gear-ids to obtain this ID
+    # See: https://docs.getsfs.app/#/configuration/gear-maintenance?id=strava-gear-ids to obtain this ID
     attachedTo:
       - 'gxxxxxxxx' # May not always start with g 
       - 'gxxxxxxxx'
@@ -116,7 +116,7 @@ gears:
 ```
 
 > [!IMPORTANT]
-> **Important** After each change to these values, you need to run the <i>app:strava:import-data</i> command again for the changes to take effect
+> **Important** After each change to these values, you need to run the <i>app:data:import</i> command again for the changes to take effect
 
 
 ## Components

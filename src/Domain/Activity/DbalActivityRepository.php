@@ -16,6 +16,7 @@ use App\Infrastructure\ValueObject\Geography\Latitude;
 use App\Infrastructure\ValueObject\Geography\Longitude;
 use App\Infrastructure\ValueObject\Measurement\Length\Meter;
 use App\Infrastructure\ValueObject\Measurement\Velocity\KmPerHour;
+use App\Infrastructure\ValueObject\String\ExternalReferenceId;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Doctrine\DBAL\ArrayParameterType;
 
@@ -73,16 +74,16 @@ final readonly class DbalActivityRepository extends DbalRepository implements Ac
     public function add(ActivityWithRawData $activityWithRawData): void
     {
         $sql = 'INSERT INTO Activity (
-            activityId, startDateTime, sportType, activityType, worldType, name, description, distance,
+            activityId, startDateTime, sportType, activityType, worldType, importSource, externalReferenceId, name, description, distance,
             elevation, startingCoordinateLatitude, startingCoordinateLongitude, calories, kilojoules,
             averagePower, maxPower, averageSpeed, maxSpeed, averageHeartRate, maxHeartRate,
-            averageCadence,movingTimeInSeconds, kudoCount, deviceName, totalImageCount, localImagePaths,
+            averageCadence,movingTimeInSeconds, elapsedTimeInSeconds, deviceName, totalImageCount, localImagePaths,
             polyline, routeGeography, weather, gearId, data, isCommute, streamsAreImported, workoutType
         ) VALUES(
-            :activityId, :startDateTime, :sportType, :activityType, :worldType, :name, :description, :distance,
+            :activityId, :startDateTime, :sportType, :activityType, :worldType, :importSource, :externalReferenceId, :name, :description, :distance,
             :elevation, :startingCoordinateLatitude, :startingCoordinateLongitude, :calories, :kilojoules,
             :averagePower, :maxPower, :averageSpeed, :maxSpeed, :averageHeartRate, :maxHeartRate,
-            :averageCadence, :movingTimeInSeconds, :kudoCount, :deviceName, :totalImageCount, :localImagePaths,
+            :averageCadence, :movingTimeInSeconds, :elapsedTimeInSeconds, :deviceName, :totalImageCount, :localImagePaths,
             :polyline, :routeGeography, :weather, :gearId, :data, :isCommute, :streamsAreImported, :workoutType
         )';
 
@@ -92,6 +93,8 @@ final readonly class DbalActivityRepository extends DbalRepository implements Ac
             'startDateTime' => $activity->getStartDate(),
             'sportType' => $activity->getSportType()->value,
             'worldType' => $activity->getWorldType()->value,
+            'importSource' => $activity->getImportSource()->value,
+            'externalReferenceId' => $activity->getExternalReferenceId(),
             'activityType' => $activity->getSportType()->getActivityType()->value,
             'name' => $activity->getOriginalName(),
             'description' => $activity->getDescription(),
@@ -109,7 +112,7 @@ final readonly class DbalActivityRepository extends DbalRepository implements Ac
             'maxHeartRate' => $activity->getMaxHeartRate(),
             'averageCadence' => $activity->getAverageCadence(),
             'movingTimeInSeconds' => $activity->getMovingTimeInSeconds(),
-            'kudoCount' => $activity->getKudoCount(),
+            'elapsedTimeInSeconds' => $activity->getElapsedTimeInSeconds(),
             'deviceName' => $activity->getDeviceName(),
             'totalImageCount' => $activity->getTotalImageCount(),
             'localImagePaths' => implode(',', $activity->getLocalImagePaths()),
@@ -135,7 +138,6 @@ final readonly class DbalActivityRepository extends DbalRepository implements Ac
                     maxSpeed = :maxSpeed,
                     movingTimeInSeconds = :movingTimeInSeconds,
                     elevation = :elevation,
-                    kudoCount = :kudoCount,
                     polyline = :polyline,
                     startingCoordinateLatitude = :startingCoordinateLatitude,
                     startingCoordinateLongitude = :startingCoordinateLongitude,
@@ -159,7 +161,6 @@ final readonly class DbalActivityRepository extends DbalRepository implements Ac
             'averageSpeed' => $activity->getAverageSpeed()->toFloat(),
             'maxSpeed' => $activity->getMaxSpeed()->toFloat(),
             'movingTimeInSeconds' => $activity->getMovingTimeInSeconds(),
-            'kudoCount' => $activity->getKudoCount(),
             'polyline' => $activity->getEncodedPolyline(),
             'startingCoordinateLatitude' => $activity->getStartingCoordinate()?->getLatitude()->toFloat(),
             'startingCoordinateLongitude' => $activity->getStartingCoordinate()?->getLongitude()->toFloat(),
@@ -225,7 +226,9 @@ final readonly class DbalActivityRepository extends DbalRepository implements Ac
             startDateTime: SerializableDateTime::fromString($result['startDateTime']),
             sportType: SportType::from($result['sportType']),
             worldType: WorldType::from($result['worldType']),
-            name: $result['name'],
+            importSource: ImportSource::from($result['importSource']),
+            externalReferenceId: ExternalReferenceId::fromOptionalString($result['externalReferenceId'] ?? null),
+            name: ActivityName::fromString($result['name']),
             description: $result['description'] ?: '',
             distance: Meter::from($result['distance'])->toKilometer(),
             elevation: Meter::from($result['elevation'] ?: 0),
@@ -243,7 +246,7 @@ final readonly class DbalActivityRepository extends DbalRepository implements Ac
             maxHeartRate: isset($result['maxHeartRate']) ? (int) round($result['maxHeartRate']) : null,
             averageCadence: isset($result['averageCadence']) ? (int) round($result['averageCadence']) : null,
             movingTimeInSeconds: $result['movingTimeInSeconds'] ?: 0,
-            kudoCount: $result['kudoCount'] ?: 0,
+            elapsedTimeInSeconds: $result['elapsedTimeInSeconds'] ?: 0,
             deviceName: $result['deviceName'],
             totalImageCount: $result['totalImageCount'] ?: 0,
             localImagePaths: $result['localImagePaths'] ? explode(',', (string) $result['localImagePaths']) : [],

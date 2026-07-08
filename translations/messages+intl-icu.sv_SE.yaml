@@ -1,3 +1,4 @@
+'# completed': '# completed'
 '42-day fitness trend': '42-dagars träningstendens'
 '7-day fatigue level': '7-dagars utmattningsnivå'
 '< 1.5: Good variety in training': '< 1.5: Bra variation av träningsformer'
@@ -27,11 +28,15 @@ Apr: Apr
 'Ask Mark something...': 'Fråga Mark någonting...'
 'Athlete profile': 'Athlete profile'
 Aug: Aug
+Average: Average
 'Average gradient': 'Average gradient'
-Avg: Med
+'Avg gradient': 'Avg gradient'
+'Avg pace': 'Avg pace'
+'Avg speed': 'Avg speed'
 'Back Country Ski': Utförsåkning
 Badges: Badges
 Badminton: Badminton
+Bananas: Bananas
 Basketball: Basketball
 Best: Bästa
 'Best effort': 'Bästa resultatet'
@@ -40,23 +45,25 @@ Best: Bästa
 'Build zone (–10)': 'Utvecklingsfas (–10)'
 'CTL (Fitness)': 'CTL (Träningsform)'
 Cadence: Kadens
-'Cadence distribution': Kadensfördelning
+Cal.: Cal.
 Calories: Kalorier
 'Calories burned': 'Brända kalorier'
+'Calories burnt': 'Calories burnt'
 Canoeing: Kanot
 'Carbon saved': 'Sparat koldioxid'
 'Challenge consistency': Utmaningsihållighet
 Challenges: Utmaningar
 'Chronic Training Load (Fitness) - 42-day exponentially weighted average of your daily training load. Represents long-term training adaptation.': 'Kronisk träningsbelastning (Träningsform) - 42 dagars exponentiellt viktat medelvärde av din dagliga träningsbelastning. Representerar långsiktig träningsanpassning.'
+'Clear all filters': 'Clear all filters'
 'Clear chat': 'Clear chat'
 'Close modal': 'Close modal'
-'Collapse sidebar': Minimera
 Commutes: Pendling
 'Commutes only': 'Endast pendling'
 Compare: Jämför
 'Compare to': 'Jämför med'
 'Completed {threshold} activities': 'Completed {threshold} activities'
-'Congrats! You achieved personal bests during this activity.': 'Grattis! Du slog ditt tidigare rekord i den här aktiviteten.'
+Components: Components
+'Congrats! You achieved {numberOfPRs} PRs in this activity.': 'Congrats! You achieved {numberOfPRs} PRs in this activity.'
 'Consider reducing load': 'Consider reducing load'
 Consistency: Consistency
 Country: Country
@@ -80,29 +87,34 @@ Density: Density
 'Detailed instructions are available in the documentation on': 'Detaljerade instruktioner finns i dokumentationen på'
 Details: Detaljer
 Device: Enhet
+Dist.: Dist.
 Distance: Distans
 'Distance & Elevation': 'Distance & Elevation'
 'Distance breakdown': 'Sammanställning av sträckor'
+'Distance distribution': 'Distance distribution'
 'Distance in {unit}': 'Distans i {unit}'
 'Distance over time per gear': 'Distans över tid per utrustning'
 'Distance per month per gear': 'Distans per månad per utrustning'
-Distribution: Fördelning
 'Doing a mix of cycling, running, swimming, and strength work increases your variety score.': 'Doing a mix of cycling, running, swimming, and strength work increases your variety score.'
 Duration: Duration
 'E-Bike Rides': 'E-Cykel Turer'
 'E-Mountain Bike Rides': 'E-Mountain Bike Turer'
 Eddington: Eddington
+'Eddington number': 'Eddington number'
+'Eddington over time': 'Eddington over time'
 'Effort vs heart rate': 'Effort vs heart rate'
+'Elapsed time': 'Elapsed time'
 Elev: Höjd
+Elev.: Elev.
 Elevation: Höjdmeter
 'Elevation in {unit}': 'Höjdmeter i {unit}'
 Elliptical: Elliptisk
 Energy: Energy
+'Energy burned across your activities': 'Energy burned across your activities'
 'Enter fullscreen mode': 'Enter fullscreen mode'
 Evening: Kväll
 'Excludes commutes': 'Uteslut pendling'
 'FTP history': 'FTP historik'
-'Fastest times': 'Snabbaste tiderna'
 Favourite: Favoriter
 Feb: Feb
 'Filter on KOM segments': 'Filtrera på KOM segment'
@@ -115,10 +127,10 @@ Firsts: Firsts
 Fitness: Träning
 'Fitness may be declining due to low recent training load': 'Fitness may be declining due to low recent training load'
 'Fitness may decline': 'Fitness may decline'
-'For example, an Eddington number of 70 would imply that a cyclist has cycled at least 70 km or miles in a day on at least 70 occasions. Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance workouts, since any workout shorter than 75 km or miles will no longer be included in the reckoning.': 'Som ett exempel skulle ett Eddingtontal på 70 innebära att en cyklist har cyklat minst 70 km eller miles under loppet av en dag vid minst 70 tillfällen. Att uppnå ett högt Eddingtontal är svårt, eftersom en övergång från, säg, 70 till 75 (förmodligen) kommer att kräva mer än fem nya långdistanspass, eftersom inga pass som är kortare än 75 km eller miles kommer att inkluderas i beräkningen.'
+'For example, an Eddington number of 70 would imply that a cyclist has cycled at least 70 km or miles in a day on at least 70 occasions. Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance workouts, since any workout shorter than 75 km or miles will no longer be included in the reckoning.': 'For example, an Eddington number of 70 would imply that a cyclist has cycled at least 70 km or miles in a day on at least 70 occasions. Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance workouts, since any workout shorter than 75 km or miles will no longer be included in the reckoning.'
 'Form (TSB)': 'Träningsform (TSB)'
 Fri: Fre
-Friday: Fredag
+Fri.: Fri.
 GAP: GAP
 Gear: Utrustning
 'Gear "{gearId}" is referenced in your maintenance config file, but was not imported from Strava. Please check that the gear exists and is correctly synced.': 'Utrusning "{gearId}" refereras i din underhållskonfigurationsfil, men importerades inte från Strava. Kontrollera att utrustningen finns och är korrekt synkroniserad..'
@@ -131,6 +143,7 @@ Goal: Goal
 Golf: Golf
 'Good training variety': 'Bra variation av träningsformer'
 'Google searches': 'Google sökningar'
+Grad.: Grad.
 Gradient: Gradient
 'Gravel Rides': Grusvägscykling
 "Guidelines vary by individual; for more information see Joe Friel's 'The Cyclist's Training Bible' or TrainingPeaks' research documentation.": "Riktlinjerna varierar från individ till individ; för mer information se Joe Friel's 'The Cyclist's Training Bible' eller 'TrainingPeaks' forskningsdokumentation."
@@ -138,7 +151,6 @@ HIIT: HIIT
 HR: Puls
 'Hand Cycle': Handcykel
 'Heart rate': Puls
-'Heart rate distribution': Pulsfördelning
 'Heart rate zone distribution over the past month. For effective polarized training, your workouts should primarily fall within the following zones': 'Pulszonfördelning under den senaste månaden. För effektiv polariserad träning bör dina träningspass huvudsakligen falla inom följande zoner'
 'Heart rate zones': Pulszoner
 Heatmap: Färgkarta
@@ -172,7 +184,6 @@ KOM: KOM
 Kayaking: Kayak
 'Kite Surf': Draksurfning
 Lap: Varv
-Laps: Varv
 'Last 30 days': 'Last 30 days'
 'Last 7 days training load': 'Belastning de senaste 7 dagarna'
 'Last activity': 'Last activity'
@@ -192,6 +203,7 @@ Loading...: Laddar...
 'Long run': Långdistanslöpning
 'Longest activity': 'Longest activity'
 'Longest activity (h)': 'Längsta aktiviteten (h)'
+'Longest day': 'Longest day'
 'Longest distance': 'Longest distance'
 'Longest streaks': 'Längsta obrutna serie'
 Low: Låg
@@ -205,13 +217,12 @@ Max: Max
 May: May
 Medium: Mellan
 Metric: Metric
-Metrics: Mätvärden
 Milestones: Milestones
 'Mind & Body Sports': 'Sinne- och kroppssporter'
 'Moderate fatigue with stable fitness. Well suited for consistent day-to-day training': 'Moderate fatigue with stable fitness. Well suited for consistent day-to-day training'
 'Moderate monotony': 'Måttlig monotoni'
 Mon: Må
-Monday: Måndag
+Mon.: Mon.
 Monotony: Monotoni
 Monthly: Monthly
 'Monthly stats': Sammanställning
@@ -222,9 +233,12 @@ Morning: Morgon
 'Most recent milestones': 'Most recent milestones'
 'Mountain Bike Rides': 'Mountain Bike Cykling'
 'Moving time': 'Tid i rörelse'
+'Moving time by sport': 'Moving time by sport'
+'Moving time in hours': 'Moving time in hours'
 Name: Namn
 Neutral: Neutral
 'New personal best for': 'New personal best for'
+'Next milestone': 'Next milestone'
 Night: Natt
 'No activities': 'Inga aktivieter'
 'No data available': 'Ingen data tillgänglig'
@@ -232,7 +246,7 @@ Night: Natt
 'No other options to compare with': 'Inga andra alternativ att jämföra med'
 None: Inga
 'Nordic Ski': 'Telemark skidåkning'
-Normalized: Normaliserad
+'Normalized power': 'Normalized power'
 'Not supported': 'Inget stöd tillgängligt'
 Nov: Nov
 Now: Now
@@ -250,30 +264,30 @@ Over-fatigued: Over-fatigued
 'Overall weekly training stress': 'Sammanfattning för träning veckovis'
 'PB badges': PB-märken
 'PET bottles produced': 'PET flaskor producerade'
-PRs: Rekord
-'PRs achieved per month': 'Rekord nådda per månad'
 Pace: Tempo
-'Pace distribution': 'Pace distribution'
 Padel: Padel
 'Peak fresh': 'Peak fresh'
 'Peak power outputs': Toppeffekt
-'Personal Records': 'Personliga Rekord'
+'Per {unit}': 'Per {unit}'
 'Personal bests': 'Personal bests'
 Photo: Bild
 Photos: Bilder
+'Physical Therapy': 'Physical Therapy'
 'Pickle Ball': 'Pickle Ball'
 Pilates: Pilates
+'Pizza slices': 'Pizza slices'
 'Please address these issues': 'Vänligen ta itu med dessa problem'
 'Polarised training (last 30 days)': 'Polariserad träning (senaste 30 dagarna)'
 Power: Effekt
-'Power distribution': Effektfördelning
 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.'
 'Prev year': 'Tidigare år'
 Previous: Previous
+'Purchase price': 'Purchase price'
 Race: Tävling
 'Racing Score': Tävlingspoäng
 'Racquet & Paddle Sports': 'Rack & Paddel Sporter'
 'Racquet Ball': Racketboll
+Rank: Rank
 Ranking: Rankning
 'Reached {threshold} hours total moving time': 'Reached {threshold} hours total moving time'
 'Reached {threshold} total distance': 'Reached {threshold} total distance'
@@ -301,7 +315,7 @@ Running: Löpning
 Runs: Löpturer
 Sail: Segling
 Sat: Lör
-Saturday: Lördag
+Sat.: Sat.
 Search: Sök
 'Search activity...': 'Sök aktivitet...'
 'Search segment...': 'Sök segment...'
@@ -316,10 +330,8 @@ Skating: Skridskoåkning
 Snowboard: Snowboard
 Snowshoe: Snöskor
 Soccer: Fotboll
-Socials: 'Sociala medier'
 'Someone who regularly trains for 90 minutes will score higher than someone doing mostly short sessions.': 'Someone who regularly trains for 90 minutes will score higher than someone doing mostly short sessions.'
 Speed: Fart
-'Speed distribution': 'Speed distribution'
 Splits: Delar
 'Sport variety': 'Sport variety'
 Squash: Squash
@@ -327,14 +339,13 @@ Squash: Squash
 'Stand Up Paddling': 'Stand Up Paddling'
 'Start slideshow': 'Starta bildspel'
 'Start times': Starttider
-'Statistics for Strava': 'Statistics for Strava'
 'Stats per weekday': 'Sammanställning veckodagar'
 Status: Status
 'Strava profile': 'Strava profile'
 'Streak started on {date}': 'Streak started on {date}'
 Streaks: Serie
 Sun: Sön
-Sunday: Söndag
+Sun.: Sun.
 Surfing: Surfning
 Swim: Simmning
 'TSB (Form)': 'TSB (Form)'
@@ -432,7 +443,8 @@ Tennis: Tennis
 "That's the length of the Great Wall of China": "That's the length of the Great Wall of China"
 "That's three quarters of the way around the Earth": "That's three quarters of the way around the Earth"
 "That's {number} days of at least {distance}": "That's {number} days of at least {distance}"
-'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.': 'Eddingtontalet i samband med cykling eller löpning definieras som det maximala antalet E så att idrottaren har tillryggalagt minst E km under minst E dagar.'
+"That's {percentage}% of all countries 🌍": "That's {percentage}% of all countries 🌍"
+'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.': 'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.'
 'These badges are dynamically created. You can use them in any &lt;img&gt; tag': 'Dessa märken skapas dynamiskt. Du kan använda dem i vilken &lt;img&gt; tagg som helst'
 Thinking...: Tänker...
 'This chart summarizes how you train. Each axis reflects a different normalized training habit, so higher values mean stronger emphasis.': 'This chart summarizes how you train. Each axis reflects a different normalized training habit, so higher values mean stronger emphasis.'
@@ -440,18 +452,19 @@ Thinking...: Tänker...
 'This month': 'This month'
 'This week': 'This week'
 Thu: Tor
-Thursday: Torsdag
+Thu.: Thu.
 Time: Tid
+'Time in zone': 'Time in zone'
 'Times completed': 'Antal gånger avklarade'
+Title: Title
 'To enable it, configure {configFile} and rebuild the files for the changes to take effect': 'För att aktivera, konfigurera {configFile} och bygg om filerna så att ändringarna träder i kraft'
 'Toggle sidebar': 'Visa/Dölj sidofält'
 'Top 10': '10 bästa'
 'Total distance per month': 'Total distans per månad'
 'Total elevation per month': 'Totala antalet höjdmeter per månad'
-'Total hours': 'Totala antalet timmar'
 'Total hours spent per gear': 'Totala antalet timmar spenderat per utrustning'
 'Total hours spent per sport type': 'Totala antalet timmar per sport'
-'Total kudos and comments received': 'Totala antalet mottagna kudos och kommentarer'
+'Total moving time per month': 'Total moving time per month'
 'Trail Runs': Stiglöpning
 'Training 4–5 days every week scores higher than doing everything in one or two days.': 'Training 4–5 days every week scores higher than doing everything in one or two days.'
 'Training Impulse - Training load metric that accounts for intensity and duration.': 'Träningsimpuls - Träningsbelastningsmått som tar hänsyn till intensitet och varaktighet.'
@@ -461,7 +474,7 @@ Time: Tid
 'Training goals': 'Training goals'
 'Training load is accumulating, recovery days are important': 'Training load is accumulating, recovery days are important'
 Tue: Tis
-Tuesday: Tisdag
+Tue.: Tue.
 Unspecified: Ospecificerad
 'Updated on': Uppdaterades
 'User badge': Användarmärke
@@ -480,7 +493,7 @@ Walks: Promenader
 'Water Sports': Vattensport
 'We detected following issues': 'Vi har upptäckt följande problem'
 Wed: Ons
-Wednesday: Onsdag
+Wed.: Wed.
 Weekly: Weekly
 'Weekly Strain': Veckobelastning
 'Weekly Strain - Product of weekly training load and monotony. Overall training stress.': 'Veckobelastning - Produkten av veckovis träningsbelastning och monotoni. Övergripande träningsstress.'
@@ -495,18 +508,23 @@ Wheelchair: Rullstol
 Workout: Träning
 'Workout assistant': 'Workout assistant'
 'Workout type': Träningsform
+World: World
 Year: År
 Yearly: Yearly
 'Yearly stats': Årsstatistik
 Yoga: Yoga
-"You recorded workouts in {numberOfCountriesWithWorkouts} different countries, that's {percentage} of all countries 🌍": 'Du har registrerat träningspass i {numberOfCountriesWithWorkouts} olika länder, vilket motsvarar {percentage} av alla länder 🌍'
 'Your PB badge': 'Ditt PB märke'
 'Your Strava badge': 'Ditt strava märke'
 'Your Zwift badge': 'Ditt Zwift märke'
 'Your badge(s)': 'Ditt/Dina märke(n)'
+Z1: Z1
 'Z1-2 (Low)': 'Z1-2 (Låg)'
+Z2: Z2
+Z3: Z3
 'Z3 (Mod)': 'Z3 (Med)'
+Z4: Z4
 'Z4-5 (High)': 'Z4-5 (Hög)'
+Z5: Z5
 'Zone 1 (recovery)': 'Fas 1 (återhämtning)'
 'Zone 2 (aerobic)': 'Fas 2 (aerob)'
 'Zone 3 (aerobic/anaerobic)': 'Fas 3 (aerob/anaerob)'
@@ -517,22 +535,21 @@ Yoga: Yoga
 'Zwift stats': 'Sammanställning Zwift'
 activities: aktiviteter
 and: och
-'average gradient': 'average gradient'
 avg: snitt
 bpm: bpm
+challenges: challenges
 clear: rensa
-comments: kommentarer
 compare: jämför
+countries: countries
 day(s): day(s)
 days: dagar
 'days needed for next Eddington': 'dagar till nästa Eddington nivå'
+'days to reach {n}': 'days to reach {n}'
 history: historik
 hours: timmar
 hrs: tim
-kudos: kudos
 'last {numberOfDays} days': 'senaste {numberOfDays} dagarna'
 max: max
-'max gradient': 'maximal lutning'
 min: min
 months: månader
 more: mera
@@ -543,8 +560,10 @@ per: per
 'per activity': 'per aktivitet'
 'per hour': 'per timma'
 'reached Eddington number {number}': 'reached Eddington number {number}'
+rpm: rpm
 to: till
 total: totalt
+watts: watts
 weeks: veckor
 workouts: träningspass
 '{daysSinceLastTagged} days': '{daysSinceLastTagged} dagar'
@@ -554,9 +573,9 @@ workouts: träningspass
 '{numberOfActivities} activities': '{numberOfActivities} aktiviteter'
 '{numberOfActivities} activities in {year}': '{numberOfActivities} aktiviteter på {year}'
 '{numberOfMonths} months': '{numberOfMonths} months'
-'{numberOfResults} photos based on your active filters': '{numberOfResults} bilder utifrån dina aktiva filter'
-'{numberOfResults} results based on your active filters': '{numberOfResults} resultat utifrån dina aktiva filter'
-'{numberOfResults} routes based on your active filters': '{numberOfResults} turer utifrån dina aktiva filter'
+'{numberOfResults} photos': '{numberOfResults} photos'
+'{numberOfResults} results': '{numberOfResults} results'
+'{numberOfResults} routes': '{numberOfResults} routes'
 '{numberOfWeeks} weeks': '{numberOfWeeks} weeks'
 '{threshold} hours using {gearName}': '{threshold} hours using {gearName}'
 '{threshold} total distance using {gearName}': '{threshold} total distance using {gearName}'

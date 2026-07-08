@@ -12,7 +12,7 @@ use App\Infrastructure\Config\AppConfig;
 use App\Infrastructure\CQRS\Command\Bus\CommandBus;
 use App\Infrastructure\Http\ServerSentEvent;
 use App\Infrastructure\Serialization\Json;
-use App\Infrastructure\ValueObject\String\Path;
+use App\Infrastructure\ValueObject\String\RelativeUrl;
 use GuzzleHttp\Exception\ClientException;
 use League\Flysystem\FilesystemOperator;
 use NeuronAI\Agent\AgentInterface;
@@ -34,7 +34,7 @@ use Twig\Environment;
 final readonly class AIChatRequestHandler
 {
     public function __construct(
-        private FilesystemOperator $buildStorage,
+        private FilesystemOperator $buildHtmlStorage,
         private AgentInterface $neuronAIAgent,
         private ChatCommands $chatCommands,
         private ChatRepository $chatRepository,
@@ -48,15 +48,15 @@ final readonly class AIChatRequestHandler
     #[Route(path: '/ai/chat', methods: ['GET'], priority: 2)]
     public function handle(): Response
     {
-        if (!$this->buildStorage->fileExists('index.html')) {
-            return new RedirectResponse(Path::from('/', $this->appUrl)->toRelativePath(), Response::HTTP_FOUND);
+        if (!$this->buildHtmlStorage->fileExists('index.html')) {
+            return new RedirectResponse(RelativeUrl::from('/', $this->appUrl)->toRelativeUrl(), Response::HTTP_FOUND);
         }
         if (!AppConfig::isAIIntegrationWithUIEnabled()) {
             return new Response('UI for AI not enabled', Response::HTTP_OK);
         }
         $formBuilder = $this->formFactory->createBuilder();
         $form = $formBuilder
-            ->setAction(Path::from('/ai/chat/user-message', $this->appUrl)->toRelativePath())
+            ->setAction(RelativeUrl::from('/ai/chat/user-message', $this->appUrl)->toRelativeUrl())
             ->add('message', TextType::class, [
                 'label' => 'Message',
                 'required' => true,
@@ -74,14 +74,22 @@ final readonly class AIChatRequestHandler
     #[Route(path: '/chat/clear', methods: ['POST'], priority: 2)]
     public function clearChat(): Response
     {
+        if (!AppConfig::isAIIntegrationWithUIEnabled()) {
+            return new Response('UI for AI not enabled', Response::HTTP_OK);
+        }
+
         $this->chatRepository->clear();
 
         return new Response(status: Response::HTTP_NO_CONTENT);
     }
 
     #[Route('/chat/sse', methods: ['GET'], priority: 2)]
-    public function chatSse(Request $request): EventStreamResponse
+    public function chatSse(Request $request): Response
     {
+        if (!AppConfig::isAIIntegrationWithUIEnabled()) {
+            return new Response('UI for AI not enabled', Response::HTTP_OK);
+        }
+
         return new EventStreamResponse(function (EventStreamResponse $response) use ($request): void {
             $message = $request->query->get('message');
             assert(is_string($message));

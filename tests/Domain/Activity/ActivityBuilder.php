@@ -6,6 +6,8 @@ namespace App\Tests\Domain\Activity;
 
 use App\Domain\Activity\Activity;
 use App\Domain\Activity\ActivityId;
+use App\Domain\Activity\ActivityName;
+use App\Domain\Activity\ImportSource;
 use App\Domain\Activity\Route\RouteGeography;
 use App\Domain\Activity\SportType\SportType;
 use App\Domain\Activity\WorkoutType;
@@ -15,6 +17,7 @@ use App\Infrastructure\ValueObject\Geography\Coordinate;
 use App\Infrastructure\ValueObject\Measurement\Length\Kilometer;
 use App\Infrastructure\ValueObject\Measurement\Length\Meter;
 use App\Infrastructure\ValueObject\Measurement\Velocity\KmPerHour;
+use App\Infrastructure\ValueObject\String\ExternalReferenceId;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 final class ActivityBuilder
@@ -23,12 +26,14 @@ final class ActivityBuilder
     private SerializableDateTime $startDateTime;
     private SportType $sportType = SportType::RIDE;
     private WorldType $worldType = WorldType::REAL_WORLD;
-    private string $name = 'Test activity';
+    private ImportSource $importSource = ImportSource::STRAVA_API;
+    private ExternalReferenceId $externalReferenceId;
+    private ActivityName $name;
     private readonly string $description;
     private Kilometer $distance;
     private Meter $elevation;
     private ?Coordinate $startingCoordinate = null;
-    private readonly int $calories;
+    private int $calories;
     private ?int $averagePower = null;
     private readonly ?int $maxPower;
     private KmPerHour $averageSpeed;
@@ -37,7 +42,7 @@ final class ActivityBuilder
     private readonly ?int $maxHeartRate;
     private readonly ?int $averageCadence;
     private int $movingTimeInSeconds = 10;
-    private int $kudoCount = 1;
+    private int $elapsedTimeInSeconds = 10;
     private int $totalImageCount = 0;
     private ?string $deviceName = null;
     /** @var array<string> */
@@ -53,6 +58,7 @@ final class ActivityBuilder
     {
         $this->activityId = ActivityId::fromUnprefixed('903645');
         $this->startDateTime = SerializableDateTime::fromString('2023-10-10');
+        $this->name = ActivityName::fromString('Test activity');
         $this->description = '';
         $this->distance = Kilometer::from(10);
         $this->elevation = Meter::from(0);
@@ -66,6 +72,7 @@ final class ActivityBuilder
         $this->routeGeography = RouteGeography::create([]);
         $this->isCommute = false;
         $this->workoutType = null;
+        $this->externalReferenceId = ExternalReferenceId::fromString('1234567');
     }
 
     public static function fromDefaults(): self
@@ -80,6 +87,8 @@ final class ActivityBuilder
             startDateTime: $this->startDateTime,
             sportType: $this->sportType,
             worldType: $this->worldType,
+            importSource: $this->importSource,
+            externalReferenceId: $this->externalReferenceId,
             name: $this->name,
             description: $this->description,
             distance: $this->distance,
@@ -95,7 +104,7 @@ final class ActivityBuilder
             maxHeartRate: $this->maxHeartRate,
             averageCadence: $this->averageCadence,
             movingTimeInSeconds: $this->movingTimeInSeconds,
-            kudoCount: $this->kudoCount,
+            elapsedTimeInSeconds: $this->elapsedTimeInSeconds,
             deviceName: $this->deviceName,
             totalImageCount: $this->totalImageCount,
             localImagePaths: $this->localImagePaths,
@@ -117,14 +126,7 @@ final class ActivityBuilder
 
     public function withName(string $name): self
     {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function withKudoCount(int $kudoCount): self
-    {
-        $this->kudoCount = $kudoCount;
+        $this->name = ActivityName::fromString($name);
 
         return $this;
     }
@@ -146,6 +148,20 @@ final class ActivityBuilder
     public function withMovingTimeInSeconds(int $movingTimeInSeconds): self
     {
         $this->movingTimeInSeconds = $movingTimeInSeconds;
+
+        return $this;
+    }
+
+    public function withCalories(int $calories): self
+    {
+        $this->calories = $calories;
+
+        return $this;
+    }
+
+    public function withElapsedTimeInSeconds(int $elapsedTimeInSeconds): self
+    {
+        $this->elapsedTimeInSeconds = $elapsedTimeInSeconds;
 
         return $this;
     }
@@ -251,6 +267,20 @@ final class ActivityBuilder
     public function withWorldType(WorldType $worldType): self
     {
         $this->worldType = $worldType;
+
+        return $this;
+    }
+
+    public function withImportSource(ImportSource $importSource): self
+    {
+        $this->importSource = $importSource;
+
+        return $this;
+    }
+
+    public function withExternalReferenceId(?ExternalReferenceId $externalReferenceId): self
+    {
+        $this->externalReferenceId = $externalReferenceId;
 
         return $this;
     }

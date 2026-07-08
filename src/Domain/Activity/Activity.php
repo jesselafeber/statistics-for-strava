@@ -27,6 +27,7 @@ use App\Infrastructure\ValueObject\Measurement\Velocity\KmPerHour;
 use App\Infrastructure\ValueObject\Measurement\Velocity\MetersPerSecond;
 use App\Infrastructure\ValueObject\Measurement\Velocity\SecPer100Meter;
 use App\Infrastructure\ValueObject\Measurement\Velocity\SecPerKm;
+use App\Infrastructure\ValueObject\String\ExternalReferenceId;
 use App\Infrastructure\ValueObject\String\Name;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\SerializableTimezone;
@@ -77,8 +78,12 @@ final class Activity implements SupportsAITooling
         private readonly SportType $sportType,
         #[ORM\Column(type: 'string', nullable: true)]
         private readonly WorldType $worldType,
+        #[ORM\Column(type: 'string', options: ['default' => ImportSource::STRAVA_API->value])]
+        private readonly ImportSource $importSource,
+        #[ORM\Column(type: 'string', nullable: true)]
+        private readonly ?ExternalReferenceId $externalReferenceId,
         #[ORM\Column(type: 'string')]
-        private readonly string $name,
+        private readonly ActivityName $name,
         #[ORM\Column(type: 'string', nullable: true)]
         private readonly ?string $description,
         #[ORM\Column(type: 'integer')]
@@ -107,8 +112,8 @@ final class Activity implements SupportsAITooling
         private readonly ?int $averageCadence,
         #[ORM\Column(type: 'integer')]
         private readonly int $movingTimeInSeconds,
-        #[ORM\Column(type: 'integer')]
-        private readonly int $kudoCount,
+        #[ORM\Column(type: 'integer', nullable: true)]
+        private readonly int $elapsedTimeInSeconds,
         #[ORM\Column(type: 'string', nullable: true)]
         private readonly ?string $deviceName,
         #[ORM\Column(type: 'integer')]
@@ -133,7 +138,7 @@ final class Activity implements SupportsAITooling
     /**
      * @param array<mixed> $rawData
      */
-    public static function createFromRawData(array $rawData): self
+    public static function createFromRawStravaData(array $rawData): self
     {
         $startDate = SerializableDateTime::createFromFormat(
             format: Activity::DATE_TIME_FORMAT,
@@ -142,20 +147,15 @@ final class Activity implements SupportsAITooling
         );
 
         $deviceName = $rawData['device_name'] ?? null;
-        $worldType = match (true) {
-            'zwift' === strtolower($deviceName ?? '') => WorldType::ZWIFT,
-            'rouvy' === strtolower($deviceName ?? '') => WorldType::ROUVY,
-            'mywhoosh' === strtolower($deviceName ?? '') => WorldType::MY_WHOOSH,
-            str_contains(strtolower($rawData['name'] ?? ''), 'mywhoosh') => WorldType::MY_WHOOSH,
-            default => WorldType::REAL_WORLD,
-        };
 
         return self::fromState(
             activityId: ActivityId::fromUnprefixed((string) $rawData['id']),
             startDateTime: $startDate,
             sportType: SportType::from($rawData['sport_type']),
-            worldType: $worldType,
-            name: $rawData['name'],
+            worldType: WorldType::fromDeviceAndActivityName($deviceName, $rawData['name'] ?? ''),
+            importSource: ImportSource::STRAVA_API,
+            externalReferenceId: ExternalReferenceId::fromOptionalString($rawData['external_id'] ?? ''),
+            name: ActivityName::fromString($rawData['name']),
             description: $rawData['description'],
             distance: Kilometer::from(round($rawData['distance'] / 1000, 3)),
             elevation: Meter::from(round($rawData['total_elevation_gain'])),
@@ -173,7 +173,7 @@ final class Activity implements SupportsAITooling
             maxHeartRate: isset($rawData['max_heartrate']) ? (int) round($rawData['max_heartrate']) : null,
             averageCadence: isset($rawData['average_cadence']) ? (int) round($rawData['average_cadence']) : null,
             movingTimeInSeconds: $rawData['moving_time'] ?? 0,
-            kudoCount: $rawData['kudos_count'] ?? 0,
+            elapsedTimeInSeconds: $rawData['elapsed_time'] ?? 0,
             deviceName: $deviceName,
             totalImageCount: $rawData['total_photo_count'] ?? 0,
             localImagePaths: [],
@@ -194,7 +194,9 @@ final class Activity implements SupportsAITooling
         SerializableDateTime $startDateTime,
         SportType $sportType,
         WorldType $worldType,
-        string $name,
+        ImportSource $importSource,
+        ?ExternalReferenceId $externalReferenceId,
+        ActivityName $name,
         ?string $description,
         Kilometer $distance,
         Meter $elevation,
@@ -209,7 +211,7 @@ final class Activity implements SupportsAITooling
         ?int $maxHeartRate,
         ?int $averageCadence,
         int $movingTimeInSeconds,
-        int $kudoCount,
+        int $elapsedTimeInSeconds,
         ?string $deviceName,
         int $totalImageCount,
         array $localImagePaths,
@@ -225,6 +227,8 @@ final class Activity implements SupportsAITooling
             startDateTime: $startDateTime,
             sportType: $sportType,
             worldType: $worldType,
+            importSource: $importSource,
+            externalReferenceId: $externalReferenceId,
             name: $name,
             description: $description,
             distance: $distance,
@@ -240,7 +244,7 @@ final class Activity implements SupportsAITooling
             maxHeartRate: $maxHeartRate,
             averageCadence: $averageCadence,
             movingTimeInSeconds: $movingTimeInSeconds,
-            kudoCount: $kudoCount,
+            elapsedTimeInSeconds: $elapsedTimeInSeconds,
             deviceName: $deviceName,
             totalImageCount: $totalImageCount,
             localImagePaths: $localImagePaths,
@@ -273,6 +277,16 @@ final class Activity implements SupportsAITooling
         return $this->worldType;
     }
 
+    public function getImportSource(): ImportSource
+    {
+        return $this->importSource;
+    }
+
+    public function getExternalReferenceId(): ?ExternalReferenceId
+    {
+        return $this->externalReferenceId;
+    }
+
     public function withSportType(SportType $sportType): self
     {
         return clone ($this, [
@@ -289,18 +303,6 @@ final class Activity implements SupportsAITooling
     {
         return clone ($this, [
             'startingCoordinate' => $coordinate,
-        ]);
-    }
-
-    public function getKudoCount(): int
-    {
-        return $this->kudoCount;
-    }
-
-    public function withKudoCount(int $count): self
-    {
-        return clone ($this, [
-            'kudoCount' => $count,
         ]);
     }
 
@@ -416,7 +418,7 @@ final class Activity implements SupportsAITooling
 
     public function getOriginalName(): string
     {
-        return trim(str_replace('Zwift - ', '', $this->name));
+        return trim(str_replace('Zwift - ', '', (string) $this->name));
     }
 
     public function getName(): string
@@ -433,7 +435,7 @@ final class Activity implements SupportsAITooling
         return Escape::forJsonEncode($this->getName());
     }
 
-    public function withName(string $name): self
+    public function withName(ActivityName $name): self
     {
         return clone ($this, [
             'name' => $name,
@@ -570,6 +572,16 @@ final class Activity implements SupportsAITooling
     public function getMovingTimeFormatted(): string
     {
         return $this->formatDurationAsClock($this->getMovingTimeInSeconds());
+    }
+
+    public function getElapsedTimeInSeconds(): int
+    {
+        return $this->elapsedTimeInSeconds;
+    }
+
+    public function getElapsedTimeFormatted(): string
+    {
+        return $this->formatDurationAsClock($this->getElapsedTimeInSeconds());
     }
 
     public function getUrl(): string
@@ -781,7 +793,6 @@ final class Activity implements SupportsAITooling
             'maxHeartRate' => $this->getMaxHeartRate(),
             'averageCadence' => $this->getAverageCadence(),
             'movingTimeInSeconds' => $this->getMovingTimeInSeconds(),
-            'kudoCount' => $this->getKudoCount(),
             'recordedOnDevice' => $this->getDeviceName(),
             'totalImageCount' => $this->getTotalImageCount(),
             'routeGeography' => $this->getRouteGeography()->jsonSerialize(),

@@ -6,6 +6,7 @@ use App\Application\AppUrl;
 use App\Controller\AIChatRequestHandler;
 use App\Domain\Athlete\Athlete;
 use App\Domain\Athlete\AthleteRepository;
+use App\Domain\Import\ImportMode;
 use App\Domain\Integration\AI\Chat\AddChatMessage\AddChatMessage;
 use App\Domain\Integration\AI\Chat\ChatCommands;
 use App\Domain\Integration\AI\Chat\ChatMessage;
@@ -95,7 +96,7 @@ class AIChatRequestHandlerTest extends ContainerTestCase
     public function testClearChat(): void
     {
         $requestHandler = $this->buildRequestHandler(
-            $this->getContainer()->get(KernelProjectDir::class)->getForTestSuite('app-configs/config-ai-disabled')
+            $this->getContainer()->get(KernelProjectDir::class)->getForTestSuite('app-configs/config-ai-enabled')
         );
 
         $this->chatRepository
@@ -106,6 +107,19 @@ class AIChatRequestHandlerTest extends ContainerTestCase
             204,
             $requestHandler->clearChat()->getStatusCode()
         );
+    }
+
+    public function testClearChatAINotEnabled(): void
+    {
+        $this->chatRepository
+            ->expects($this->never())
+            ->method('clear');
+
+        $requestHandler = $this->buildRequestHandler(
+            $this->getContainer()->get(KernelProjectDir::class)->getForTestSuite('app-configs/config-ai-disabled')
+        );
+
+        $this->assertMatchesHtmlSnapshot($requestHandler->clearChat()->getContent());
     }
 
     #[AllowMockObjectsWithoutExpectations]
@@ -195,15 +209,27 @@ class AIChatRequestHandlerTest extends ContainerTestCase
         $this->assertInstanceOf(AddChatMessage::class, $dispatchedCommands[0]);
     }
 
+    #[AllowMockObjectsWithoutExpectations]
+    public function testChatSseAINotEnabled(): void
+    {
+        $requestHandler = $this->buildRequestHandler(
+            $this->getContainer()->get(KernelProjectDir::class)->getForTestSuite('app-configs/config-ai-disabled')
+        );
+
+        $request = new Request(query: ['message' => 'What is my FTP?']);
+        $this->assertMatchesHtmlSnapshot($requestHandler->chatSse($request)->getContent());
+    }
+
     private function buildRequestHandler(KernelProjectDir $kernelProjectDir): AIChatRequestHandler
     {
         AppConfig::init(
             kernelProjectDir: $kernelProjectDir,
-            platformEnvironment: PlatformEnvironment::PROD
+            platformEnvironment: PlatformEnvironment::PROD,
+            importMode: ImportMode::STRAVA_API
         );
 
         return new AIChatRequestHandler(
-            buildStorage: $this->buildStorage,
+            buildHtmlStorage: $this->buildStorage,
             neuronAIAgent: $this->neuronAIAgent,
             chatCommands: ChatCommands::fromArray([]),
             chatRepository: $this->chatRepository,
@@ -221,11 +247,12 @@ class AIChatRequestHandlerTest extends ContainerTestCase
     ): AIChatRequestHandler {
         AppConfig::init(
             kernelProjectDir: $this->getContainer()->get(KernelProjectDir::class)->getForTestSuite('app-configs/config-ai-enabled'),
-            platformEnvironment: PlatformEnvironment::PROD
+            platformEnvironment: PlatformEnvironment::PROD,
+            importMode: ImportMode::STRAVA_API
         );
 
         return new AIChatRequestHandler(
-            buildStorage: $this->buildStorage,
+            buildHtmlStorage: $this->buildStorage,
             neuronAIAgent: $agent,
             chatCommands: ChatCommands::fromArray([]),
             chatRepository: $chatRepository,
@@ -241,7 +268,7 @@ class AIChatRequestHandlerTest extends ContainerTestCase
     {
         parent::setUp();
 
-        $this->buildStorage = $this->getContainer()->get('build.storage');
+        $this->buildStorage = $this->getContainer()->get('build_html.storage');
         $this->neuronAIAgent = $this->createStub(AgentInterface::class);
         $this->chatRepository = $this->createMock(ChatRepository::class);
     }

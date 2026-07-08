@@ -1,20 +1,27 @@
 import {fetchJson} from "../../utils";
+import L from 'leaflet';
+import {createMapToolsControl} from "./leaflet-controls";
+import './ctrl-scroll-zoom';
 
 export default class LeafletMap {
-    constructor(mapNode, data) {
+    constructor(mapNode, data, config) {
         this.mapNode = mapNode;
         this.data = data;
+        this.config = config;
 
         this.map = L.map(mapNode, {
-            scrollWheelZoom: data.scrollWheelZoom || false,
+            ctrlScrollZoom: true,
             minZoom: data.minZoom,
             maxZoom: data.maxZoom,
             zoomSnap: .5,
             zoomDelta: .5,
+            preferCanvas: true,
         });
 
         if (data.tileLayer) {
-            L.tileLayer(data.tileLayer).addTo(this.map);
+            this.config.tileLayerUrls.forEach((tileLayerUrl) => {
+                L.tileLayer(tileLayerUrl).addTo(this.map);
+            });
         }
     }
 
@@ -24,10 +31,11 @@ export default class LeafletMap {
 
         for (const coordinates of polylines) {
             L.polyline(coordinates, {
-                color: '#fc6719',
+                color: this.config.polylineColor,
                 weight: 2,
                 opacity: 0.9,
-                lineJoin: 'round'
+                lineJoin: 'round',
+                smoothFactor: 2.0
             }).addTo(featureGroup);
 
             if (this.data.showStartMarker) {
@@ -47,14 +55,7 @@ export default class LeafletMap {
 
         featureGroup.addTo(this.map);
         this.map.fitBounds(featureGroup.getBounds(), {maxZoom: this.data.maxZoom});
-    }
-
-    addGpxControl() {
-        if (!this.data.gpxLink) {
-            return;
-        }
-
-        L.control.downloadGpx({gpxLink: this.data.gpxLink}).addTo(this.map);
+        this.map.addControl(createMapToolsControl({bounds: featureGroup.getBounds()}));
     }
 
     async connectToEChart() {

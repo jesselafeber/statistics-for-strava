@@ -15,6 +15,13 @@
 
 ---
 
+> [!NOTE]
+> On June 1, 2026, Strava announced significant changes to its Developer Program,
+> including a requirement for developers to have an active Strava subscription in order to access the API.
+>
+> We are exploring possibilities to serve people with an active Strava subscription as well as people that want to move away from Strava.
+> Keep an eye out on future release notes or join our Discord server to stay up to date.
+
 # :camera_flash: Showcase
 
 > [!NOTE]
@@ -28,8 +35,8 @@
 * **Activities** -  Browse a detailed list of everything you've done
 * **Monthly View** - Monthly stats with an interactive calendar
 * **Gear stats** - Track how much you've used each bike, shoe, etc.
-* **Custom gear** - Add custom gear setups  ([instructions](https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/custom-gear))
-* **Maintenance Tracking** - Keep tabs on gear wear and tear ([instructions](https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/gear-maintenance))
+* **Custom gear** - Add custom gear setups  ([instructions](https://docs.getsfs.app/#/configuration/custom-gear))
+* **Maintenance Tracking** - Keep tabs on gear wear and tear ([instructions](https://docs.getsfs.app/#/configuration/gear-maintenance))
 * **Eddington** - For your distance milestones
 * **Segments & Efforts** - Dive into your segment history and times
 * **Heatmap** - Visualize where you’ve been active the most

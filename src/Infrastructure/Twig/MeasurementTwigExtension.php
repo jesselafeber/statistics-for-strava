@@ -36,12 +36,21 @@ final readonly class MeasurementTwigExtension
         return $measurement;
     }
 
+    #[AsTwigFilter('formatMeasurement')]
+    public function formatMeasurement(Unit $measurement, int $precision): string
+    {
+        $convertedMeasurement = $this->convertMeasurement($measurement);
+        $measurementInScalar = $convertedMeasurement->toFloat();
+
+        return self::formatNumber($measurementInScalar, $precision);
+    }
+
     #[AsTwigFilter('renderMeasurement')]
     public function renderMeasurement(Unit $measurement, int $precision, ?string $symbolSuffix = null): string
     {
         $convertedMeasurement = $this->convertMeasurement($measurement);
         $measurementInScalar = $convertedMeasurement->toFloat();
-        $formattedNumber = self::formatNumber($measurementInScalar, $measurementInScalar < 100 ? $precision : 0);
+        $formattedNumber = self::formatNumber($measurementInScalar, $precision);
 
         if (!$symbolSuffix) {
             if ('' === $convertedMeasurement->getSymbol()) {
@@ -49,14 +58,14 @@ final readonly class MeasurementTwigExtension
             }
 
             return sprintf(
-                '%s<span class="text-xs">%s</span>',
+                '%s<span class="text-xxs ml-px whitespace-nowrap">%s</span>',
                 $formattedNumber,
                 $convertedMeasurement->getSymbol()
             );
         }
 
         return sprintf(
-            '%s<span class="text-xs">%s %s</span>',
+            '%s<span class="text-xxs ml-px">%s %s</span>',
             $formattedNumber,
             $convertedMeasurement->getSymbol(),
             $symbolSuffix
@@ -78,6 +87,7 @@ final readonly class MeasurementTwigExtension
             'distance' => $this->unitSystem->distanceSymbol(),
             'elevation' => $this->unitSystem->elevationSymbol(),
             'pace' => $this->unitSystem->paceSymbol(),
+            'speed' => $this->unitSystem->speedSymbol(),
             default => throw new \RuntimeException(sprintf('Invalid unitName "%s"', $unitName)),
         };
     }
@@ -88,6 +98,8 @@ final readonly class MeasurementTwigExtension
         if (is_null($number)) {
             return '0';
         }
+
+        $precision = $number < 100 ? $precision : 0;
 
         return number_format(round($number, $precision), $precision, '.', "\u{00A0}");
     }

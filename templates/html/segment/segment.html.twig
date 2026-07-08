@@ -1,34 +1,31 @@
 {% autoescape false %}
     <!-- Modal header -->
-    <div class="modal-header flex items-center justify-between">
+    <div class="modal-header flex items-center justify-between z-10000 sticky top-0 bg-white">
         <h3>
             <a class="flex items-center gap-x-1 hover:underline" href="{{ segment.getUrl() }}" target="_blank" rel="nofollow">
                 {{ segment.getName() }}
-                <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+                <svg class="size-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"/>
                 </svg>
             </a>
         </h3>
         <div class="flex items-center">
             <ul class="hidden md:flex text-center mr-2 divide-x divide-gray-200">
-                <li class="flex items-center gap-x-0.5 pr-2" title="Distance">
-                    {{ svg('distance') }}
-                    <div>{{ segment.getDistance().toFloat()|formatNumber(2) }}</div>
+                <li class="flex flex-col pr-2 text-sm" title="{{ "Distance"|trans }}">
+                    <div>{{ segment.getDistance()|formatMeasurement(2) }}</div>
                     <div class="text-xs text-gray-500">{{ segment.getDistance().getSymbol() }}</div>
                 </li>
-                <li class="flex items-center gap-x-0.5 px-2" title="Max gradient">
-                    {{ svg('percentage') }}
-                    <div>{{ segment.getAverageGradient() }}</div>
-                    <div class="text-xs text-gray-500">{{ "average gradient"|trans }}</div>
+                <li class="flex flex-col px-2 text-sm" title="{{ "Avg gradient"|trans }}">
+                    <div>{{ segment.getAverageGradient() }}%</div>
+                    <div class="text-xs text-gray-500">{{ "Avg gradient"|trans|lower }}</div>
                 </li>
-                <li class="flex items-center gap-x-0.5 px-2" title="Max gradient">
-                    {{ svg('percentage') }}
-                    <div>{{ segment.getMaxGradient() }}</div>
-                    <div class="text-xs text-gray-500">{{ "max gradient"|trans }}</div>
+                <li class="flex flex-col px-2 text-sm" title="{{ "Max gradient"|trans }}">
+                    <div>{{ segment.getMaxGradient() }}%</div>
+                    <div class="text-xs text-gray-500">{{ "Max gradient"|trans|lower }}</div>
                 </li>
             </ul>
             <button type="button" class="close">
-                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <svg class="size-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                 </svg>
                 <span class="sr-only">{{ "Close modal"|trans }}</span>
@@ -49,7 +46,7 @@
                     'showStartMarker': true,
                     'showEndMarker': true
                 } %}
-                <div class="h-[350px]" style="background-color:{{ leaflet.map.getBackgroundColor() }}"
+                <div class="h-87.5" style="background-color:{{ leaflet.map.getBackgroundColor() }}"
                      data-leaflet='{{ leafletOptions|json_encode }}'></div>
             {% endif %}
             <div class="tabs tabs--default">
@@ -73,67 +70,55 @@
             </div>
             <div id="segmentTabsContent">
                 <div id="segmentTabsTopTen" role="tabpanel" aria-labelledby="segmentTabsTopTen-tab">
-                    {% set maxHeight = leaflet ? 'max-h-[calc(100vh-585px)]' : 'max-h-[calc(100vh-285px)]' %}
-                    <div class="relative overflow-x-auto {{ maxHeight }}">
-                        <table class="sortable w-full text-sm text-center text-gray-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                    <div class="relative overflow-x-auto">
+                        <table class="data-table">
+                            <thead>
                             <tr>
-                                <th scope="col" class="cursor-pointer px-2 py-3 bg-gray-50 lg:sticky lg:left-0">
-                                    <div class="flex items-center justify-center" title="{{ "Ranking"|trans }}">
-                                        {{ svg('hashtag') }}
-                                    </div>
+                                <th scope="col" class="bg-gray-50 lg:sticky lg:left-0">
+                                    {{ "Ranking"|trans }}
                                 </th>
-                                <th scope="col" class="px-2 py-3">
+                                <th scope="col" class="narrow">
                                     <div class="flex items-center justify-center" title="{{ "Date"|trans }}">
-                                        {{ svg('calendar') }}
+                                        {{ "Date"|trans }}
                                     </div>
                                 </th>
-                                <th scope="col" class="px-2 py-3">
+                                <th scope="col" class="text-left narrow">
+                                    {{ "Activity"|trans }}
                                 </th>
-                                <th scope="col" class="px-2 py-3">
-                                    <div class="flex items-center justify-center" title="{{ "Time"|trans }}">
-                                        {{ svg('time') }}
-                                    </div>
+                                <th scope="col" >
+                                    {{ "Time"|trans }}
                                 </th>
-                                <th scope="col" class="px-2 py-3">
-                                    <div class="flex items-center justify-center" title="{{ "Speed"|trans }}">
-                                        {{ svg('speed') }}
-                                    </div>
+                                <th scope="col" >
+                                    {{ "Speed"|trans }}
                                 </th>
-                                <th scope="col" class="px-2 py-3">
-                                    <div class="flex items-center justify-center" title="{{ "Heart rate"|trans }}">
-                                        {{ svg('heart-rate') }}
-                                    </div>
+                                <th scope="col" >
+                                    {{ "HR"|trans }}
                                 </th>
-                                <th scope="col" class="px-2 py-3">
-                                    <div class="flex items-center justify-center" title="{{ "Power"|trans }}">
-                                        {{ svg('power') }}
-                                    </div>
+                                <th scope="col" >
+                                    {{ "Power"|trans }}
                                 </th>
-                                <th scope="col" class="px-2 py-3">
-                                    <div class="flex items-center justify-center" title="{{ "Gear"|trans }}">
-                                        {{ svg('rocket') }}
-                                    </div>
+                                <th scope="col">
+                                    {{ "Gear"|trans }}
                                 </th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for segmentEffort in segmentEffortsTopTen %}
                                 {% set activity = enrichedActivities.find(segmentEffort.getActivityId()) %}
-                                <tr class="{{ cycle(['bg-white border-b', 'border-b bg-gray-50'], loop.index0) }}">
-                                    <td class="px-2 py-2 truncate lg:sticky lg:left-0 {{ cycle(['bg-white', 'bg-gray-50'], loop.index0) }}">
+                                <tr>
+                                    <td class="truncate lg:sticky lg:left-0">
                                         {{ loop.index }}
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td class="narrow">
                                         <div class="flex justify-center">
                                             <div class="w-18">{{ segmentEffort.getStartDateTime()|formatDate() }}</div>
                                         </div>
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td class="narrow truncate">
                                         <div class="flex items-center gap-x-1">
                                             {{ activity|activityLink(ellipses: 180) }}
                                             <a href="{{ activity.getUrl() }}" target="_blank" rel="nofollow">
-                                                <svg class="w-2 h-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                <svg class="size-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                                                      viewBox="0 0 18 18">
                                                     <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                           d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"/>
@@ -141,30 +126,30 @@
                                             </a>
                                         </div>
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td >
                                         {{ segmentEffort.getElapsedTimeFormatted() }}
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td>
                                         {% set velocityPreference = activity.getSportType().getVelocityDisplayPreference() %}
                                         {% if velocityPreference is instanceof('App\\Infrastructure\\ValueObject\\Measurement\\Velocity\\SecPer100Meter') %}
-                                            {{ segmentEffort.getPaceInSecPer100Meter()|formatPace }}<span class="text-xs">/100m</span>
+                                            {{ segmentEffort.getPaceInSecPer100Meter()|formatPace }}<span class="text-xxs ml-px">/100m</span>
                                         {% elseif velocityPreference is instanceof('App\\Infrastructure\\ValueObject\\Measurement\\Velocity\\SecPerKm') %}
-                                            {{ segmentEffort.getPaceInSecPerKm()|formatPace }}<span class="text-xs">{{ renderUnitSymbol('pace') }}</span>
+                                            {{ segmentEffort.getPaceInSecPerKm()|formatPace }}<span class="text-xxs ml-px">{{ renderUnitSymbol('pace') }}</span>
                                         {% else %}
                                             {{ segmentEffort.getAverageSpeed()|renderMeasurement(1) }}
                                         {% endif %}
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td>
                                         {{ segmentEffort.getAverageHeartRate() ?? 'n/a' }}
                                     </td>
-                                    <td class="px-2 py-2">
+                                    <td>
                                         {% if segmentEffort.getAverageWatts() %}
-                                            {{ segmentEffort.getAverageWatts()|formatNumber(1) }}<span class="text-xs">w</span>
+                                            {{ segmentEffort.getAverageWatts()|formatNumber(1) }}<span class="text-xxs ml-px">w</span>
                                         {% else %}
                                             {{ "n/a"|trans }}
                                         {% endif %}
                                     </td>
-                                    <td class="px-2 py-2 truncate">
+                                    <td class="truncate">
                                         {% set gearName = activity.getGearName() %}
                                         {% if gearName %}
                                             {{ activity.getGearName() }}

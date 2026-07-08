@@ -6,6 +6,7 @@ use App\Console\DetectCorruptedActivitiesConsoleCommand;
 use App\Domain\Activity\ActivityId;
 use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\ActivityWithRawData;
+use App\Domain\Activity\ImportSource;
 use App\Domain\Activity\SportType\SportType;
 use App\Domain\Activity\Stream\CombinedStream\CombinedStreamType;
 use App\Domain\Activity\Stream\StreamType;
@@ -38,12 +39,12 @@ class DetectCorruptedActivitiesConsoleCommandTest extends ConsoleCommandTestCase
     public function testExecuteWithoutDataButNegativeConfirmation(): void
     {
         $this->getConnection()->executeStatement(
-            'INSERT INTO Activity (activityId, data, startDateTime, sportType, name, distance, 
-                                    elevation, averageSpeed, maxSpeed, movingTimeInSeconds, kudoCount,
-                                    totalImageCount, worldType) 
-                VALUES (:activityId, :data, :startDateTime, :sportType, :name, :distance, 
-                        :elevation, :averageSpeed, :maxSpeed, :movingTimeInSeconds, :kudoCount,
-                        :totalImageCount, :worldType)',
+            'INSERT INTO Activity (activityId, data, startDateTime, sportType, name, distance,
+                                    elevation, averageSpeed, maxSpeed, movingTimeInSeconds, elapsedTimeInSeconds,
+                                    totalImageCount, worldType, importSource)
+                VALUES (:activityId, :data, :startDateTime, :sportType, :name, :distance,
+                        :elevation, :averageSpeed, :maxSpeed, :movingTimeInSeconds, :elapsedTimeInSeconds,
+                        :totalImageCount, :worldType, :importSource)',
             [
                 'activityId' => 'activity-test',
                 'data' => '{"name": "Ride", "distance": 42,}',
@@ -55,9 +56,10 @@ class DetectCorruptedActivitiesConsoleCommandTest extends ConsoleCommandTestCase
                 'averageSpeed' => 4200,
                 'maxSpeed' => 4200,
                 'movingTimeInSeconds' => 4200,
-                'kudoCount' => 4200,
+                'elapsedTimeInSeconds' => 4200,
                 'totalImageCount' => 1,
                 'worldType' => WorldType::REAL_WORLD->value,
+                'importSource' => ImportSource::STRAVA_API->value,
             ]
         );
 
@@ -74,12 +76,12 @@ class DetectCorruptedActivitiesConsoleCommandTest extends ConsoleCommandTestCase
     public function testExecuteWithoutDataButPositiveConfirmation(): void
     {
         $this->getConnection()->executeStatement(
-            'INSERT INTO Activity (activityId, data, startDateTime, sportType, name, distance, 
-                                    elevation, averageSpeed, maxSpeed, movingTimeInSeconds, kudoCount,
-                                    totalImageCount, worldType) 
-                VALUES (:activityId, :data, :startDateTime, :sportType, :name, :distance, 
-                        :elevation, :averageSpeed, :maxSpeed, :movingTimeInSeconds, :kudoCount,
-                        :totalImageCount, :worldType)',
+            'INSERT INTO Activity (activityId, data, startDateTime, sportType, name, distance,
+                                    elevation, averageSpeed, maxSpeed, movingTimeInSeconds, elapsedTimeInSeconds,
+                                    totalImageCount, worldType, importSource)
+                VALUES (:activityId, :data, :startDateTime, :sportType, :name, :distance,
+                        :elevation, :averageSpeed, :maxSpeed, :movingTimeInSeconds, :elapsedTimeInSeconds,
+                        :totalImageCount, :worldType, :importSource)',
             [
                 'activityId' => 'activity-test',
                 'data' => '{"name": "Ride", "distance": 42,}',
@@ -91,9 +93,10 @@ class DetectCorruptedActivitiesConsoleCommandTest extends ConsoleCommandTestCase
                 'averageSpeed' => 4200,
                 'maxSpeed' => 4200,
                 'movingTimeInSeconds' => 4200,
-                'kudoCount' => 4200,
+                'elapsedTimeInSeconds' => 4200,
                 'totalImageCount' => 1,
                 'worldType' => WorldType::REAL_WORLD->value,
+                'importSource' => ImportSource::STRAVA_API->value,
             ]
         );
 

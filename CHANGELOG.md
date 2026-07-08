@@ -1,3 +1,201 @@
+# [v4.8.8](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.8.8) - 2026-06-14
+
+## Improvements
+* Moved database migrations away from the codebase to the Docker entrypoint
+* Redesigned onboarding flow
+* Updated German translations
+* Updated Portuguese translations
+
+## Bug fixes
+* Fixed a bug where filters on the photos page was not persisted between page loads
+
+## Technical details
+* ISSUE #2142: Introduce an isolated service to detect duplicate activities before importing by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2143
+* ISSUE #2141: Move the app away from Strava branding by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2144
+* ISSUE #2133: Add new Activity file import pipeline by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2145
+* ISSUE #2146: Add periodic file imports to the daemon container by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2147
+* ISSUE #2152: Rename database, but fallback to existing strava.db file by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2153
+* ISSUE #2151: Only render link to Strava activity if activity got imported through Strava API by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2154
+* ISSUE #2156: Filters on the photos page are not persisted to localStorage by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2157
+* ISSUE #2149: Remove references to kudo's and comments by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2158
+* ISSUE #2160: Improve import flow and get rid of unnecessary cron complexity by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2162
+* ISSUE #2161: Improve file parser tests by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2163
+* ISSUE #2155: Move database migrations to docker entrypoint by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2159
+* ISSUE #2164: Import athlete from file config by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2165
+* ISSUE #2150: Restyle onboarding flow by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2166
+* Update German translations in intl-icu file by @effectpears in https://github.com/robiningelbrecht/statistics-for-strava/pull/2170
+* Update messages+intl-icu.pt_BR.yaml by @gustavobim in https://github.com/robiningelbrecht/statistics-for-strava/pull/2168
+
+## New Contributors
+* @gustavobim made their first contribution in https://github.com/robiningelbrecht/statistics-for-strava/pull/2168
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.8.7...v4.8.8
+
+# [v4.8.7](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.8.7) - 2026-06-08
+
+## Bug fixes
+* Fixed an issue where the import crashes for manually added activities
+
+## Technical details
+* ISSUE #2128: Add config option 'import mode' in preparation of multi-source imports by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2130
+* ISSUE #2129: Add new 'FileImport' entity to keep track of all file imports by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2131
+* ISSUE #2133: Add new Activity file import pipeline by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2134
+* ISSUE #2132: Import crashes on activities with null external_id by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2137
+* Fix CI/CD by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2138
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.8.6...v4.8.7
+
+# [v4.8.6](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.8.6) - 2026-06-04
+
+## New features
+* Allow to configure all maps instead of the heatmap only
+
+> [!WARNING]  
+> We slightly altered the configuration of the heatmap to take all maps into account.
+> 
+> Configuration before:
+> ```yaml
+>appearance:
+>  heatmap:
+>    polylineColor: '#fc6719'
+>    tileLayerUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+>    enableGreyScale: true
+>    initialCenter: null
+>    initialZoom: null
+> ```
+> 
+> Configuration now:
+> ```yaml
+>appearance:
+>  maps:
+>    polylineColor: '#fc6719'
+>    tileLayerUrl: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png'
+>    enableGreyScale: true
+>    heatmap:
+>      initialCenter: null
+>      initialZoom: null
+> ```
+
+These changes are reflected in the documentation: https://docs.getsfs.app/#/configuration/main-configuration
+
+## Improvements
+* Allow for activity descriptions to be expanded when clicking them
+
+## Bug fixes
+* Fix buggy behaviour when using the browser's back button
+
+## Technical details
+* ISSUE #2113: Fix buggy behaviour when using the browser's back button by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2118
+* Added note to the docs informing users about Strava API policy by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2120
+* ISSUE #2114: Leaflet map settings by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2119
+* ISSUE #2114: Allow for descriptions to be expanded by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2122
+* ISSUE #2123: Move manifest.json to build folder by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2124
+* ISSUE #2125: Add ImportSource and ExternalReferenceId on Activity entity in preparation of multi-source imports by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2126
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.8.5...v4.8.6
+
+# [v4.8.5](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.8.5) - 2026-06-01
+
+## New features
+* Added activity elapsed time to the activity detail page
+
+## Improvements
+* Improved application security by tightening file access rules
+* Improved accessibility of the mobile navigation menu
+
+## Bug fixes
+* Fixed and refined Caddy server directives, with additional test coverage to prevent future regressions
+
+## Technical details
+* ISSUE #2104: Harden security by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2105
+* ISSUE #2106: Add button state to the mobile menu trigger by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2108
+* ISSUE #2107: Fix Caddy directives and add proper tests by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2109
+* ISSUE #2110: Activity elapsed time by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2111
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.8.4...v4.8.5
+
+# [v4.8.4](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.8.4) - 2026-05-29
+
+> [!WARNING]  
+> This release fixes an issue where log files stored under `storage/files/logs` could be accessed through the web server on publicly exposed SfS instances.
+> While the logs did not contain sensitive user data, they were never intended to be publicly accessible. Access to these files is now properly blocked.
+> Security and privacy are taken very seriously, and we apologize for not catching this earlier.
+
+> [!NOTE]  
+> We revisited the way training load is calculated and discovered that the current implementation was incorrect in certain cases.
+> As a result, users with many heart rate-based activities may notice significant changes in their training load numbers after updating.
+
+## Technical details
+* ISSUE #2093: Cadence distribution chart bars do not connect by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2097
+* Added anonymous analytics for docs by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2098
+* ISSUE #2033: Normalize daily TSS and daily TRIMP by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2100
+* ISSUE #2101: Allow demo to serve anonymized image by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2102
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.8.3...v4.8.4
+
+# [v4.8.3](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.8.3) - 2026-05-28
+
+## Bug fixes
+* Fixed rendering of previous milestones in the milestone dashboard widget
+* Convert all measurements to proper unit system
+
+## Technical details
+* ISSUE #2082: Convert all measurements to proper unit system by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2083
+* ISSUE #2085: Milestone dashboard widget does not render previous milestones correctly by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2086
+* ISSUE #2087: Bundle flowbite in app.min.js by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2088
+* ISSUE #2089: New Shoutrrr release - v0.15.1 by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2090
+* ISSUE #2094: Reference to new domain getsfs.app by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2095
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.8.2...v4.8.3
+
+# [v4.8.2](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.8.2) - 2026-05-26 
+
+## Improvements
+* A lot of small UX improvements throughout the app
+* Use table header labels instead of icons
+
+## Bug fixes
+* Properly format GAP pace for running activities
+
+## Technical details
+* ISSUE #2062: Daytime dashboard widget disable text wrap by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2063
+* ISSUE #2064: Yearly stats dashboard widget disable text wrap by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2065
+* ISSUE #2068: Use table header labels instead of icons by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2069
+* fix: format GAP like pace by @cgtobi in https://github.com/robiningelbrecht/statistics-for-strava/pull/2071
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.8.1...v4.8.2
+
+# [v4.8.1](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.8.1) - 2026-05-23
+
+## Bug fixes
+* Fixed ChunkLoadError: Loading chunk failed on instances served behind Cloudflare, where dynamically loaded JS chunks were being requested from the wrong
+  URL due to interference from the Cloudflare Insights beacon.
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.8.0...v4.8.1
+
+# [v4.8.0](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.8.0) - 2026-05-23
+
+## Improvements
+* Added support for the PhysicalTherapy sport type
+* Redesigned the activity detail page
+* Redesigned the sidebar navigation
+* Fixed dark mode styling issues throughout the app
+
+## Bug fixes
+* Fixed an issue where the dropdown active state was not updating correctly when filtering.
+
+## Technical details
+* ISSUE #2047: Fix dropdown active state when filtering by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2049
+* ISSUE #2050: Add support for sport type PhysicalTherapy by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2052
+* ISSUE #2048: Redesign of the activity detail page by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2051
+* ISSUE #2050: Follow up fixes for activity redesign by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2054
+* ISSUE #2053: Remove average heart rate from splits by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2055
+* ISSUE #2050: Followup fixes for activity redesign by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2056
+* ISSUE #2057: Small UX improvements throughout the app by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2058
+* ISSUE #2057: Fix gear maintenance dark mode UI by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/2059
+
+**Full Changelog**: https://github.com/robiningelbrecht/statistics-for-strava/compare/v4.7.12...v4.8.0
+
 # [v4.7.12](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.7.12) - 2026-05-14
 
 ## What's Changed
@@ -123,7 +321,7 @@ appearance:
 }
 ```
 
-https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/dashboard-widgets?id=traininggoals
+https://docs.getsfs.app/#/configuration/dashboard-widgets?id=traininggoals
 
 ## Bug fixes
 * Fixed cadence accuracy for running and walking activities by correctly doubling the cadence value where needed.
@@ -307,7 +505,7 @@ metrics:
 # [v4.6.8](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v4.6.8) - 2026-03-03
 
 ## New features
-* Added [statistics for recording devices](https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration), giving you more insight into which devices you use for your activities.
+* Added [statistics for recording devices](https://docs.getsfs.app/#/configuration/main-configuration), giving you more insight into which devices you use for your activities.
 
 ```yaml
 gear:
@@ -599,7 +797,7 @@ general:
 
 Statistics for Strava now supports Strava webhooks to automatically import and build your data when new activities are uploaded. This eliminates the need to manually run import commands or set up cron jobs.
 
-Learn how to enable and configure webhooks in the documentation: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/strava-webhooks
+Learn how to enable and configure webhooks in the documentation: https://docs.getsfs.app/#/configuration/strava-webhooks
 
 ## What's Changed
 * ISSUE #1551: Only import activities that are affected by incoming webhooks by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1560
@@ -676,7 +874,7 @@ Learn how to enable and configure webhooks in the documentation: https://statist
 > [!WARNING]  
 > The `weeklyGoals` widget has been removed and replaced by the `trainingGoals` widget.
 > If you currently use `weeklyGoals`, update your configuration accordingly:
-> https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/dashboard-widgets?id=traininggoals
+> https://docs.getsfs.app/#/configuration/dashboard-widgets?id=traininggoals
 
 ## What's Changed
 * ISSUE #1421: Add running to peak power output and FTP history by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1467
@@ -689,12 +887,12 @@ Learn how to enable and configure webhooks in the documentation: https://statist
 
 🔥 Two new features worth mentioning this release:
 
-* To keep your configuration clean and maintainable, you can split it across multiple files: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration?id=splitting-your-configuration-into-multiple-files
+* To keep your configuration clean and maintainable, you can split it across multiple files: https://docs.getsfs.app/#/configuration/main-configuration?id=splitting-your-configuration-into-multiple-files
 * An improved notification system. Under the hood we're using *Shoutrrr*, so any service supported by Shoutrrr, will be supported by SFS (https://shoutrrr.nickfedor.com/dev/services/overview/)
 
 > [!NOTE]  
 > The old ntfy.sh config will keep working, the feature is backwards compatible.
-> Read the docs how to configure your notifications: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration
+> Read the docs how to configure your notifications: https://docs.getsfs.app/#/configuration/main-configuration
 
 ## What's Changed
 * ISSUE #1448: Implement Shoutrrr to allow other notification providers by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1457
@@ -737,7 +935,7 @@ Learn how to enable and configure webhooks in the documentation: https://statist
 > If you are using the internal cron to manage your app imports and builds,
 > make sure you configured the correct volumes on the Daemon container.
 > The docs were missing a volume and have been updated:
-> https://statistics-for-strava-docs.robiningelbrecht.be/#/getting-started/installation?id=docker-composeyml
+> https://docs.getsfs.app/#/getting-started/installation?id=docker-composeyml
 
 ## What's Changed
 * ISSUE #1410: Build crashes when VelocityDistributionChart has no valid data by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1411
@@ -796,7 +994,7 @@ Learn how to enable and configure webhooks in the documentation: https://statist
 >    Its configuration has been merged into the main config file under `gear.customGear`
 > 
 > Simply copy/paste your existing values into their new locations.
-> https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration
+> https://docs.getsfs.app/#/configuration/main-configuration
 
 🔥This new release adds several new features and improvements. 
 The highlight is the addition of an internal scheduler, allowing you to define and run recurring background tasks directly within the app.
@@ -804,8 +1002,8 @@ The highlight is the addition of an internal scheduler, allowing you to define a
 If you prefer, you can still use external tools to trigger the import and build scripts.
 However, to use the internal scheduler, you’ll need to configure two things:
 
-* An extra container in your `docker-compose.yml` file: https://statistics-for-strava-docs.robiningelbrecht.be/#/getting-started/installation?id=docker-composeyml
-* The recurring tasks in your main config file under `daemin.cron`: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration
+* An extra container in your `docker-compose.yml` file: https://docs.getsfs.app/#/getting-started/installation?id=docker-composeyml
+* The recurring tasks in your main config file under `daemin.cron`: https://docs.getsfs.app/#/configuration/main-configuration
 
 ## What's Changed
 * syntax fix by @oregonpillow in https://github.com/robiningelbrecht/statistics-for-strava/pull/1362
@@ -846,7 +1044,7 @@ However, to use the internal scheduler, you’ll need to configure two things:
 > [!NOTE]  
 > This widget is disabled in the default dashboard layout. If you want to use this widget you need to configure a custom dashboard layout.
 
-Read more in the documentation: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/dashboard-widgets?id=weeklygoals
+Read more in the documentation: https://docs.getsfs.app/#/configuration/dashboard-widgets?id=weeklygoals
 
 ## What's Changed
 * ISSUE #1326: Do not use gear that has no activities referencing it by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1327
@@ -864,7 +1062,7 @@ Read more in the documentation: https://statistics-for-strava-docs.robiningelbre
 
 This option lets you customize the order of the metric buttons __Distance__, __Time__, and __Elevation__ in each widget to match your preferred display order.
 
-Read more in the documentation: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/dashboard-widgets
+Read more in the documentation: https://docs.getsfs.app/#/configuration/dashboard-widgets
 
 ## What's Changed
 * Minor change for Ofelia docs example config by @Luen in https://github.com/robiningelbrecht/statistics-for-strava/pull/1314
@@ -887,8 +1085,8 @@ Read more in the documentation: https://statistics-for-strava-docs.robiningelbre
 
 🔥 You can now set the purchase price of your (custom) gear to track its relative cost per hour and per activity. Read more in the documentation:
 
-* https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration
-* https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/custom-gear
+* https://docs.getsfs.app/#/configuration/main-configuration
+* https://docs.getsfs.app/#/configuration/custom-gear
 
 ## What's Changed
 * updated german translations by @Export33 in https://github.com/robiningelbrecht/statistics-for-strava/pull/1294
@@ -924,7 +1122,7 @@ Read more in the documentation: https://statistics-for-strava-docs.robiningelbre
 >      defaultEnabledFilters: {}
 > ```
 
-Read more in the documentation: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration
+Read more in the documentation: https://docs.getsfs.app/#/configuration/main-configuration
 
 ## What's Changed
 * ISSUE #1264: Fix NeuronAI bug by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/1265
@@ -1044,7 +1242,7 @@ Read more in the documentation: https://statistics-for-strava-docs.robiningelbre
 
 > [!WARNING]  
 > This release comes with a new Docker-based architecture.  Before upgrading, review and update the required `.env` values for your setup:  
-> https://statistics-for-strava-docs.robiningelbrecht.be/#/getting-started/installation?id=env
+> https://docs.getsfs.app/#/getting-started/installation?id=env
 
 ```.env
 # !! IMPORTANT If you want to serve Statistics for Strava from a custom domain (not localhost), 
@@ -1293,7 +1491,7 @@ appearance:
       - { 'widget': 'eddington', 'width': 50, 'enabled': true }
 ```
 
-Check https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/dashboard-widgets?id=eddington for more information.
+Check https://docs.getsfs.app/#/configuration/dashboard-widgets?id=eddington for more information.
 
 ## What's Changed
 * ISSUE #942: Better error messages in chat UI by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/947
@@ -1327,7 +1525,7 @@ appearance:
 
 🤖 This release introduces extra configuration options for the AI agent. You can now configure pre-defined chat commands.
 
-Check https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/ai-integration?id=pre-defining-chat-commands for more information.
+Check https://docs.getsfs.app/#/configuration/ai-integration?id=pre-defining-chat-commands for more information.
 
 ```yaml
 integrations:
@@ -1354,7 +1552,7 @@ integrations:
 # [v3.1.0](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v3.1.0) - 2025-07-29
 
 🔥 This release allows you to configure dashboard widgets. You can now choose which widgets you want to see on your dashboard and in which order they are displayed.
-Check https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration?id=dashboard-layout for more information.
+Check https://docs.getsfs.app/#/configuration/main-configuration?id=dashboard-layout for more information.
 
 ## What's Changed
 * ISSUE #902: Fix weekly streaks in rewind by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/907
@@ -1402,7 +1600,7 @@ This release introduces configuration options for the heatmap
 # [v3.0.0](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v3.0.0) - 2025-07-22
 
 * 🚀 Our AI agent "Mark" is now available via the UI as well. You can enable this by setting `enableUI: true` in your config.yaml file
-* ⚠️ Native scheduling has been removed from the SFS image. [Check the docs](https://statistics-for-strava-docs.robiningelbrecht.be/#/getting-started/scheduling) for alternatives.
+* ⚠️ Native scheduling has been removed from the SFS image. [Check the docs](https://docs.getsfs.app/#/getting-started/scheduling) for alternatives.
 
 ## What's Changed
 * ISSUE #870: German translations by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/871
@@ -1468,7 +1666,7 @@ This release introduces configuration options for the heatmap
 # [v2.4.0](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v2.4.0) - 2025-07-01
 
 🚀 Statistics for Strava v2.4.0 is here!
-The most noteworthy feature is the virtual workout assistant: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/ai-integration
+The most noteworthy feature is the virtual workout assistant: https://docs.getsfs.app/#/configuration/ai-integration
 
 ## What's Changed
 * ISSUE #806: Fix filter date range bug by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/807
@@ -1487,7 +1685,7 @@ The most noteworthy feature is the virtual workout assistant: https://statistics
 appearance:
   # With this list you can decide the order the sport types will be rendered in. For example in the tabs on the dashboard.
   # You don't have to include all sport types. Sport types not included in this list will be rendered by the app default.
-  # A full list of allowed options is available on https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration?id=supported-sport-types 
+  # A full list of allowed options is available on https://docs.getsfs.app/#/configuration/main-configuration?id=supported-sport-types 
   sportTypesSortingOrder: []  
 ```
 
@@ -1501,7 +1699,7 @@ appearance:
 
 # [v2.3.5](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v2.3.5) - 2025-06-27
 
-Configure your own consistency challenges: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration?id=consistency-challenges
+Configure your own consistency challenges: https://docs.getsfs.app/#/configuration/main-configuration?id=consistency-challenges
 
 ## What's Changed
 * ISSUE #786: Allow to configure consistency challenges by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/790
@@ -1562,7 +1760,7 @@ appearance:
 # [v2.3.0](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v2.3.0) - 2025-06-16
 
 🚀 New: Fine-tune your heart rate zones with advanced configuration options!
-📖 Learn how to set them up: [Configuration Guide](https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration)
+📖 Learn how to set them up: [Configuration Guide](https://docs.getsfs.app/#/configuration/main-configuration)
 
 ## What's Changed
 * ISSUE #677: Show activity where PB was set by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/720
@@ -1583,7 +1781,7 @@ appearance:
 # [v2.2.0](https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/v2.2.0) - 2025-06-12
 
 🔥 Be the master of your Eddington. 
-Read up on how to configure your Eddington numbers: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration
+Read up on how to configure your Eddington numbers: https://docs.getsfs.app/#/configuration/main-configuration
 
 ## What's Changed
 * ISSUE #692: Fix bug in Safari while rendering gear maintenance by @robiningelbrecht in https://github.com/robiningelbrecht/statistics-for-strava/pull/704

@@ -10,6 +10,7 @@ node_modules
 /src/Repository
 .idea
 config/reference.php
+poc/
 
 ###> friendsofphp/php-cs-fixer ###
 /.php-cs-fixer.php
@@ -33,6 +34,8 @@ phpstan.neon
 /cron
 /ollama
 /mercure
-/tests/strava*.db
+/watch
+/tests/dreeve*.db*
+/tests/strava*.db*
 ###> app-build ###
 /.env

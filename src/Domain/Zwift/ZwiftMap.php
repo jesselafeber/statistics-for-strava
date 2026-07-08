@@ -34,7 +34,7 @@ final readonly class ZwiftMap implements LeafletMap
 
     public function getLabel(): string
     {
-        return ucfirst(str_replace('-', ' ', $this->mapName));
+        return ucwords(str_replace('-', ' ', $this->mapName));
     }
 
     public function getTileLayer(): ?string
@@ -71,6 +71,7 @@ final readonly class ZwiftMap implements LeafletMap
     {
         // https://zwiftinsider.com/hilly-kom-bypass/
         // https://cf.veloviewer.com/js/vv.lmap.61.js
+        // https://github.com/andipaetzold/zwift-data/blob/main/src/worlds.ts
         $boundMap = [
             self::BOLOGNA => [
                 Coordinate::createFromLatAndLng(Latitude::fromString('44.5308037'), Longitude::fromString('11.26261748')),

@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Application\Import\DeleteActivitiesMarkedForDeletion\DeleteActivitiesMarkedForDeletion;
+use App\Application\Import\StravaImport\DeleteActivitiesMarkedForDeletion\DeleteActivitiesMarkedForDeletion;
 use App\Domain\Activity\ActivityId;
 use App\Domain\Activity\ActivityIdRepository;
 use App\Domain\Activity\ActivityIds;
@@ -17,6 +17,7 @@ use App\Domain\Strava\Webhook\WebhookEventRepository;
 use App\Infrastructure\Console\ProvideConsoleIntro;
 use App\Infrastructure\CQRS\Command\Bus\CommandBus;
 use App\Infrastructure\DependencyInjection\Mutex\WithMutex;
+use App\Infrastructure\Doctrine\Migrations\RequiresUpToDateDatabaseSchema;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Mutex\LockName;
 use App\Infrastructure\Mutex\Mutex;
@@ -29,6 +30,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[WithMutex(lockName: LockName::IMPORT_DATA_OR_BUILD_APP)]
+#[RequiresUpToDateDatabaseSchema]
 #[AsCommand(name: 'app:data:detect-corrupted-activities', description: 'Checks for corrupted activities and deletes them')]
 class DetectCorruptedActivitiesConsoleCommand extends Command
 {

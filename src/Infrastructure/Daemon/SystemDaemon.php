@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Daemon;
 
+use App\Console\Daemon\ProcessStravaWebhooksConsoleCommand;
+use App\Console\Daemon\RunFileImportAndBuildAppConsoleCommand;
+use App\Domain\Import\ImportMode;
 use App\Domain\Strava\Webhook\WebhookConfig;
 use App\Infrastructure\Console\ConsoleOutputAware;
-use App\Infrastructure\Daemon\Cron\Cron;
+use App\Infrastructure\Daemon\Cron\ConfiguredCronActions;
 use App\Infrastructure\Daemon\Cron\CronAction;
 use App\Infrastructure\Daemon\Cron\CronProcess;
 use App\Infrastructure\Time\Clock\Clock;
@@ -25,8 +28,9 @@ final class SystemDaemon implements Daemon
 
     public function __construct(
         private readonly Clock $clock,
-        private readonly Cron $cron,
+        private readonly ConfiguredCronActions $configuredCronActions,
         private readonly WebhookConfig $webhookConfig,
+        private readonly ImportMode $importMode,
     ) {
     }
 
@@ -43,17 +47,23 @@ final class SystemDaemon implements Daemon
     public function configureCron(): void
     {
         $actions = [];
+        $processedCronAction = [];
         /** @var CronAction $cronAction */
-        foreach ($this->cron as $cronAction) {
+        foreach ($this->configuredCronActions as $cronAction) {
+            if (!$cronAction->supportsImportMode($this->importMode)) {
+                continue;
+            }
+            $processedCronAction[] = $cronAction;
             $actions[] = new Action(
                 key: $cronAction->getId(),
-                mutexTtl: $cronAction->getRunnable()->getMutexTtl(),
+                mutexTtl: 1200,
                 expression: (string) $cronAction->getExpression(),
                 performer: function () use ($cronAction): PromiseInterface {
                     $process = new CronProcess(
                         cronActionId: $cronAction->getId(),
                         clock: $this->clock,
                         output: $this->getConsoleOutput(),
+                        command: $cronAction->getCommand(),
                     );
                     $process->start();
 
@@ -63,7 +73,29 @@ final class SystemDaemon implements Daemon
         }
 
         $extraConfiguredCronActionsOutput = [];
-        if ($this->webhookConfig->isEnabled()) {
+
+        if ($this->importMode->isFiles()) {
+            $cronExpression = '*/5 * * * *';
+            $extraConfiguredCronActionsOutput[] = sprintf('<info> - runFileImport: %s</info>', $cronExpression);
+            $actions[] = new Action(
+                key: 'runFileImport',
+                mutexTtl: 300,
+                expression: $cronExpression,
+                performer: function (): PromiseInterface {
+                    $process = new CronProcess(
+                        cronActionId: 'runFileImport',
+                        clock: $this->clock,
+                        output: $this->getConsoleOutput(),
+                        command: sprintf('bin/console %s', RunFileImportAndBuildAppConsoleCommand::NAME)
+                    );
+                    $process->start();
+
+                    return resolve(true);
+                }
+            );
+        }
+
+        if ($this->importMode->isStravaApi() && $this->webhookConfig->isEnabled()) {
             $extraConfiguredCronActionsOutput[] = sprintf('<info> - processStravaWebhooks: %s</info>', $this->webhookConfig->getCronExpression());
             $actions[] = new Action(
                 key: 'processStravaWebhooks',
@@ -74,7 +106,8 @@ final class SystemDaemon implements Daemon
                         cronActionId: 'processStravaWebhooks',
                         clock: $this->clock,
                         output: $this->getConsoleOutput(),
-                    )->withCommand('bin/console app:cron:process-webhooks');
+                        command: sprintf('bin/console %s', ProcessStravaWebhooksConsoleCommand::NAME)
+                    );
                     $process->start();
 
                     return resolve(true);
@@ -96,7 +129,7 @@ final class SystemDaemon implements Daemon
         $this->getConsoleOutput()->writeln([
             ...array_map(
                 fn (CronAction $action): string => \sprintf('<info> - %s: %s</info>', $action->getId(), $action->getExpression()),
-                iterator_to_array($this->cron)
+                $processedCronAction
             ),
             ...$extraConfiguredCronActionsOutput,
         ]);

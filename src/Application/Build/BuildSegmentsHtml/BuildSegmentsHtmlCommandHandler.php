@@ -29,8 +29,8 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
         private SportTypeRepository $sportTypeRepository,
         private Countries $countries,
         private Environment $twig,
-        private FilesystemOperator $buildStorage,
-        private FilesystemOperator $apiStorage,
+        private FilesystemOperator $buildHtmlStorage,
+        private FilesystemOperator $buildApiStorage,
         private UnitSystem $unitSystem,
         private TranslatorInterface $translator,
     ) {
@@ -57,14 +57,14 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
                     ->withLastEffortDate($segmentEfforts->getFirst()?->getStartDateTime());
 
                 $polylinesFileLocation = sprintf('segment/%s/polylines.json', $segment->getId()->toUnprefixedString());
-                if (($leafletMap = $segment->getLeafletMap()) && !$this->apiStorage->fileExists($polylinesFileLocation)) {
-                    $this->apiStorage->write(
+                if (($leafletMap = $segment->getLeafletMap()) && !$this->buildApiStorage->fileExists($polylinesFileLocation)) {
+                    $this->buildApiStorage->write(
                         $polylinesFileLocation,
                         (string) Json::encodeAndCompress([$segment->getPolyline()?->decodeAndPairLatLng()]),
                     );
                 }
 
-                $this->buildStorage->write(
+                $this->buildHtmlStorage->write(
                     'segment/'.$segment->getId().'.html',
                     $this->twig->load('html/segment/segment.html.twig')->render([
                         'segment' => $segment,
@@ -101,12 +101,12 @@ final readonly class BuildSegmentsHtmlCommandHandler implements CommandHandler
             $pagination = $pagination->next();
         } while (!$segments->isEmpty());
 
-        $this->apiStorage->write(
+        $this->buildApiStorage->write(
             'segment/data-table.json',
             (string) Json::encodeAndCompress($dataDatableRows),
         );
 
-        $this->buildStorage->write(
+        $this->buildHtmlStorage->write(
             'segments.html',
             $this->twig->load('html/segment/segments.html.twig')->render([
                 'sportTypes' => $importedSportTypes,

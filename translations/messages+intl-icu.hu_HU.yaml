@@ -1,3 +1,4 @@
+'# completed': '# completed'
 '42-day fitness trend': '42 napos fitnesz trend'
 '7-day fatigue level': '7 napos fáradtsági szint'
 '< 1.5: Good variety in training': '< 1,5: Jó változatosság az edzésben'
@@ -27,11 +28,15 @@ Apr: Ápr
 'Ask Mark something...': 'Kérdezz Marktól...'
 'Athlete profile': 'Sportoló profil'
 Aug: Aug
+Average: Average
 'Average gradient': 'Átlagos lejtés'
-Avg: Átl
+'Avg gradient': 'Avg gradient'
+'Avg pace': 'Avg pace'
+'Avg speed': 'Avg speed'
 'Back Country Ski': Túrasí
 Badges: Kitűzők
 Badminton: Tollaslabda
+Bananas: Bananas
 Basketball: Kosárlabda
 Best: Legjobb
 'Best effort': 'Legjobb teljesítmény'
@@ -40,23 +45,25 @@ Best: Legjobb
 'Build zone (–10)': 'Építési zóna (–10)'
 'CTL (Fitness)': 'CTL (Fitnesz)'
 Cadence: Kadencia
-'Cadence distribution': 'Kadencia eloszlás'
+Cal.: Cal.
 Calories: Kalória
 'Calories burned': 'Elégetett kalória'
+'Calories burnt': 'Calories burnt'
 Canoeing: Kenuzás
 'Carbon saved': 'Megtakarított szén-dioxid'
 'Challenge consistency': 'Kihívás következetesség'
 Challenges: Kihívások
 'Chronic Training Load (Fitness) - 42-day exponentially weighted average of your daily training load. Represents long-term training adaptation.': 'Krónikus edzésterhelés (Fitnesz) – a napi edzésterhelés 42 napos exponenciálisan súlyozott átlaga. A hosszú távú edzésadaptációt mutatja.'
+'Clear all filters': 'Clear all filters'
 'Clear chat': 'Chat törlése'
 'Close modal': Bezárás
-'Collapse sidebar': 'Oldalsáv összecsukása'
 Commutes: Ingázások
 'Commutes only': 'Csak ingázások'
 Compare: Összehasonlítás
 'Compare to': 'Összehasonlítás:'
 'Completed {threshold} activities': '{threshold} tevékenység teljesítve'
-'Congrats! You achieved personal bests during this activity.': 'Gratulálok! Személyes rekordot értél el ennél a tevékenységnél.'
+Components: Components
+'Congrats! You achieved {numberOfPRs} PRs in this activity.': 'Congrats! You achieved {numberOfPRs} PRs in this activity.'
 'Consider reducing load': 'Fontold meg a terhelés csökkentését'
 Consistency: Következetesség
 Country: Ország
@@ -80,29 +87,34 @@ Density: Sűrűség
 'Detailed instructions are available in the documentation on': 'Részletes utasítások az alábbi dokumentációban találhatók:'
 Details: Részletek
 Device: Eszköz
+Dist.: Dist.
 Distance: Távolság
 'Distance & Elevation': 'Távolság & szintemelkedés'
 'Distance breakdown': 'Távolság részletezés'
+'Distance distribution': 'Distance distribution'
 'Distance in {unit}': 'Távolság ({unit})'
 'Distance over time per gear': 'Távolság időben felszerelésenkén'
 'Distance per month per gear': 'Havi távolság felszerelésenkén'
-Distribution: Eloszlás
 'Doing a mix of cycling, running, swimming, and strength work increases your variety score.': 'A kerékpározás, futás, úszás és erőedzés vegyítése növeli a változatossági pontszámodat.'
 Duration: Időtartam
 'E-Bike Rides': 'E-Bike túrák'
 'E-Mountain Bike Rides': 'E-MTB túrák'
 Eddington: Eddington
+'Eddington number': 'Eddington number'
+'Eddington over time': 'Eddington over time'
 'Effort vs heart rate': 'Erőfeszítés vs pulzus'
+'Elapsed time': 'Elapsed time'
 Elev: Szintek
+Elev.: Elev.
 Elevation: Szintemelkedés
 'Elevation in {unit}': 'Szintemelkedés ({unit})'
 Elliptical: 'Elliptikus gép'
 Energy: Energy
+'Energy burned across your activities': 'Energy burned across your activities'
 'Enter fullscreen mode': 'Teljes képernyős mód'
 Evening: Este
 'Excludes commutes': 'Ingázások nélkül'
 'FTP history': 'FTP előzmények'
-'Fastest times': 'Leggyorsabb idők'
 Favourite: Kedvenc
 Feb: Feb
 'Filter on KOM segments': 'Szűrés KOM szegmensekre'
@@ -115,10 +127,10 @@ Firsts: Elsők
 Fitness: Fitnesz
 'Fitness may be declining due to low recent training load': 'A fitnesz csökkenhet az alacsony közelmúltbeli edzésterhelés miatt'
 'Fitness may decline': 'A fitnesz csökkenhet'
-'For example, an Eddington number of 70 would imply that a cyclist has cycled at least 70 km or miles in a day on at least 70 occasions. Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance workouts, since any workout shorter than 75 km or miles will no longer be included in the reckoning.': 'Például egy 70-es Eddington-szám azt jelenti, hogy a kerékpáros legalább 70 alkalommal tekert legalább 70 km-t egy nap. Egy magas Eddington-szám elérése nehéz, hiszen pl. a 70-ről 75-re való lépéshez valószínűleg több mint öt új hosszú edzés szükséges, mivel a 75 km-nél rövidebb edzések már nem számítanak bele.'
+'For example, an Eddington number of 70 would imply that a cyclist has cycled at least 70 km or miles in a day on at least 70 occasions. Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance workouts, since any workout shorter than 75 km or miles will no longer be included in the reckoning.': 'For example, an Eddington number of 70 would imply that a cyclist has cycled at least 70 km or miles in a day on at least 70 occasions. Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance workouts, since any workout shorter than 75 km or miles will no longer be included in the reckoning.'
 'Form (TSB)': 'Forma (TSB)'
 Fri: P
-Friday: Péntek
+Fri.: Fri.
 GAP: GAP
 Gear: Felszerelés
 'Gear "{gearId}" is referenced in your maintenance config file, but was not imported from Strava. Please check that the gear exists and is correctly synced.': 'A(z) „{gearId}" felszerelés szerepel a karbantartási konfigurációs fájlban, de nem lett importálva a Stravából. Ellenőrizd, hogy a felszerelés létezik és megfelelően szinkronizálva van.'
@@ -131,6 +143,7 @@ Goal: Cél
 Golf: Golf
 'Good training variety': 'Jó edzésváltozatosság'
 'Google searches': 'Google keresések'
+Grad.: Grad.
 Gradient: Lejtés
 'Gravel Rides': 'Gravel túrák'
 "Guidelines vary by individual; for more information see Joe Friel's 'The Cyclist's Training Bible' or TrainingPeaks' research documentation.": "Az irányelvek egyénenként változnak; további információkért lásd Joe Friel 'The Cyclist's Training Bible' c. könyvét vagy a TrainingPeaks kutatási dokumentációját."
@@ -138,7 +151,6 @@ HIIT: HIIT
 HR: Pulzus
 'Hand Cycle': Kézikerékpár
 'Heart rate': Pulzus
-'Heart rate distribution': 'Pulzus eloszlás'
 'Heart rate zone distribution over the past month. For effective polarized training, your workouts should primarily fall within the following zones': 'Az elmúlt havi pulzuszóna eloszlás. A hatékony polarizált edzéshez az edzéseidnek elsősorban a következő zónákba kell esniük'
 'Heart rate zones': Pulzuszónák
 Heatmap: Hőtérkép
@@ -172,7 +184,6 @@ KOM: KOM
 Kayaking: Kajak
 'Kite Surf': 'Sárkányos szörfözés'
 Lap: Kör
-Laps: Körök
 'Last 30 days': 'Last 30 days'
 'Last 7 days training load': 'Utolsó 7 nap edzésterhelése'
 'Last activity': 'Utolsó tevékenység'
@@ -192,6 +203,7 @@ Loading...: Betöltés...
 'Long run': 'Hosszú futás'
 'Longest activity': 'Leghosszabb tevékenység'
 'Longest activity (h)': 'Leghosszabb tevékenység (h)'
+'Longest day': 'Longest day'
 'Longest distance': 'Leghosszabb távolság'
 'Longest streaks': 'Leghosszabb sorozatok'
 Low: Alacsony
@@ -205,13 +217,12 @@ Max: Max
 May: Máj
 Medium: Közepes
 Metric: Metrikus
-Metrics: Mutatók
 Milestones: Mérföldkövek
 'Mind & Body Sports': 'Test-lélek sportok'
 'Moderate fatigue with stable fitness. Well suited for consistent day-to-day training': 'Mérsékelt fáradtság stabil fittséggel. Kiváló a következetes napi edzéshez'
 'Moderate monotony': 'Mérsékelt monotonitás'
 Mon: H
-Monday: Hétfő
+Mon.: Mon.
 Monotony: Monotonitás
 Monthly: Havi
 'Monthly stats': 'Havi statisztikák'
@@ -222,9 +233,12 @@ Morning: Reggel
 'Most recent milestones': 'Legutóbbi mérföldkövek'
 'Mountain Bike Rides': 'MTB túrák'
 'Moving time': 'Mozgásban töltött idő'
+'Moving time by sport': 'Moving time by sport'
+'Moving time in hours': 'Moving time in hours'
 Name: Név
 Neutral: Semleges
 'New personal best for': 'Új személyes rekord:'
+'Next milestone': 'Next milestone'
 Night: Éjjel
 'No activities': 'Nincsenek tevékenységek'
 'No data available': 'Nincs elérhető adat'
@@ -232,7 +246,7 @@ Night: Éjjel
 'No other options to compare with': 'Nincs más összehasonlítási lehetőség'
 None: 'Egyik sem'
 'Nordic Ski': Sífutás
-Normalized: Normalizált
+'Normalized power': 'Normalized power'
 'Not supported': 'Nem támogatott'
 Nov: Nov
 Now: Most
@@ -250,30 +264,30 @@ Over-fatigued: Túlterhelve
 'Overall weekly training stress': 'Heti összes edzésstressz'
 'PB badges': 'Személyes rekord kitűzők'
 'PET bottles produced': 'Előállított PET palackok'
-PRs: 'Személyes rekordok'
-'PRs achieved per month': 'Havi személyes rekordok'
 Pace: Tempó
-'Pace distribution': 'Tempó eloszlás'
 Padel: Padel
 'Peak fresh': Csúcsfriss
 'Peak power outputs': 'Csúcsteljesítmény értékek'
-'Personal Records': 'Személyes rekordok'
+'Per {unit}': 'Per {unit}'
 'Personal bests': 'Személyes csúcsok'
 Photo: Fotó
 Photos: Fotók
+'Physical Therapy': 'Physical Therapy'
 'Pickle Ball': Pickleball
 Pilates: Pilates
+'Pizza slices': 'Pizza slices'
 'Please address these issues': 'Kérjük, foglalkozz ezekkel a problémákkal'
 'Polarised training (last 30 days)': 'Polarizált edzés (utolsó 30 nap)'
 Power: Teljesítmény
-'Power distribution': 'Teljesítmény eloszlás'
 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': 'Ezt becsült {caloriesBurned} kalória hajtotta, ami nagyjából {numberOfPizzaSlices} szelet pizza.'
 'Prev year': 'Előző év'
 Previous: Előző
+'Purchase price': 'Purchase price'
 Race: Verseny
 'Racing Score': Versenypontszám
 'Racquet & Paddle Sports': 'Ütős sportok'
 'Racquet Ball': 'Squash labda'
+Rank: Rank
 Ranking: Ranglista
 'Reached {threshold} hours total moving time': '{threshold} óra összes mozgásidő elérve'
 'Reached {threshold} total distance': '{threshold} összes távolság elérve'
@@ -301,7 +315,7 @@ Running: Futás
 Runs: Futások
 Sail: Vitorlázás
 Sat: Szo
-Saturday: Szombat
+Sat.: Sat.
 Search: Keresés
 'Search activity...': 'Tevékenység keresése...'
 'Search segment...': 'Szegmens keresése...'
@@ -316,10 +330,8 @@ Skating: Korcsolyázás
 Snowboard: Snowboard
 Snowshoe: Hótalp
 Soccer: Labdarúgás
-Socials: Közösségi
 'Someone who regularly trains for 90 minutes will score higher than someone doing mostly short sessions.': 'Aki rendszeresen 90 percet edz, magasabb pontszámot ér el, mint aki főleg rövid edzéseket végez.'
 Speed: Sebesség
-'Speed distribution': 'Sebesség eloszlás'
 Splits: Részidők
 'Sport variety': Sporttípus-változatosság
 Squash: Squash
@@ -327,14 +339,13 @@ Squash: Squash
 'Stand Up Paddling': SUP
 'Start slideshow': 'Diavetítés indítása'
 'Start times': 'Kezdési idők'
-'Statistics for Strava': 'Strava statisztikák'
 'Stats per weekday': 'Statisztikák napokra bontva'
 Status: Állapot
 'Strava profile': 'Strava profil'
 'Streak started on {date}': 'Sorozat kezdete: {date}'
 Streaks: Sorozatok
 Sun: V
-Sunday: Vasárnap
+Sun.: Sun.
 Surfing: Szörfözés
 Swim: Úszás
 'TSB (Form)': 'TSB (Forma)'
@@ -432,7 +443,8 @@ Tennis: Tenisz
 "That's the length of the Great Wall of China": 'Ez a Kínai Nagy Fal hossza'
 "That's three quarters of the way around the Earth": 'Ez a Föld kerületének háromnegyede'
 "That's {number} days of at least {distance}": 'Ez {number} nap legalább {distance}-vel'
-'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.': 'Az Eddington-szám kerékpározás vagy futás kontextusában a maximális E szám, amelyre az atléta legalább E napot teljesített legalább E km-rel.'
+"That's {percentage}% of all countries 🌍": "That's {percentage}% of all countries 🌍"
+'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.': 'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.'
 'These badges are dynamically created. You can use them in any &lt;img&gt; tag': 'Ezek a kitűzők dinamikusan jönnek létre. Bármely &lt;img&gt; tagben használhatod őket'
 Thinking...: Gondolkodás...
 'This chart summarizes how you train. Each axis reflects a different normalized training habit, so higher values mean stronger emphasis.': 'Ez a diagram összefoglalja, hogyan edzel. Minden tengely különböző normalizált edzési szokást tükröz, így a magasabb értékek erősebb hangsúlyt jelentenek.'
@@ -440,18 +452,19 @@ Thinking...: Gondolkodás...
 'This month': 'This month'
 'This week': 'This week'
 Thu: Cs
-Thursday: Csütörtök
+Thu.: Thu.
 Time: Idő
+'Time in zone': 'Time in zone'
 'Times completed': 'Teljesítések száma'
+Title: Title
 'To enable it, configure {configFile} and rebuild the files for the changes to take effect': 'Az engedélyezéséhez konfiguráld a(z) {configFile} fájlt, és építsd újra a fájlokat a változtatások életbe lépéséhez'
 'Toggle sidebar': 'Oldalsáv ki/be'
 'Top 10': 'Top 10'
 'Total distance per month': 'Havi össztávolság'
 'Total elevation per month': 'Havi össz szintemelkedés'
-'Total hours': 'Összes óra'
 'Total hours spent per gear': 'Összes óra felszerelésenkén'
 'Total hours spent per sport type': 'Összes óra sporttípusonként'
-'Total kudos and comments received': 'Összes kapott kudos és hozzászólás'
+'Total moving time per month': 'Total moving time per month'
 'Trail Runs': Terepfutások
 'Training 4–5 days every week scores higher than doing everything in one or two days.': 'A heti 4–5 napos edzés magasabb pontszámot ér el, mint ha mindent egy-két napra zsúfolnak.'
 'Training Impulse - Training load metric that accounts for intensity and duration.': 'Edzési impulzus – az intenzitást és az időtartamot figyelembe vevő edzésterhelési mutató.'
@@ -461,7 +474,7 @@ Time: Idő
 'Training goals': 'Edzési célok'
 'Training load is accumulating, recovery days are important': 'Az edzésterhelés halmozódik, a regenerációs napok fontosak'
 Tue: K
-Tuesday: Kedd
+Tue.: Tue.
 Unspecified: Meghatározatlan
 'Updated on': 'Frissítve:'
 'User badge': 'Felhasználói kitűző'
@@ -480,7 +493,7 @@ Walks: Séták
 'Water Sports': 'Vízi sportok'
 'We detected following issues': 'A következő problémákat észleltük'
 Wed: Sze
-Wednesday: Szerda
+Wed.: Wed.
 Weekly: Heti
 'Weekly Strain': 'Heti terhelés'
 'Weekly Strain - Product of weekly training load and monotony. Overall training stress.': 'Heti terhelés – a heti edzésterhelés és a monotonitás szorzata. Összesített edzési stressz.'
@@ -495,18 +508,23 @@ Wheelchair: Kerekesszék
 Workout: Edzés
 'Workout assistant': 'Edzési asszisztens'
 'Workout type': 'Edzés típusa'
+World: World
 Year: Év
 Yearly: Éves
 'Yearly stats': 'Éves statisztikák'
 Yoga: Jóga
-"You recorded workouts in {numberOfCountriesWithWorkouts} different countries, that's {percentage} of all countries 🌍": '{numberOfCountriesWithWorkouts} különböző országban rögzítettél edzéseket, ez az összes ország {percentage}-a 🌍'
 'Your PB badge': 'Személyes rekord kitűződ'
 'Your Strava badge': 'Strava kitűződ'
 'Your Zwift badge': 'Zwift kitűződ'
 'Your badge(s)': Kitűződ(ök)
+Z1: Z1
 'Z1-2 (Low)': 'Z1-2 (Alacsony)'
+Z2: Z2
+Z3: Z3
 'Z3 (Mod)': 'Z3 (Közepes)'
+Z4: Z4
 'Z4-5 (High)': 'Z4-5 (Magas)'
+Z5: Z5
 'Zone 1 (recovery)': '1. zóna (regeneráció)'
 'Zone 2 (aerobic)': '2. zóna (aerob)'
 'Zone 3 (aerobic/anaerobic)': '3. zóna (aerob/anaerob)'
@@ -517,22 +535,21 @@ Yoga: Jóga
 'Zwift stats': 'Zwift statisztikák'
 activities: tevékenységek
 and: és
-'average gradient': 'átlagos lejtés'
 avg: átl
 bpm: bpm
+challenges: challenges
 clear: törlés
-comments: hozzászólások
 compare: összehasonlítás
+countries: countries
 day(s): nap(ok)
 days: napok
 'days needed for next Eddington': 'napok a következő Eddington-számhoz'
+'days to reach {n}': 'days to reach {n}'
 history: előzmények
 hours: órák
 hrs: h
-kudos: kudos
 'last {numberOfDays} days': 'utolsó {numberOfDays} nap'
 max: max
-'max gradient': 'max. lejtés'
 min: min
 months: hónapok
 more: több
@@ -543,8 +560,10 @@ per: /
 'per activity': tevékenységenkén
 'per hour': óránként
 'reached Eddington number {number}': '{number}-es Eddington-szám elérve'
+rpm: rpm
 to: '-ig'
 total: összesen
+watts: watts
 weeks: hetek
 workouts: edzések
 '{daysSinceLastTagged} days': '{daysSinceLastTagged} nap'
@@ -554,9 +573,9 @@ workouts: edzések
 '{numberOfActivities} activities': '{numberOfActivities} tevékenység'
 '{numberOfActivities} activities in {year}': '{numberOfActivities} tevékenység {year}-ben'
 '{numberOfMonths} months': '{numberOfMonths} hónap'
-'{numberOfResults} photos based on your active filters': '{numberOfResults} fotó az aktív szűrők alapján'
-'{numberOfResults} results based on your active filters': '{numberOfResults} eredmény az aktív szűrők alapján'
-'{numberOfResults} routes based on your active filters': '{numberOfResults} útvonal az aktív szűrők alapján'
+'{numberOfResults} photos': '{numberOfResults} photos'
+'{numberOfResults} results': '{numberOfResults} results'
+'{numberOfResults} routes': '{numberOfResults} routes'
 '{numberOfWeeks} weeks': '{numberOfWeeks} hét'
 '{threshold} hours using {gearName}': '{threshold} óra {gearName} felhasználásával'
 '{threshold} total distance using {gearName}': '{threshold} össztávolság {gearName} felhasználásával'

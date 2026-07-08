@@ -8,6 +8,7 @@ use App\Domain\Activity\Route\Route;
 use App\Domain\Activity\Route\RouteRepository;
 use App\Domain\Activity\SportType\SportType;
 use App\Domain\Activity\SportType\SportTypeRepository;
+use App\Infrastructure\Config\Leaflet\HeatmapConfig;
 use App\Infrastructure\CQRS\Command\Command;
 use App\Infrastructure\CQRS\Command\CommandHandler;
 use App\Infrastructure\Serialization\Json;
@@ -27,8 +28,8 @@ final readonly class BuildHeatmapHtmlCommandHandler implements CommandHandler
         private UrlTwigExtension $urlTwigExtension,
         private UnitSystem $unitSystem,
         private DateAndTimeFormat $dateAndTimeFormat,
-        private FilesystemOperator $buildStorage,
-        private FilesystemOperator $apiStorage,
+        private FilesystemOperator $buildHtmlStorage,
+        private FilesystemOperator $buildApiStorage,
     ) {
     }
 
@@ -49,12 +50,12 @@ final readonly class BuildHeatmapHtmlCommandHandler implements CommandHandler
                 ->withRelativeActivityUri($this->urlTwigExtension->toRelativeUrl('activity/'.$route->getActivityId().'.html'));
         }
 
-        $this->apiStorage->write(
+        $this->buildApiStorage->write(
             'heatmap/routes.json',
             (string) Json::encodeAndCompress($enrichedRoutes),
         );
 
-        $this->buildStorage->write(
+        $this->buildHtmlStorage->write(
             'heatmap.html',
             $this->twig->load('html/heatmap.html.twig')->render([
                 'numberOfRoutes' => count($enrichedRoutes),

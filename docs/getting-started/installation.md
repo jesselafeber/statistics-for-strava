@@ -54,7 +54,7 @@ services:
   #   - Sending notifications when a new app version becomes available
   #
   # These tasks can be configured in the main configuration file under the `daemon` section:
-  #   https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration
+  #   https://docs.getsfs.app/#/configuration/main-configuration
   #
   # If you prefer to trigger these tasks manually, you can omit this container entirely.
   daemon:
@@ -68,7 +68,7 @@ services:
       - ./storage/files:/var/www/storage/files
     env_file: ./.env
     healthcheck:
-      test: [ "CMD", "sh", "-c", "test -f /var/www/storage/database/strava.db && echo 'ok' || exit 1" ]
+      test: [ "CMD", "sh", "-c", "test -f /var/www/storage/database/dreeve.db && echo 'ok' || exit 1" ]
       start_period: 5s
     command: ['bin/console', 'app:daemon:run']
     networks:
@@ -144,8 +144,8 @@ Once you have successfully authenticated with Strava, you can import your data a
 after which you can view your statistics.
 
 ```bash
-> docker compose exec app bin/console app:strava:import-data
-> docker compose exec app bin/console app:strava:build-files
+> docker compose exec app bin/console app:data:import
+> docker compose exec app bin/console app:data:build
 ```
 
 > [!IMPORTANT]

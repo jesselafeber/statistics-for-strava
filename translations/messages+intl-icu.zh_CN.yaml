@@ -1,3 +1,4 @@
+'# completed': '# completed'
 '42-day fitness trend': 42天健身趋势
 '7-day fatigue level': 7天疲劳水平
 '< 1.5: Good variety in training': '< 1.5: 训练多样性良好'
@@ -27,11 +28,15 @@ Apr: 四月
 'Ask Mark something...': 问问Mark...
 'Athlete profile': 'Athlete profile'
 Aug: 八月
+Average: Average
 'Average gradient': 'Average gradient'
-Avg: 平均
+'Avg gradient': 'Avg gradient'
+'Avg pace': 'Avg pace'
+'Avg speed': 'Avg speed'
 'Back Country Ski': 越野滑雪
 Badges: Badges
 Badminton: 羽毛球
+Bananas: Bananas
 Basketball: Basketball
 Best: 最佳
 'Best effort': 最佳努力
@@ -40,23 +45,25 @@ Best: 最佳
 'Build zone (–10)': '构建区 (–10)'
 'CTL (Fitness)': 'CTL (体能)'
 Cadence: 踏频
-'Cadence distribution': 踏频分布
+Cal.: Cal.
 Calories: 卡路里
 'Calories burned': 燃烧的卡路里
+'Calories burnt': 'Calories burnt'
 Canoeing: 划独木舟
 'Carbon saved': 碳减排
 'Challenge consistency': 挑战一致性
 Challenges: 挑战
 'Chronic Training Load (Fitness) - 42-day exponentially weighted average of your daily training load. Represents long-term training adaptation.': '长期训练负荷（体能）— 42天训练的负荷指数加权平均值。代表长期训练适应情况。'
+'Clear all filters': 'Clear all filters'
 'Clear chat': 'Clear chat'
 'Close modal': 关闭模态框
-'Collapse sidebar': 折叠侧边栏
 Commutes: 通勤
 'Commutes only': 仅通勤
 Compare: 对比
 'Compare to': 对比
 'Completed {threshold} activities': 'Completed {threshold} activities'
-'Congrats! You achieved personal bests during this activity.': 恭喜！您在此活动中取得了个人最佳成绩。
+Components: Components
+'Congrats! You achieved {numberOfPRs} PRs in this activity.': 'Congrats! You achieved {numberOfPRs} PRs in this activity.'
 'Consider reducing load': 'Consider reducing load'
 Consistency: Consistency
 Country: Country
@@ -80,29 +87,34 @@ Density: Density
 'Detailed instructions are available in the documentation on': 详细说明
 Details: 详情
 Device: 设备
+Dist.: Dist.
 Distance: 距离
 'Distance & Elevation': 'Distance & Elevation'
 'Distance breakdown': 距离分解
+'Distance distribution': 'Distance distribution'
 'Distance in {unit}': '以{unit}为单位的距离'
 'Distance over time per gear': 每个装备随时间变化的距离
 'Distance per month per gear': 每个装备每月的距离
-Distribution: 分布
 'Doing a mix of cycling, running, swimming, and strength work increases your variety score.': 'Doing a mix of cycling, running, swimming, and strength work increases your variety score.'
 Duration: Duration
 'E-Bike Rides': 电动自行车骑行
 'E-Mountain Bike Rides': 电动山地车骑行
 Eddington: 愛丁頓數
+'Eddington number': 'Eddington number'
+'Eddington over time': 'Eddington over time'
 'Effort vs heart rate': 'Effort vs heart rate'
+'Elapsed time': 'Elapsed time'
 Elev: 海拔
+Elev.: Elev.
 Elevation: 海拔高度
 'Elevation in {unit}': '海拔高度（单位：{unit})'
 Elliptical: 椭圆机
 Energy: Energy
+'Energy burned across your activities': 'Energy burned across your activities'
 'Enter fullscreen mode': 'Enter fullscreen mode'
 Evening: 晚上
 'Excludes commutes': 筛除通勤
 'FTP history': FTP历史
-'Fastest times': 最快时间
 Favourite: 收藏夹
 Feb: 二月
 'Filter on KOM segments': 筛选KOM路段
@@ -115,10 +127,10 @@ Firsts: Firsts
 Fitness: 健身
 'Fitness may be declining due to low recent training load': 'Fitness may be declining due to low recent training load'
 'Fitness may decline': 'Fitness may decline'
-'For example, an Eddington number of 70 would imply that a cyclist has cycled at least 70 km or miles in a day on at least 70 occasions. Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance workouts, since any workout shorter than 75 km or miles will no longer be included in the reckoning.': 例如，埃丁顿数为70意味着骑行者在至少70天内每天骑行至少70公里或英里。达到高埃丁顿数很困难，因为从70到75可能需要超过五次新的长距离锻炼，因为任何少于75公里或英里的锻炼将不再包括在计算中。
+'For example, an Eddington number of 70 would imply that a cyclist has cycled at least 70 km or miles in a day on at least 70 occasions. Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance workouts, since any workout shorter than 75 km or miles will no longer be included in the reckoning.': 'For example, an Eddington number of 70 would imply that a cyclist has cycled at least 70 km or miles in a day on at least 70 occasions. Achieving a high Eddington number is difficult, since moving from, say, 70 to 75 will (probably) require more than five new long-distance workouts, since any workout shorter than 75 km or miles will no longer be included in the reckoning.'
 'Form (TSB)': '状态 (TSB)'
 Fri: 周五
-Friday: 星期五
+Fri.: Fri.
 GAP: GAP
 Gear: 装备
 'Gear "{gearId}" is referenced in your maintenance config file, but was not imported from Strava. Please check that the gear exists and is correctly synced.': '您的维护配置文件中引用了装备"{gearId}"，但该装备尚未从 Strava 导入。请检查该装备是否存在并已正确同步。'
@@ -131,6 +143,7 @@ Goal: Goal
 Golf: 高尔夫
 'Good training variety': 良好的训练多样性
 'Google searches': Google搜索
+Grad.: Grad.
 Gradient: Gradient
 'Gravel Rides': 砾石骑行
 "Guidelines vary by individual; for more information see Joe Friel's 'The Cyclist's Training Bible' or TrainingPeaks' research documentation.": '指导原则因人而异；欲了解更多信息，请参阅乔·弗里尔的《自行车训练圣经》或 TrainingPeaks 的研究文档。'
@@ -138,7 +151,6 @@ HIIT: 高强度间歇训练
 HR: 心率
 'Hand Cycle': 手动自行车
 'Heart rate': 心率
-'Heart rate distribution': 心率分布
 'Heart rate zone distribution over the past month. For effective polarized training, your workouts should primarily fall within the following zones': 过去一个月的心率区间分布。为了进行有效的极化训练，您的训练应主要在以下区间内进行。
 'Heart rate zones': 心率区间
 Heatmap: 热图
@@ -172,7 +184,6 @@ KOM: 赛段王
 Kayaking: 皮划艇
 'Kite Surf': 风筝冲浪
 Lap: 圈
-Laps: 圈
 'Last 30 days': 'Last 30 days'
 'Last 7 days training load': 最近7天训练负荷
 'Last activity': 'Last activity'
@@ -192,6 +203,7 @@ Loading...: 加载中...
 'Long run': 长跑
 'Longest activity': 'Longest activity'
 'Longest activity (h)': '最久运动 (h)'
+'Longest day': 'Longest day'
 'Longest distance': 'Longest distance'
 'Longest streaks': 最长连续记录
 Low: 低
@@ -205,13 +217,12 @@ Max: 最大
 May: 五月
 Medium: 中等
 Metric: Metric
-Metrics: Metrics
 Milestones: Milestones
 'Mind & Body Sports': 心灵与身体运动
 'Moderate fatigue with stable fitness. Well suited for consistent day-to-day training': 'Moderate fatigue with stable fitness. Well suited for consistent day-to-day training'
 'Moderate monotony': 适度单调性
 Mon: 周一
-Monday: 星期一
+Mon.: Mon.
 Monotony: 单调性
 Monthly: Monthly
 'Monthly stats': 每月统计
@@ -222,9 +233,12 @@ Morning: 早晨
 'Most recent milestones': 'Most recent milestones'
 'Mountain Bike Rides': 山地车骑行
 'Moving time': 移动时间
+'Moving time by sport': 'Moving time by sport'
+'Moving time in hours': 'Moving time in hours'
 Name: 名称
 Neutral: Neutral
 'New personal best for': 'New personal best for'
+'Next milestone': 'Next milestone'
 Night: 夜晚
 'No activities': 没有活动
 'No data available': 没有可用数据
@@ -232,7 +246,7 @@ Night: 夜晚
 'No other options to compare with': 无可供比较的其他选项
 None: 无
 'Nordic Ski': 北欧滑雪
-Normalized: 归一化
+'Normalized power': 'Normalized power'
 'Not supported': 不支持
 Nov: 十一月
 Now: Now
@@ -250,30 +264,30 @@ Over-fatigued: Over-fatigued
 'Overall weekly training stress': 每周训练负荷总览
 'PB badges': PB徽章
 'PET bottles produced': PET瓶量
-PRs: PRs
-'PRs achieved per month': 每月PRs
 Pace: 步速
-'Pace distribution': 步速分布
 Padel: Padel
 'Peak fresh': 'Peak fresh'
 'Peak power outputs': 峰值功率输出
-'Personal Records': 个人记录
+'Per {unit}': 'Per {unit}'
 'Personal bests': 'Personal bests'
 Photo: 照片
 Photos: 照片
+'Physical Therapy': 'Physical Therapy'
 'Pickle Ball': 匹克球
 Pilates: 普拉提
+'Pizza slices': 'Pizza slices'
 'Please address these issues': 请解决这些问题
 'Polarised training (last 30 days)': 极化训练（过去30天）
 Power: 功率
-'Power distribution': 功率分布
 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': '消耗了约{caloriesBurned}卡路里，或大约{numberOfPizzaSlices}片披萨🍕。'
 'Prev year': 去年
 Previous: Previous
+'Purchase price': 'Purchase price'
 Race: 比赛
 'Racing Score': 赛车成绩
 'Racquet & Paddle Sports': 球拍和桨类运动
 'Racquet Ball': 壁球
+Rank: Rank
 Ranking: Ranking
 'Reached {threshold} hours total moving time': 'Reached {threshold} hours total moving time'
 'Reached {threshold} total distance': 'Reached {threshold} total distance'
@@ -301,7 +315,7 @@ Running: 跑步
 Runs: 跑步
 Sail: 帆船
 Sat: 周六
-Saturday: 星期六
+Sat.: Sat.
 Search: 搜索
 'Search activity...': 搜索活动...
 'Search segment...': 搜索路段...
@@ -316,10 +330,8 @@ Skating: 滑冰
 Snowboard: 单板滑雪
 Snowshoe: 雪鞋
 Soccer: 足球
-Socials: 社交
 'Someone who regularly trains for 90 minutes will score higher than someone doing mostly short sessions.': 'Someone who regularly trains for 90 minutes will score higher than someone doing mostly short sessions.'
 Speed: 速度
-'Speed distribution': 速度分布
 Splits: 分段
 'Sport variety': 'Sport variety'
 Squash: 壁球
@@ -327,14 +339,13 @@ Squash: 壁球
 'Stand Up Paddling': 站立划桨
 'Start slideshow': 播放幻灯片
 'Start times': 开始时间
-'Statistics for Strava': 'Statistics for Strava'
 'Stats per weekday': 按工作日统计
 Status: Status
 'Strava profile': 'Strava profile'
 'Streak started on {date}': 'Streak started on {date}'
 Streaks: 连续记录
 Sun: 周日
-Sunday: 星期日
+Sun.: Sun.
 Surfing: 冲浪
 Swim: 游泳
 'TSB (Form)': 'TSB (状态)'
@@ -432,7 +443,8 @@ Tennis: 网球
 "That's the length of the Great Wall of China": "That's the length of the Great Wall of China"
 "That's three quarters of the way around the Earth": "That's three quarters of the way around the Earth"
 "That's {number} days of at least {distance}": "That's {number} days of at least {distance}"
-'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.': 在骑行或跑步的场景下，埃丁顿数被定义为运动员在至少E天内至少覆盖E公里的最大数E。
+"That's {percentage}% of all countries 🌍": "That's {percentage}% of all countries 🌍"
+'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.': 'The Eddington number in the context of cycling or running is defined as the maximum number E such that the athlete has covered at least E km on at least E days.'
 'These badges are dynamically created. You can use them in any &lt;img&gt; tag': '徽章为动态生成，您可在任意 &lt;img&gt; 标签中使用'
 Thinking...: 思考中...
 'This chart summarizes how you train. Each axis reflects a different normalized training habit, so higher values mean stronger emphasis.': 'This chart summarizes how you train. Each axis reflects a different normalized training habit, so higher values mean stronger emphasis.'
@@ -440,18 +452,19 @@ Thinking...: 思考中...
 'This month': 'This month'
 'This week': 'This week'
 Thu: 周四
-Thursday: 星期四
+Thu.: Thu.
 Time: 时间
+'Time in zone': 'Time in zone'
 'Times completed': 完成次数
+Title: Title
 'To enable it, configure {configFile} and rebuild the files for the changes to take effect': '请配置{configFile}并重新构建文件以开启此功能'
 'Toggle sidebar': 切换侧边栏
 'Top 10': 前10名
 'Total distance per month': 每月总距离
 'Total elevation per month': 每月总海拔
-'Total hours': 总时长
 'Total hours spent per gear': 每种装备总时长
 'Total hours spent per sport type': 每种运动的总时长
-'Total kudos and comments received': 收到的总赞和留言
+'Total moving time per month': 'Total moving time per month'
 'Trail Runs': 越野跑
 'Training 4–5 days every week scores higher than doing everything in one or two days.': 'Training 4–5 days every week scores higher than doing everything in one or two days.'
 'Training Impulse - Training load metric that accounts for intensity and duration.': '训练脉冲 - 训练负荷指标，综合考虑强度和持续时间。'
@@ -461,7 +474,7 @@ Time: 时间
 'Training goals': 'Training goals'
 'Training load is accumulating, recovery days are important': 'Training load is accumulating, recovery days are important'
 Tue: 周二
-Tuesday: 星期二
+Tue.: Tue.
 Unspecified: 未指定
 'Updated on': 更新于
 'User badge': 用户徽章
@@ -480,7 +493,7 @@ Walks: 散步
 'Water Sports': 水上运动
 'We detected following issues': 检测到以下问题
 Wed: 周三
-Wednesday: 星期三
+Wed.: Wed.
 Weekly: Weekly
 'Weekly Strain': 每周训练负荷
 'Weekly Strain - Product of weekly training load and monotony. Overall training stress.': '每周训练负荷 - 每周训练量与单调性的乘积。整体训练压力。'
@@ -495,18 +508,23 @@ Wheelchair: 轮椅
 Workout: 锻炼
 'Workout assistant': 'Workout assistant'
 'Workout type': 锻炼类型
+World: World
 Year: 年
 Yearly: Yearly
 'Yearly stats': 年度统计
 Yoga: 瑜伽
-"You recorded workouts in {numberOfCountriesWithWorkouts} different countries, that's {percentage} of all countries 🌍": '您记录了{numberOfCountriesWithWorkouts}个不同国家/地区的锻炼情况，占所有国家/地区的百分之 {percentage} 🌍'
 'Your PB badge': PB徽章
 'Your Strava badge': Strava徽章
 'Your Zwift badge': Zwift徽章
 'Your badge(s)': 徽章
+Z1: Z1
 'Z1-2 (Low)': Z1-2（低）
+Z2: Z2
+Z3: Z3
 'Z3 (Mod)': Z3（中）
+Z4: Z4
 'Z4-5 (High)': Z4-5（高）
+Z5: Z5
 'Zone 1 (recovery)': 区域1（恢复）
 'Zone 2 (aerobic)': 区域2（有氧）
 'Zone 3 (aerobic/anaerobic)': 区域3（有氧/无氧）
@@ -517,22 +535,21 @@ Yoga: 瑜伽
 'Zwift stats': Zwift统计
 activities: 活动
 and: 和
-'average gradient': 'average gradient'
 avg: 平均
 bpm: 拍子数
+challenges: challenges
 clear: 清除
-comments: 留言
 compare: 对比
+countries: countries
 day(s): day(s)
 days: 天
 'days needed for next Eddington': '天 - 下一个爱丁顿所需天数'
+'days to reach {n}': 'days to reach {n}'
 history: 历史
 hours: 小时
 hrs: hrs
-kudos: 赞
 'last {numberOfDays} days': '最近{numberOfDays}天'
 max: max
-'max gradient': 最大坡度
 min: min
 months: 月
 more: 更多
@@ -543,8 +560,10 @@ per: per
 'per activity': 每项活动
 'per hour': 每小时
 'reached Eddington number {number}': 'reached Eddington number {number}'
+rpm: rpm
 to: 至
 total: 总计
+watts: watts
 weeks: 周
 workouts: 锻炼
 '{daysSinceLastTagged} days': '{daysSinceLastTagged}天'
@@ -554,9 +573,9 @@ workouts: 锻炼
 '{numberOfActivities} activities': '{numberOfActivities}活动'
 '{numberOfActivities} activities in {year}': '{year}年内，{numberOfActivities}项活动'
 '{numberOfMonths} months': '{numberOfMonths} months'
-'{numberOfResults} photos based on your active filters': '{numberOfResults}张照片符合筛选条件'
-'{numberOfResults} results based on your active filters': '{numberOfResults}个结果符合筛选条件'
-'{numberOfResults} routes based on your active filters': '{numberOfResults}条路线符合筛选条件'
+'{numberOfResults} photos': '{numberOfResults} photos'
+'{numberOfResults} results': '{numberOfResults} results'
+'{numberOfResults} routes': '{numberOfResults} routes'
 '{numberOfWeeks} weeks': '{numberOfWeeks} weeks'
 '{threshold} hours using {gearName}': '{threshold} hours using {gearName}'
 '{threshold} total distance using {gearName}': '{threshold} total distance using {gearName}'

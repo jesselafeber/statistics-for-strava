@@ -5,7 +5,7 @@ The main configuration yaml file contains all the settings for you to customize 
 [include](config-yaml-example.md ':include')
 
 > [!IMPORTANT]
-> **Important** After each change to these values, you need to run the _app:strava:build-files_ command again for the changes to take effect
+> **Important** After each change to these values, you need to run the _app:data:build_ command again for the changes to take effect
 
 ## Splitting your configuration into multiple files
 
@@ -143,12 +143,12 @@ This lets you create very specific zones for different scenarios.
           from: 91
           to: null # Infinity and beyond.
       # You can further refine your zones by specifying date ranges.
-      # This works the same way as weight and FTP history: https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration?id=athlete-weight-historys
+      # This works the same way as weight and FTP history: https://docs.getsfs.app/#/configuration/main-configuration?id=athlete-weight-historys
       dateRanges:
         "2025-01-01": ...
         "2024-11-08": ...
       # You can also override your heart rate zones for specific sport types.    
-      # A full list of allowed options is available on https://statistics-for-strava-docs.robiningelbrecht.be/#/configuration/main-configuration?id=supported-sport-types      
+      # A full list of allowed options is available on https://docs.getsfs.app/#/configuration/main-configuration?id=supported-sport-types      
       sportTypes:
         GravelRide:
           # The default heart rate zones for all GravelRide activities.

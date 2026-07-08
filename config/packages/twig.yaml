@@ -5,7 +5,9 @@ twig:
     cache: true
     form_themes: ['form/flowbite-layout.html.twig']
     globals:
+        appName: '@App\Application\AppName'
         appVersion: '@App\Application\AppVersion'
         appConfig: '@App\Infrastructure\Config\AppConfig'
+        importMode: '@App\Domain\Import\ImportMode'
         enrichedActivities: '@App\Domain\Activity\EnrichedActivities'
         bestEffortsCalculator: '@App\Domain\Activity\BestEffort\BestEffortsCalculator'
