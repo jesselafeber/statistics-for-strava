@@ -15,6 +15,9 @@ corepack_enable: false
 hooks:
   post-start:
     - exec: mkdir -p /var/www/html/storage/database /var/www/html/storage/files
+    # Build the fit-tool .FIT decoder (docker/fit-tool) into the gitignored var/ dir
+    # and expose it on PATH. Only builds when missing, so restarts stay fast.
+    - exec: bash -c 'BIN=/var/www/html/var/bin/fit-tool; if [ ! -x "$BIN" ]; then mkdir -p /var/www/html/var/bin && cd /var/www/html/docker/fit-tool && GOMODCACHE=/var/www/html/var/gocache /usr/local/bin/go build -ldflags="-s -w" -o "$BIN" .; fi; sudo ln -sf "$BIN" /usr/local/bin/fit-tool'
     - exec: composer install
     - exec: php bin/console doctrine:migrations:migrate --no-interaction
 
