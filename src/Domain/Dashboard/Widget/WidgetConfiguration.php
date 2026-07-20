@@ -36,4 +36,17 @@ final class WidgetConfiguration
     {
         return array_key_exists($key, $this->configuration);
     }
+
+    public function isEmpty(): bool
+    {
+        return [] === $this->configuration;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(): array
+    {
+        return $this->configuration;
+    }
 }

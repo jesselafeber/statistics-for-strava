@@ -7,14 +7,26 @@ namespace App\Domain\Dashboard\Widget;
 use App\Domain\Activity\EnrichedActivities;
 use App\Domain\Dashboard\InvalidDashboardLayout;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 final readonly class MostRecentActivitiesWidget implements Widget
 {
     public function __construct(
+        private TranslatorInterface $translator,
         private EnrichedActivities $enrichedActivities,
         private Environment $twig,
     ) {
+    }
+
+    public function getLabel(): string
+    {
+        return $this->translator->trans('Most recent activities');
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'widget--most-recent-activities';
     }
 
     public function getDefaultConfiguration(): WidgetConfiguration
@@ -44,7 +56,7 @@ final readonly class MostRecentActivitiesWidget implements Widget
 
         $numberOfActivitiesToDisplay = (int) $configuration->get('numberOfActivitiesToDisplay');
 
-        return $this->twig->load('html/dashboard/widget/widget--most-recent-activities.html.twig')->render([
+        return $this->twig->load(sprintf('html/dashboard/widget/%s.html.twig', $this->getTemplateName()))->render([
             'mostRecentActivities' => $allActivities->slice(0, $numberOfActivitiesToDisplay),
         ]);
     }

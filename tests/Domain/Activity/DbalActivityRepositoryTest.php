@@ -57,6 +57,42 @@ class DbalActivityRepositoryTest extends ContainerTestCase
         );
     }
 
+    public function testFindWithEmptyNameItShouldFallBackToGeneratedName(): void
+    {
+        $activity = ActivityBuilder::fromDefaults()
+            ->withActivityId(ActivityId::fromUnprefixed(1))
+            ->withStartDateTime(SerializableDateTime::fromString('2023-10-10 14:00:34'))
+            ->withSportType(SportType::RIDE)
+            ->build();
+        $this->activityRepository->add(ActivityWithRawData::fromState(
+            $activity,
+            ['raw' => 'data']
+        ));
+
+        // Legacy activities can contain empty titles...
+        $this->getConnection()->executeStatement(
+            'UPDATE Activity SET name = :name WHERE activityId = :activityId',
+            [
+                'name' => '   ',
+                'activityId' => $activity->getId(),
+            ]
+        );
+
+        $persisted = $this->activityRepository->find($activity->getId());
+
+        $this->assertEquals(
+            'Afternoon Ride',
+            $persisted->getName()
+        );
+        $this->assertEquals(
+            ActivityName::from(
+                SerializableDateTime::fromString('2023-10-10 14:00:34'),
+                SportType::RIDE
+            ),
+            ActivityName::fromString($persisted->getName())
+        );
+    }
+
     public function testItShouldThrowWhenNotFound(): void
     {
         $this->expectExceptionObject(new EntityNotFound('Activity "activity-1" not found'));
@@ -116,6 +152,8 @@ class DbalActivityRepositoryTest extends ContainerTestCase
 
         $activity = $activity
             ->withName(ActivityName::fromString('Updated name'))
+            ->withDescription('Updated description')
+            ->withDeviceName('Updated device')
             ->withSportType(SportType::BADMINTON)
             ->withDistance(Kilometer::from(9.99))
             ->withAverageSpeed(MetersPerSecond::from(19.99)->toKmPerHour())
@@ -145,6 +183,14 @@ class DbalActivityRepositoryTest extends ContainerTestCase
         $this->assertEquals(
             'Updated name',
             $persistedActivity->getName()
+        );
+        $this->assertEquals(
+            'Updated description',
+            $persistedActivity->getDescription()
+        );
+        $this->assertEquals(
+            'Updated device',
+            $persistedActivity->getDeviceName()
         );
         $this->assertEquals(
             Kilometer::from(9.99),

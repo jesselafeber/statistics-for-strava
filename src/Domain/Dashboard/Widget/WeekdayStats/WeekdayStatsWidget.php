@@ -21,6 +21,16 @@ final readonly class WeekdayStatsWidget implements Widget
     ) {
     }
 
+    public function getLabel(): string
+    {
+        return $this->translator->trans('Stats per weekday');
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'widget--weekday-stats';
+    }
+
     public function getDefaultConfiguration(): WidgetConfiguration
     {
         return WidgetConfiguration::empty();
@@ -55,7 +65,7 @@ final readonly class WeekdayStatsWidget implements Widget
             translator: $this->translator,
         );
 
-        return $this->twig->load('html/dashboard/widget/widget--weekday-stats.html.twig')->render([
+        return $this->twig->load(sprintf('html/dashboard/widget/%s.html.twig', $this->getTemplateName()))->render([
             'allActivities' => [
                 'chart' => Json::encode(
                     WeekdayStatsChart::create($allWeekdayStats)->build(),

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Domain\Activity\Gap;
 
 use App\Domain\Activity\Math;
+use App\Infrastructure\ValueObject\Geography\GeoMath;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 
 /**
@@ -130,9 +131,9 @@ final readonly class GapCalculator
         }
 
         $pointCount = \count($points);
-        $smoothedPoints = $points;
+        $smoothedPoints = [];
 
-        foreach (array_keys($points) as $index) {
+        foreach ($points as $index => $point) {
             $weightedElevation = 0.0;
             $totalWeight = 0.0;
             $start = max(0, $index - $radius);
@@ -144,9 +145,11 @@ final readonly class GapCalculator
                 $totalWeight += $weight;
             }
 
-            $smoothedPoints[$index] = [
-                ...$smoothedPoints[$index],
+            $smoothedPoints[] = [
+                'lat' => $point['lat'],
+                'lon' => $point['lon'],
                 'ele' => $weightedElevation / $totalWeight,
+                'timestamp' => $point['timestamp'],
             ];
         }
 
@@ -164,7 +167,7 @@ final readonly class GapCalculator
         $pointCount = \count($points);
 
         for ($i = 1; $i < $pointCount; ++$i) {
-            $cumulativeDistances[] = $cumulativeDistances[$i - 1] + Math::haversineDistance(
+            $cumulativeDistances[] = $cumulativeDistances[$i - 1] + GeoMath::haversineDistance(
                 $points[$i - 1]['lat'],
                 $points[$i - 1]['lon'],
                 $points[$i]['lat'],
@@ -280,7 +283,7 @@ final readonly class GapCalculator
     /**
      * @param array<string, mixed> $trackPoint
      *
-     * @return NormalizedTrackPoint
+     * @return array{lat: float,lon: float,ele: float,timestamp: int}
      */
     private function normalizePoint(array $trackPoint): array
     {

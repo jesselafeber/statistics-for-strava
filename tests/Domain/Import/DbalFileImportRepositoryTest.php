@@ -5,49 +5,15 @@ declare(strict_types=1);
 namespace App\Tests\Domain\Import;
 
 use App\Domain\Activity\ActivityId;
-use App\Domain\Activity\ImportSource;
 use App\Domain\Import\DbalFileImportRepository;
 use App\Domain\Import\FileImportId;
 use App\Domain\Import\FileImportRepository;
-use App\Domain\Import\FileImports;
-use App\Domain\Import\FileImportStatus;
-use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\ContainerTestCase;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class DbalFileImportRepositoryTest extends ContainerTestCase
 {
     private FileImportRepository $fileImportRepository;
-
-    public function testAddAndFindAll(): void
-    {
-        $success = FileImportBuilder::fromDefaults()
-            ->withFileImportId(FileImportId::fromUnprefixed('1'))
-            ->withFileHash('hash-one')
-            ->withFileContents("\x00\x01binary\xfffit-bytes\x00")
-            ->withSource(ImportSource::FIT_FILE)
-            ->withStatus(FileImportStatus::SUCCESS)
-            ->withActivityId(ActivityId::fromUnprefixed('123'))
-            ->withImportedOn(SerializableDateTime::fromString('2026-06-04 10:00:00'))
-            ->build();
-        $this->fileImportRepository->add($success);
-
-        $failed = FileImportBuilder::fromDefaults()
-            ->withFileImportId(FileImportId::fromUnprefixed('2'))
-            ->withFileHash('hash-two')
-            ->withSource(ImportSource::TCX_FILE)
-            ->withStatus(FileImportStatus::FAILED)
-            ->withErrorMessage('Could not parse file')
-            ->withActivityId(null)
-            ->withImportedOn(SerializableDateTime::fromString('2026-06-04 11:00:00'))
-            ->build();
-        $this->fileImportRepository->add($failed);
-
-        $this->assertEquals(
-            FileImports::fromArray([$failed, $success]),
-            $this->fileImportRepository->findAll()
-        );
-    }
 
     public function testExistsForFileHash(): void
     {
@@ -75,6 +41,41 @@ class DbalFileImportRepositoryTest extends ContainerTestCase
                 ->withFileImportId(FileImportId::fromUnprefixed('2'))
                 ->withFileHash('duplicate-hash')
                 ->build()
+        );
+    }
+
+    public function testDeleteForActivity(): void
+    {
+        $this->fileImportRepository->add(
+            FileImportBuilder::fromDefaults()
+                ->withFileImportId(FileImportId::fromUnprefixed('1'))
+                ->withFileHash('hash-1')
+                ->withActivityId(ActivityId::fromUnprefixed('1'))
+                ->build()
+        );
+        $this->fileImportRepository->add(
+            FileImportBuilder::fromDefaults()
+                ->withFileImportId(FileImportId::fromUnprefixed('2'))
+                ->withFileHash('hash-2')
+                ->withActivityId(ActivityId::fromUnprefixed('2'))
+                ->build()
+        );
+
+        $this->fileImportRepository->deleteForActivity(ActivityId::fromUnprefixed('1'));
+
+        $this->assertSame(
+            0,
+            (int) $this->getConnection()->executeQuery(
+                'SELECT COUNT(*) FROM FileImport WHERE activityId = :activityId',
+                ['activityId' => (string) ActivityId::fromUnprefixed('1')]
+            )->fetchOne()
+        );
+        $this->assertSame(
+            1,
+            (int) $this->getConnection()->executeQuery(
+                'SELECT COUNT(*) FROM FileImport WHERE activityId = :activityId',
+                ['activityId' => (string) ActivityId::fromUnprefixed('2')]
+            )->fetchOne()
         );
     }
 

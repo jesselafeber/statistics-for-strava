@@ -8,7 +8,6 @@ use App\Application\Countries;
 use App\Domain\Activity\ActivityTotals;
 use App\Domain\Activity\BestEffort\BestEffortsCalculator;
 use App\Domain\Activity\CadenceDistributionChart;
-use App\Domain\Activity\Device\DeviceRepository;
 use App\Domain\Activity\EnrichedActivities;
 use App\Domain\Activity\HeartRateDistributionChart;
 use App\Domain\Activity\Lap\ActivityLapRepository;
@@ -25,18 +24,17 @@ use App\Domain\Activity\Stream\Metric\ActivityStreamMetricRepository;
 use App\Domain\Activity\Stream\Metric\ActivityStreamMetricType;
 use App\Domain\Activity\Stream\StreamType;
 use App\Domain\Activity\VelocityDistributionChart;
-use App\Domain\Athlete\AthleteRepository;
-use App\Domain\Athlete\HeartRateZone\HeartRateZoneConfiguration;
-use App\Domain\Ftp\FtpHistory;
 use App\Domain\Gear\GearRepository;
+use App\Domain\Gear\RecordingDevice\RecordingDeviceRepository;
 use App\Domain\Segment\SegmentEffort\SegmentEffortRepository;
+use App\Domain\Settings\SettingsRepository;
 use App\Infrastructure\CQRS\Command\Command;
 use App\Infrastructure\CQRS\Command\CommandHandler;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\DataTableRow;
-use App\Infrastructure\ValueObject\Measurement\UnitSystem;
 use App\Infrastructure\ValueObject\Measurement\Velocity\KmPerHour;
+use App\Infrastructure\ValueObject\String\Slug;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -44,7 +42,6 @@ use Twig\Environment;
 final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
 {
     public function __construct(
-        private AthleteRepository $athleteRepository,
         private EnrichedActivities $enrichedActivities,
         private ActivityStreamRepository $activityStreamRepository,
         private ActivityStreamMetricRepository $activityStreamMetricRepository,
@@ -55,16 +52,14 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
         private SportTypeRepository $sportTypeRepository,
         private SegmentEffortRepository $segmentEffortRepository,
         private GearRepository $gearRepository,
-        private DeviceRepository $deviceRepository,
-        private FtpHistory $ftpHistory,
+        private RecordingDeviceRepository $recordingDeviceRepository,
         private BestEffortsCalculator $bestEffortsCalculator,
-        private HeartRateZoneConfiguration $heartRateZoneConfiguration,
         private Countries $countries,
-        private UnitSystem $unitSystem,
         private Environment $twig,
         private FilesystemOperator $buildHtmlStorage,
         private FilesystemOperator $buildApiStorage,
         private TranslatorInterface $translator,
+        private SettingsRepository $settingsRepository,
     ) {
     }
 
@@ -73,7 +68,9 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
         assert($command instanceof BuildActivitiesHtml);
 
         $now = $command->getCurrentDateTime();
-        $athlete = $this->athleteRepository->find();
+        $general = $this->settingsRepository->general();
+        $unitSystem = $this->settingsRepository->appearance()->getUnitSystem();
+        $athlete = $general->getAthlete();
         $importedSportTypes = $this->sportTypeRepository->findAll();
 
         $activities = $this->enrichedActivities->findAll();
@@ -88,7 +85,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
             'activities.html',
             $this->twig->load('html/activity/activities.html.twig')->render([
                 'sportTypes' => $importedSportTypes,
-                'devices' => $this->deviceRepository->findAll(),
+                'devices' => $this->recordingDeviceRepository->findAll(),
                 'activityTotals' => $activityTotals,
                 'countries' => $this->countries->getUsedInActivities(),
                 'gears' => $this->gearRepository->findAllUsed(),
@@ -113,7 +110,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                         heartRateData: $heartRateDistribution,
                         averageHeartRate: $activity->getAverageHeartRate(),
                         athleteMaxHeartRate: $athlete->getMaxHeartRate($activity->getStartDate()),
-                        heartRateZones: $this->heartRateZoneConfiguration->getHeartRateZonesFor(
+                        heartRateZones: $general->getHeartRateZoneConfiguration()->getHeartRateZonesFor(
                             sportType: $activity->getSportType(),
                             on: $activity->getStartDate()
                         )
@@ -126,7 +123,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                 && count($powerDistribution) > 1) {
                 $ftp = null;
                 try {
-                    $ftp = $this->ftpHistory->find(
+                    $ftp = $general->getFtpHistory()->find(
                         activityType: $activityType,
                         on: $activity->getStartDate()
                     );
@@ -155,7 +152,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                     velocityData: $velocityDistribution,
                     averageSpeed: $activity->getAverageSpeed(),
                     sportType: $activity->getSportType(),
-                    unitSystem: $this->unitSystem,
+                    unitSystem: $unitSystem,
                 )->build();
 
                 if (!is_null($velocityDistributionChart)) {
@@ -187,7 +184,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
 
             $activitySplits = $this->activitySplitRepository->findBy(
                 activityId: $activity->getId(),
-                unitSystem: $this->unitSystem
+                unitSystem: $unitSystem
             );
 
             $profileChart = null;
@@ -196,7 +193,7 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
             try {
                 $combinedActivityStream = $this->combinedActivityStreamRepository->findOneForActivityAndUnitSystem(
                     activityId: $activity->getId(),
-                    unitSystem: $this->unitSystem
+                    unitSystem: $unitSystem
                 );
 
                 $maximumNumberOfDigits = $combinedActivityStream->getMaximumNumberOfDigits();
@@ -218,10 +215,10 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                     items: array_reverse($items),
                     topXAxisData: $times,
                     bottomXAxisData: $distances,
-                    bottomXAxisSuffix: $this->unitSystem->distanceSymbol(),
+                    bottomXAxisSuffix: $unitSystem->distanceSymbol(),
                     grades: $grades,
                     maximumNumberOfDigitsOnYAxis: $maximumNumberOfDigits,
-                    unitSystem: $this->unitSystem,
+                    unitSystem: $unitSystem,
                     translator: $this->translator,
                 );
                 $profileChart = $combinedCharts->build();
@@ -268,6 +265,11 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                         'map' => $leafletMap,
                     ] : null,
                     'gpxLink' => $activityHasTimeStream ? $gpxFileLocation : null,
+                    'gpxFileName' => sprintf(
+                        '%s-%s.gpx',
+                        $activity->getStartDate()->format('Y-m-d'),
+                        Slug::fromString($activity->getName()),
+                    ),
                     'distributionCharts' => $distributionCharts,
                     'segmentEfforts' => $this->segmentEffortRepository->findByActivityId($activity->getId()),
                     'splits' => $activitySplits,
@@ -285,9 +287,9 @@ final readonly class BuildActivitiesHtmlCommandHandler implements CommandHandler
                     'activity' => $activity,
                 ]),
                 searchables: $activity->getSearchables(),
-                filterables: $activity->getFilterables($this->unitSystem),
+                filterables: $activity->getFilterables($unitSystem),
                 sortValues: $activity->getSortables(),
-                summables: $activity->getSummables($this->unitSystem),
+                summables: $activity->getSummables($unitSystem),
             );
         }
 

@@ -7,7 +7,6 @@ use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\ActivityWithRawData;
 use App\Domain\Gear\GearId;
 use App\Domain\Gear\GearIds;
-use App\Domain\Gear\Maintenance\GearMaintenanceConfig;
 use App\Domain\Gear\Maintenance\Task\IntervalUnit;
 use App\Domain\Gear\Maintenance\Task\Progress\EveryXDistanceUsedProgressCalculation;
 use App\Domain\Gear\Maintenance\Task\Progress\MaintenanceTaskProgress;
@@ -79,7 +78,6 @@ class EveryXDistanceUsedProgressCalculationTest extends ContainerTestCase
             $this->calculation->calculate(
                 ProgressCalculationContext::from(
                     gearIds: GearIds::fromArray([GearId::fromUnprefixed('test')]),
-                    lastTaggedOnActivityId: ActivityId::fromUnprefixed('last-tagged'),
                     lastTaggedOn: SerializableDateTime::fromString('01-01-2025'),
                     intervalUnit: IntervalUnit::EVERY_X_KILOMETERS_USED,
                     intervalValue: 1000,
@@ -145,7 +143,6 @@ class EveryXDistanceUsedProgressCalculationTest extends ContainerTestCase
             $this->calculation->calculate(
                 ProgressCalculationContext::from(
                     gearIds: GearIds::fromArray([GearId::fromUnprefixed('test')]),
-                    lastTaggedOnActivityId: ActivityId::fromUnprefixed('last-tagged'),
                     lastTaggedOn: SerializableDateTime::fromString('01-01-2025'),
                     intervalUnit: IntervalUnit::EVERY_X_MILES_USED,
                     intervalValue: 1000,
@@ -161,7 +158,6 @@ class EveryXDistanceUsedProgressCalculationTest extends ContainerTestCase
 
         $this->calculation = new EveryXDistanceUsedProgressCalculation(
             $this->getContainer()->get(Connection::class),
-            $this->getContainer()->get(GearMaintenanceConfig::class)
         );
     }
 }

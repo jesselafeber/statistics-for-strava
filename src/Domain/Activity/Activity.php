@@ -8,6 +8,7 @@ use App\Domain\Activity\Stream\ActivityPowerRepository;
 use App\Domain\Activity\Stream\PowerOutput;
 use App\Domain\Activity\Stream\PowerOutputs;
 use App\Domain\Gear\GearId;
+use App\Domain\Gear\RecordingDevice\RecordingDeviceId;
 use App\Domain\Integration\AI\SupportsAITooling;
 use App\Domain\Integration\Weather\OpenMeteo\Weather;
 use App\Domain\Zwift\CouldNotDetermineZwiftMap;
@@ -28,7 +29,6 @@ use App\Infrastructure\ValueObject\Measurement\Velocity\MetersPerSecond;
 use App\Infrastructure\ValueObject\Measurement\Velocity\SecPer100Meter;
 use App\Infrastructure\ValueObject\Measurement\Velocity\SecPerKm;
 use App\Infrastructure\ValueObject\String\ExternalReferenceId;
-use App\Infrastructure\ValueObject\String\Name;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\SerializableTimezone;
 use Doctrine\ORM\Mapping as ORM;
@@ -50,8 +50,6 @@ final class Activity implements SupportsAITooling
     private ?PowerOutputs $bestPowerOutputs = null;
     private ?int $normalizedPower = null;
     private ?string $gearName = null;
-    /** @var string[] */
-    private array $tags = [];
 
     #[ORM\Column(type: 'string', nullable: true)]
     // @phpstan-ignore-next-line
@@ -324,11 +322,6 @@ final class Activity implements SupportsAITooling
         ]);
     }
 
-    public function withEmptyGear(): self
-    {
-        return $this->withGear();
-    }
-
     public function getGearName(): ?string
     {
         return $this->gearName;
@@ -418,16 +411,16 @@ final class Activity implements SupportsAITooling
 
     public function getOriginalName(): string
     {
-        return trim(str_replace('Zwift - ', '', (string) $this->name));
+        return $this->name;
     }
 
     public function getName(): string
     {
-        if ([] === $this->tags) {
-            return $this->getOriginalName();
-        }
+        $name = str_replace('Zwift - ', '', $this->getOriginalName());
+        // Strip legacy gear-maintenance hashtags (e.g. "#sfs-chain-lubed") from the display name.
+        $name = (string) preg_replace('/\s*#sfs-\S+/', '', $name);
 
-        return trim(str_replace($this->tags, '', $this->getOriginalName()));
+        return trim($name);
     }
 
     public function getSanitizedName(): string
@@ -445,6 +438,13 @@ final class Activity implements SupportsAITooling
     public function getDescription(): string
     {
         return trim($this->description ?? '');
+    }
+
+    public function withDescription(?string $description): self
+    {
+        return clone ($this, [
+            'description' => $description,
+        ]);
     }
 
     public function getDistance(): Kilometer
@@ -606,9 +606,16 @@ final class Activity implements SupportsAITooling
         return $this->deviceName;
     }
 
-    public function getDeviceId(): string
+    public function withDeviceName(?string $deviceName): self
     {
-        return Name::fromString($this->getDeviceName() ?? 'device-none')->kebabCase();
+        return clone ($this, [
+            'deviceName' => $deviceName,
+        ]);
+    }
+
+    public function getDeviceId(): RecordingDeviceId
+    {
+        return RecordingDeviceId::fromName($this->getDeviceName() ?? 'none');
     }
 
     public function isCommute(): bool
@@ -692,16 +699,6 @@ final class Activity implements SupportsAITooling
     {
         return clone ($this, [
             'normalizedPower' => $normalizedPower,
-        ]);
-    }
-
-    /**
-     * @param string[] $tags
-     */
-    public function withTags(array $tags): self
-    {
-        return clone ($this, [
-            'tags' => $tags,
         ]);
     }
 

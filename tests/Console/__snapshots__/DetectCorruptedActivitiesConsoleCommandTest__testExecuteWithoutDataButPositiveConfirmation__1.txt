@@ -1,17 +1,11 @@
 
-StatisticsforStravav4.8.8
+Dreevev5.0.0
 
 
 
-Runtime:PHP8.5.x(cli)Symfony8.1.0Linux
+Runtime:PHP8.5.x(cli)Symfony8.1.1Linux
 
-Configuredimportmode:STRAVA_API
-
-Configurationfiles:
-config.yaml
-configathlete.yaml
-configimport.yaml
-gearmaintenance.yaml
+Configuredimportmode:stravaApi
 
 
 

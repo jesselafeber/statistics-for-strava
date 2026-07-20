@@ -1,0 +1,73 @@
+{% extends "html/admin/page/template.html.twig" %}
+{% block main %}
+    {% autoescape false %}
+    <div class="p-4 bg-white border border-gray-200 rounded-lg shadow-xs">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="text-lg font-semibold">
+                {{ "Recording device management"|trans({}, 'admin') }}
+            </h3>
+        </div>
+        <div class="relative overflow-x-auto">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th scope="col" class="text-left">
+                        {{ "Name"|trans }}
+                    </th>
+                    <th scope="col">
+                        {{ "Purchase price"|trans }}
+                    </th>
+                    <th scope="col" class="narrow">
+                        <span class="sr-only">{{ "Edit"|trans({}, 'admin') }}</span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for recordingDevice in recordingDevices %}
+                    <tr class="group/row">
+                        <td class="whitespace-nowrap text-left font-medium text-gray-800">
+                            {{ recordingDevice.getName() }}
+                        </td>
+                        <td class="whitespace-nowrap">
+                            {% set purchasePrice = recordingDevice.getPurchasePrice() %}
+                            {% if purchasePrice %}
+                                {{ purchasePrice|formatMoney }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td class="narrow whitespace-nowrap">
+                            <a href="{{ relativeUrl(path('admin_edit_recording_device', {id: recordingDevice.getId()})) }}"
+                               class="inline-flex items-center justify-center text-gray-500 transition-colors hover:text-primary"
+                               title="{{ "Edit"|trans({}, 'admin') }}">
+                                <span class="sr-only">{{ "Edit"|trans({}, 'admin') }}</span>
+                                <svg class="size-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m14.304 4.844 2.852 2.852M7 7H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-4.5m2.409-9.91a2.017 2.017 0 0 1 0 2.853l-6.844 6.844L8 14l.713-3.565 6.844-6.844a2.015 2.015 0 0 1 2.852 0Z"/>
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% if recordingDevices.isEmpty() %}
+                    <tr>
+                        <td colspan="3">
+                            <div class="flex flex-col items-center justify-center gap-3 py-12 px-4 text-center">
+                                <span class="grid place-items-center size-12 rounded-full bg-gray-100 text-gray-400" aria-hidden="true">
+                                    <svg class="size-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V8Zm4 11h6"/>
+                                    </svg>
+                                </span>
+                                <div class="flex flex-col gap-1">
+                                    <span class="text-sm font-medium text-gray-800">{{ "No recording devices yet."|trans({}, 'admin') }}</span>
+                                    <span class="text-xs text-gray-500">{{ "Recording devices will appear here once activities have been imported."|trans({}, 'admin') }}</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endautoescape %}
+{% endblock main %}

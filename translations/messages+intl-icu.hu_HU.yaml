@@ -20,6 +20,7 @@ Activity: Tevékenység
 'Acute Training Load (Fatigue) - 7-day exponentially weighted average of your daily training load. Represents short-term fatigue.': 'Akut edzésterhelés (Fáradtság) – a napi edzésterhelés 7 napos exponenciálisan súlyozott átlaga. A rövid távú fáradtságot mutatja.'
 'Acute:Chronic Ratio - Ratio of ATL to CTL. Indicates injury risk.': 'Akut:Krónikus arány – az ATL és CTL aránya. Sérülésveszélyt jelöl.'
 'Adaptive & Inclusive Sports': 'Adaptív és inkluzív sportok'
+'Admin panel': 'Admin panel'
 Afternoon: Délután
 All: Mind
 'All time': Összesített
@@ -71,7 +72,6 @@ Cricket: Krikett
 Crossfit: Crossfit
 'Current Status': 'Jelenlegi állapot'
 'Current streaks': 'Aktuális sorozatok'
-'Custom gear disabled': 'Egyedi felszerelés letiltva'
 Cycling: Kerékpározás
 'Daily TRIMP': 'Napi TRIMP'
 'Daily activities': 'Napi tevékenységek'
@@ -84,12 +84,12 @@ Day: Nap
 'Daytime stats': 'Napszaki statisztikák'
 Dec: Dec
 Density: Sűrűség
-'Detailed instructions are available in the documentation on': 'Részletes utasítások az alábbi dokumentációban találhatók:'
 Details: Részletek
 Device: Eszköz
 Dist.: Dist.
 Distance: Távolság
 'Distance & Elevation': 'Távolság & szintemelkedés'
+'Distance (single activity)': 'Distance (single activity)'
 'Distance breakdown': 'Távolság részletezés'
 'Distance distribution': 'Distance distribution'
 'Distance in {unit}': 'Távolság ({unit})'
@@ -107,6 +107,7 @@ Eddington: Eddington
 Elev: Szintek
 Elev.: Elev.
 Elevation: Szintemelkedés
+'Elevation (single activity)': 'Elevation (single activity)'
 'Elevation in {unit}': 'Szintemelkedés ({unit})'
 Elliptical: 'Elliptikus gép'
 Energy: Energy
@@ -134,7 +135,6 @@ Fri.: Fri.
 GAP: GAP
 Gear: Felszerelés
 'Gear "{gearId}" is referenced in your maintenance config file, but was not imported from Strava. Please check that the gear exists and is correctly synced.': 'A(z) „{gearId}" felszerelés szerepel a karbantartási konfigurációs fájlban, de nem lett importálva a Stravából. Ellenőrizd, hogy a felszerelés létezik és megfelelően szinkronizálva van.'
-'Gear details': 'Felszerelés részletei'
 'Gear maintenance': 'Felszerelés karbantartás'
 'Gear stats': 'Felszerelés statisztikák'
 "Gear that hasn't been used in the last three months, is disabled by default.": 'Az elmúlt három hónapban nem használt felszerelés alapértelmezés szerint le van tiltva.'
@@ -170,7 +170,6 @@ History: Előzmények
 'How often do you train': 'Milyen gyakran edzel'
 'Ice Skate': Jégkorcsolya
 Id: Azonosító
-'Image "{imgSrc}" is referenced in your maintenance config file, but was not found in "storage/gear-maintenance"': 'A(z) „{imgSrc}" kép szerepel a karbantartási konfigurációs fájlban, de nem található a „storage/gear-maintenance" mappában'
 Imperial: Angolszász
 "In that time, I’ve covered {totalDistance}, that's {numberOfTripsAroundTheWorld} trips around the world 🌍 or {numberOfTripsToTheMoonPercent}% of the way to the moon 🌕, and climbed an elevation of {totalElevation} which is {timesMountEverest} times Mount Everest 🏔. All up that's {totalTimeRecorded} of moving time 🎉.": 'Ez idő alatt {totalDistance}-t tettem meg, ami {numberOfTripsAroundTheWorld} körülutazás a Föld körül, vagy {numberOfTripsToTheMoonPercent}% az úton a Hold felé, és {totalElevation} szintemelkedést győztem le, ami {timesMountEverest}-szer a Mount Everest magassága. Összesen {totalTimeRecorded} mozgásban töltött idő.'
 'Individual thresholds vary based on fitness level.': 'Az egyéni küszöbértékek a fitnesz szinttől függően változnak.'
@@ -210,7 +209,6 @@ Low: Alacsony
 'Low risk': 'Alacsony kockázat'
 'Low training load': 'Alacsony edzésterhelés'
 Maintenance: Karbantartás
-'Maintenance history': 'Karbantartási előzmények'
 Mar: Már
 Max: Max
 'Max gradient': 'Max. lejtés'
@@ -250,6 +248,7 @@ None: 'Egyik sem'
 'Not supported': 'Nem támogatott'
 Nov: Nov
 Now: Most
+'Number of activities': 'Number of activities'
 'Number of activities per month': 'Havi tevékenységek száma'
 'Number of times completed': 'Teljesítések száma'
 Oct: Okt
@@ -276,7 +275,6 @@ Photos: Fotók
 'Pickle Ball': Pickleball
 Pilates: Pilates
 'Pizza slices': 'Pizza slices'
-'Please address these issues': 'Kérjük, foglalkozz ezekkel a problémákkal'
 'Polarised training (last 30 days)': 'Polarizált edzés (utolsó 30 nap)'
 Power: Teljesítmény
 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': 'Ezt becsült {caloriesBurned} kalória hajtotta, ami nagyjából {numberOfPizzaSlices} szelet pizza.'
@@ -341,7 +339,6 @@ Squash: Squash
 'Start times': 'Kezdési idők'
 'Stats per weekday': 'Statisztikák napokra bontva'
 Status: Állapot
-'Strava profile': 'Strava profil'
 'Streak started on {date}': 'Sorozat kezdete: {date}'
 Streaks: Sorozatok
 Sun: V
@@ -351,8 +348,6 @@ Swim: Úszás
 'TSB (Form)': 'TSB (Forma)'
 'TSB positive in': 'TSB pozitív ezután:'
 'Table Tennis': Asztalitenisz
-Tag: Cimke
-'Tag "{maintenanceTaskTag}" was used on "{activityName}", but the gear referenced on that activity is not attached to this component.': 'A(z) „{maintenanceTaskTag}" cimke a(z) „{activityName}" tevékenységben lett használva, de az ahhoz a tevékenységhez kapcsolódó felszerelés nincs csatolva ehhez a komponenshez.'
 'Taper sweet-spot (+15)': 'Taper édes pont (+15)'
 'Team Sports': Csapatsportok
 Tennis: Tenisz
@@ -457,7 +452,7 @@ Time: Idő
 'Time in zone': 'Time in zone'
 'Times completed': 'Teljesítések száma'
 Title: Title
-'To enable it, configure {configFile} and rebuild the files for the changes to take effect': 'Az engedélyezéséhez konfiguráld a(z) {configFile} fájlt, és építsd újra a fájlokat a változtatások életbe lépéséhez'
+'To enable it, configure this in the admin panel and rebuild the files for the changes to take effect': 'To enable it, configure this in the admin panel and rebuild the files for the changes to take effect'
 'Toggle sidebar': 'Oldalsáv ki/be'
 'Top 10': 'Top 10'
 'Total distance per month': 'Havi össztávolság'
@@ -545,7 +540,6 @@ day(s): nap(ok)
 days: napok
 'days needed for next Eddington': 'napok a következő Eddington-számhoz'
 'days to reach {n}': 'days to reach {n}'
-history: előzmények
 hours: órák
 hrs: h
 'last {numberOfDays} days': 'utolsó {numberOfDays} nap'

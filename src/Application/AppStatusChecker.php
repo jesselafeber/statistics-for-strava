@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace App\Application;
 
 use App\Domain\Activity\ActivityIdRepository;
-use App\Domain\Athlete\AthleteRepository;
-use App\Infrastructure\Exception\EntityNotFound;
+use App\Domain\Settings\AthleteHasNotBeenConfigured;
+use App\Domain\Settings\KeyValueBasedSettingsRepository;
+use App\Domain\Settings\SettingsRepository;
 use App\Infrastructure\FileSystem\PermissionChecker;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToWriteFile;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 final readonly class AppStatusChecker
 {
     public function __construct(
-        private AthleteRepository $athleteRepository,
+        #[Autowire(service: KeyValueBasedSettingsRepository::class)]
+        private SettingsRepository $settingsRepository,
         private ActivityIdRepository $activityIdRepository,
         private PermissionChecker $fileSystemPermissionChecker,
     ) {
@@ -51,9 +54,9 @@ final readonly class AppStatusChecker
     private function ensureAthleteCanBeLoaded(): void
     {
         try {
-            $this->athleteRepository->find();
-        } catch (EntityNotFound) {
-            throw AppIsNotReady::becauseAthleteHasNotBeenImportedYet();
+            $this->settingsRepository->general();
+        } catch (AthleteHasNotBeenConfigured) {
+            throw AppIsNotReady::becauseAthleteHasNotBeenConfiguredYet();
         }
     }
 }

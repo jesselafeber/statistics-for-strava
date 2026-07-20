@@ -11,8 +11,8 @@ use App\Domain\Dashboard\InvalidDashboardLayout;
 use App\Domain\Dashboard\StatsContext;
 use App\Domain\Dashboard\Widget\Widget;
 use App\Domain\Dashboard\Widget\WidgetConfiguration;
+use App\Domain\Settings\SettingsRepository;
 use App\Infrastructure\Serialization\Json;
-use App\Infrastructure\ValueObject\Measurement\UnitSystem;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
@@ -21,10 +21,20 @@ final readonly class WeeklyStatsWidget implements Widget
 {
     public function __construct(
         private EnrichedActivities $enrichedActivities,
-        private UnitSystem $unitSystem,
+        private SettingsRepository $settingsRepository,
         private Environment $twig,
         private TranslatorInterface $translator,
     ) {
+    }
+
+    public function getLabel(): string
+    {
+        return $this->translator->trans('Weekly stats');
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'widget--weekly-stats';
     }
 
     public function getDefaultConfiguration(): WidgetConfiguration
@@ -41,7 +51,7 @@ final readonly class WeeklyStatsWidget implements Widget
         if (!is_array($configuration->get('metricsDisplayOrder'))) {
             throw new InvalidDashboardLayout('Configuration item "metricsDisplayOrder" must be an array.');
         }
-        if (3 !== count($configuration->get('metricsDisplayOrder'))) {
+        if (3 !== count(array_unique($configuration->get('metricsDisplayOrder')))) {
             throw new InvalidDashboardLayout('Configuration item "metricsDisplayOrder" must contain all 3 metrics.');
         }
         foreach ($configuration->get('metricsDisplayOrder') as $metricDisplayOrder) {
@@ -77,7 +87,7 @@ final readonly class WeeklyStatsWidget implements Widget
 
             if ($activityType->supportsWeeklyStats() && $chartData = WeeklyStatsChart::create(
                 activities: $activitiesPerActivityType[$activityType->value],
-                unitSystem: $this->unitSystem,
+                unitSystem: $this->settingsRepository->appearance()->getUnitSystem(),
                 activityType: $activityType,
                 metricsDisplayOrder: array_map(
                     StatsContext::from(...),
@@ -90,7 +100,7 @@ final readonly class WeeklyStatsWidget implements Widget
             }
         }
 
-        return $this->twig->load('html/dashboard/widget/widget--weekly-stats.html.twig')->render([
+        return $this->twig->load(sprintf('html/dashboard/widget/%s.html.twig', $this->getTemplateName()))->render([
             'weeklyDistanceCharts' => $weeklyDistanceTimeCharts,
             'weeksPerActivityType' => $weeksPerActivityType,
         ]);

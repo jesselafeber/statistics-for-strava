@@ -8,37 +8,35 @@ use App\Domain\Gear\GearId;
 use App\Domain\Gear\GearIds;
 use App\Domain\Gear\Maintenance\Task\MaintenanceTask;
 use App\Domain\Gear\Maintenance\Task\MaintenanceTasks;
-use App\Domain\Gear\Maintenance\Task\MaintenanceTaskTags;
 use App\Infrastructure\ValueObject\String\Name;
-use App\Infrastructure\ValueObject\String\Tag;
 use Money\Money;
 
-final readonly class GearComponent
+final readonly class GearComponent implements \JsonSerializable
 {
     private MaintenanceTasks $maintenanceTasks;
 
     private function __construct(
-        private Tag $tag,
+        private GearComponentId $id,
         private Name $label,
         private GearIds $attachedTo,
-        private ?string $imgSrc,
+        private ?string $localImagePath,
         private ?Money $purchasePrice,
     ) {
         $this->maintenanceTasks = MaintenanceTasks::empty();
     }
 
     public static function create(
-        Tag $tag,
+        GearComponentId $id,
         Name $label,
         GearIds $attachedTo,
-        ?string $imgSrc,
+        ?string $localImagePath,
         ?Money $purchasePrice,
     ): self {
         return new self(
-            tag: $tag,
+            id: $id,
             label: $label,
             attachedTo: $attachedTo,
-            imgSrc: $imgSrc,
+            localImagePath: $localImagePath,
             purchasePrice: $purchasePrice,
         );
     }
@@ -48,9 +46,9 @@ final readonly class GearComponent
         $this->maintenanceTasks->add($task);
     }
 
-    public function getTag(): Tag
+    public function getId(): GearComponentId
     {
-        return $this->tag;
+        return $this->id;
     }
 
     public function getLabel(): Name
@@ -68,9 +66,9 @@ final readonly class GearComponent
         return $this->getAttachedTo()->has($gearId);
     }
 
-    public function getImgSrc(): ?string
+    public function getLocalImagePath(): ?string
     {
-        return $this->imgSrc;
+        return $this->localImagePath;
     }
 
     public function getPurchasePrice(): ?Money
@@ -81,31 +79,6 @@ final readonly class GearComponent
     public function getMaintenanceTasks(): MaintenanceTasks
     {
         return $this->maintenanceTasks;
-    }
-
-    public function withMaintenanceTaskTags(MaintenanceTaskTags $maintenanceTaskTags): self
-    {
-        $maintenanceTasks = MaintenanceTasks::empty();
-        foreach ($this->maintenanceTasks as $maintenanceTask) {
-            $mostRecentMaintenance = null;
-            foreach ($maintenanceTaskTags as $maintenanceTaskTag) {
-                if ($maintenanceTask->getTag() != $maintenanceTaskTag->getTag()) {
-                    continue;
-                }
-
-                if ($mostRecentMaintenance
-                    && $maintenanceTaskTag->getTaggedOn()->isBeforeOrOn($mostRecentMaintenance->getTaggedOn())
-                ) {
-                    continue;
-                }
-                $mostRecentMaintenance = $maintenanceTaskTag;
-            }
-            $maintenanceTasks->add($maintenanceTask->withMostRecentMaintenanceTaskTag($mostRecentMaintenance));
-        }
-
-        return clone ($this, [
-            'maintenanceTasks' => $maintenanceTasks,
-        ]);
     }
 
     public function normalizeGearIds(GearIds $normalizedGearIds): void
@@ -125,5 +98,39 @@ final readonly class GearComponent
                 $this->attachedTo->replace($gearId, $normalizedGearId);
             }
         }
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function jsonSerialize(): array
+    {
+        $component = [
+            'id' => (string) $this->id,
+            'label' => (string) $this->label,
+            'localImagePath' => $this->localImagePath,
+            'attachedTo' => $this->attachedTo->map(
+                static fn (GearId $gearId): string => $gearId->toUnprefixedString(),
+            ),
+            'maintenance' => $this->maintenanceTasks->map(
+                static fn (MaintenanceTask $task): array => [
+                    'id' => (string) $task->getId(),
+                    'label' => (string) $task->getLabel(),
+                    'interval' => [
+                        'value' => $task->getIntervalValue(),
+                        'unit' => $task->getIntervalUnit()->value,
+                    ],
+                ],
+            ),
+        ];
+
+        if ($this->purchasePrice instanceof Money) {
+            $component['purchasePrice'] = [
+                'amountInCents' => (int) $this->purchasePrice->getAmount(),
+                'currency' => $this->purchasePrice->getCurrency()->getCode(),
+            ];
+        }
+
+        return $component;
     }
 }

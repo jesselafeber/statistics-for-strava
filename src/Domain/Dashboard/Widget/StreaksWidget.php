@@ -13,16 +13,28 @@ use App\Infrastructure\CQRS\Query\Bus\QueryBus;
 use App\Infrastructure\Time\Clock\Clock;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\Years;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 final readonly class StreaksWidget implements Widget
 {
     public function __construct(
+        private TranslatorInterface $translator,
         private EnrichedActivities $enrichedActivities,
         private QueryBus $queryBus,
         private Clock $clock,
         private Environment $twig,
     ) {
+    }
+
+    public function getLabel(): string
+    {
+        return $this->translator->trans('Current streaks');
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'widget--streaks';
     }
 
     public function getDefaultConfiguration(): WidgetConfiguration
@@ -73,7 +85,7 @@ final readonly class StreaksWidget implements Widget
             }
         }
 
-        return $this->twig->load('html/dashboard/widget/widget--streaks.html.twig')->render([
+        return $this->twig->load(sprintf('html/dashboard/widget/%s.html.twig', $this->getTemplateName()))->render([
             'subtitle' => $configuration->get('subtitle'),
             'mostRecentActivity' => $mostRecentActivity,
             'dayStreak' => $findStreaksResponse->getCurrentDayStreak(),

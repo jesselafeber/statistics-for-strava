@@ -2,13 +2,12 @@
 
 namespace App\Tests\Domain\Gear\Maintenance\Task\Progress;
 
-use App\Domain\Activity\ActivityId;
 use App\Domain\Gear\GearId;
 use App\Domain\Gear\GearIds;
 use App\Domain\Gear\GearRepository;
-use App\Domain\Gear\Maintenance\GearMaintenanceConfig;
+use App\Domain\Gear\Maintenance\GearMaintenanceRepository;
+use App\Domain\Gear\Maintenance\Log\GearMaintenanceLogRepository;
 use App\Domain\Gear\Maintenance\Task\IntervalUnit;
-use App\Domain\Gear\Maintenance\Task\MaintenanceTaskTagRepository;
 use App\Domain\Gear\Maintenance\Task\Progress\MaintenanceTaskProgress;
 use App\Domain\Gear\Maintenance\Task\Progress\MaintenanceTaskProgressCalculator;
 use App\Domain\Gear\Maintenance\Task\Progress\ProgressCalculationContext;
@@ -25,13 +24,12 @@ class MaintenanceTaskProgressCalculatorTest extends ContainerTestCase
                 new ProgressCalculationOne(),
                 new ProgressCalculationTwo(),
             ],
-                $this->getContainer()->get(GearMaintenanceConfig::class),
-                $this->getContainer()->get(MaintenanceTaskTagRepository::class),
+                $this->getContainer()->get(GearMaintenanceRepository::class),
+                $this->getContainer()->get(GearMaintenanceLogRepository::class),
                 $this->getContainer()->get(GearRepository::class),
             )->calculateProgressFor(
                 ProgressCalculationContext::from(
                     gearIds: GearIds::fromArray([GearId::fromUnprefixed('test')]),
-                    lastTaggedOnActivityId: ActivityId::fromUnprefixed('test'),
                     lastTaggedOn: SerializableDateTime::fromString('2025-01-03'),
                     intervalUnit: IntervalUnit::EVERY_X_DAYS,
                     intervalValue: 4,
@@ -46,13 +44,12 @@ class MaintenanceTaskProgressCalculatorTest extends ContainerTestCase
 
         new MaintenanceTaskProgressCalculator(
             [],
-            $this->getContainer()->get(GearMaintenanceConfig::class),
-            $this->getContainer()->get(MaintenanceTaskTagRepository::class),
+            $this->getContainer()->get(GearMaintenanceRepository::class),
+            $this->getContainer()->get(GearMaintenanceLogRepository::class),
             $this->getContainer()->get(GearRepository::class),
         )->calculateProgressFor(
             ProgressCalculationContext::from(
                 gearIds: GearIds::fromArray([GearId::fromUnprefixed('test')]),
-                lastTaggedOnActivityId: ActivityId::fromUnprefixed('test'),
                 lastTaggedOn: SerializableDateTime::fromString('2025-01-03'),
                 intervalUnit: IntervalUnit::EVERY_X_DAYS,
                 intervalValue: 4,

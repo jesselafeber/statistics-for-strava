@@ -20,6 +20,7 @@ Activity: Attività
 'Acute Training Load (Fatigue) - 7-day exponentially weighted average of your daily training load. Represents short-term fatigue.': 'Carico di Allenamento Acuto (Fatica) - media esponenziale a 7 giorni del tuo carico giornaliero. Rappresenta la fatica a breve termine.'
 'Acute:Chronic Ratio - Ratio of ATL to CTL. Indicates injury risk.': 'Rapporto Acuto:Cronico - Rapporto tra ATL e CTL. Indica il rischio di infortuni.'
 'Adaptive & Inclusive Sports': 'Sport Adattati e Inclusivi'
+'Admin panel': 'Admin panel'
 Afternoon: Pomeriggio
 All: Tutti
 'All time': 'Da sempre'
@@ -71,7 +72,6 @@ Cricket: Cricket
 Crossfit: Crossfit
 'Current Status': 'Stato attuale'
 'Current streaks': 'Serie attuali'
-'Custom gear disabled': 'Attrezzatura personalizzata disattivata'
 Cycling: Ciclismo
 'Daily TRIMP': 'TRIMP giornaliero'
 'Daily activities': 'Attività giornaliere'
@@ -84,12 +84,12 @@ Day: Day
 'Daytime stats': 'Statistiche giornaliere'
 Dec: Dic
 Density: Density
-'Detailed instructions are available in the documentation on': 'Istruzioni dettagliate sono disponibili nella documentazione su'
 Details: Dettagli
 Device: Dispositivo
 Dist.: Dist.
 Distance: Distanza
 'Distance & Elevation': 'Distanza e dislivello'
+'Distance (single activity)': 'Distance (single activity)'
 'Distance breakdown': 'Analisi della distanza'
 'Distance distribution': 'Distance distribution'
 'Distance in {unit}': 'Distanza in {unit}'
@@ -107,6 +107,7 @@ Eddington: Eddington
 Elev: Disl.
 Elev.: Elev.
 Elevation: Dislivello
+'Elevation (single activity)': 'Elevation (single activity)'
 'Elevation in {unit}': 'Dislivello in {unit}'
 Elliptical: Ellittica
 Energy: Energy
@@ -134,7 +135,6 @@ Fri.: Fri.
 GAP: GAP
 Gear: Attrezzatura
 'Gear "{gearId}" is referenced in your maintenance config file, but was not imported from Strava. Please check that the gear exists and is correctly synced.': 'L''attrezzatura "{gearId}" è presente nel tuo file di configurazione della manutenzione, ma non è stata importata da Strava. Verifica che esista e sia sincronizzata correttamente.'
-'Gear details': 'Dettagli attrezzatura'
 'Gear maintenance': 'Manutenzione attrezzatura'
 'Gear stats': 'Statistiche attrezzatura'
 "Gear that hasn't been used in the last three months, is disabled by default.": 'Attrezzatura che non è stata usata negli ultimi tre mesi, è disabilitata di default.'
@@ -170,9 +170,8 @@ History: Cronologia
 'How often do you train': 'Con quale frequenza ti alleni'
 'Ice Skate': 'Pattinaggio su ghiaccio'
 Id: ID
-'Image "{imgSrc}" is referenced in your maintenance config file, but was not found in "storage/gear-maintenance"': 'L''immagine "{imgSrc}" è referenziata nel tuo file di configurazione della manutenzione, ma non è stata trovata in "storage/gear-maintenance"'
 Imperial: Imperial
-"In that time, I’ve covered {totalDistance}, that's {numberOfTripsAroundTheWorld} trips around the world 🌍 or {numberOfTripsToTheMoonPercent}% of the way to the moon 🌕, and climbed an elevation of {totalElevation} which is {timesMountEverest} times Mount Everest 🏔. All up that's {totalTimeRecorded} of moving time 🎉.": "In that time, I’ve covered {totalDistance}, that's {numberOfTripsAroundTheWorld} trips around the world 🌍 or {numberOfTripsToTheMoonPercent}% of the way to the moon 🌕, and climbed an elevation of {totalElevation} which is {timesMountEverest} times Mount Everest 🏔. All up that's {totalTimeRecorded} of moving time 🎉."
+"In that time, I’ve covered {totalDistance}, that's {numberOfTripsAroundTheWorld} trips around the world 🌍 or {numberOfTripsToTheMoonPercent}% of the way to the moon 🌕, and climbed an elevation of {totalElevation} which is {timesMountEverest} times Mount Everest 🏔. All up that's {totalTimeRecorded} of moving time 🎉.": 'In questo periodo ho percorso {totalDistance}, pari a {numberOfTripsAroundTheWorld} giri del mondo 🌍 oppure al {numberOfTripsToTheMoonPercent}% del tragitto verso la luna 🌕, e accumulato {totalElevation} di dislivello, cioè {timesMountEverest} volte il Monte Everest 🏔. In totale fanno {totalTimeRecorded} di tempo in movimento 🎉.'
 'Individual thresholds vary based on fitness level.': 'Le soglie individuali variano in base al livello di forma.'
 'Inline Skate': 'Pattinaggio in linea'
 Intensity: Intensity
@@ -210,7 +209,6 @@ Low: Basso
 'Low risk': 'Rischio basso'
 'Low training load': 'Carico di allenamento basso'
 Maintenance: Manutenzione
-'Maintenance history': 'Storico manutenzioni'
 Mar: Mar
 Max: Massimo
 'Max gradient': 'Pendenza massima'
@@ -250,6 +248,7 @@ None: Nessuno
 'Not supported': 'Non supportato'
 Nov: Nov
 Now: Now
+'Number of activities': 'Number of activities'
 'Number of activities per month': 'Numero di attività al mese'
 'Number of times completed': 'Numero di completamenti'
 Oct: Ott
@@ -276,10 +275,9 @@ Photos: Foto
 'Pickle Ball': Pickleball
 Pilates: Pilates
 'Pizza slices': 'Pizza slices'
-'Please address these issues': 'Per favore occupati di questi problemi'
 'Polarised training (last 30 days)': 'Allenamento polarizzato (ultimi 30 giorni)'
 Power: Potenza
-'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': 'Powered by {caloriesBurned} calorie, ovvero circa {numberOfPizzaSlices} fette di pizza 🍕.'
+'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': "Consumato l'equivalente di {caloriesBurned} calorie, ovvero circa {numberOfPizzaSlices} fette di pizza 🍕."
 'Prev year': 'Anno precedente'
 Previous: Previous
 'Purchase price': 'Purchase price'
@@ -341,7 +339,6 @@ Squash: Squash
 'Start times': 'Orari di partenza'
 'Stats per weekday': 'Statistiche giornaliere'
 Status: Status
-'Strava profile': 'Profilo Strava'
 'Streak started on {date}': 'Serie iniziata il {date}'
 Streaks: Serie
 Sun: Dom
@@ -351,8 +348,6 @@ Swim: Nuoto
 'TSB (Form)': 'TSB (Forma)'
 'TSB positive in': 'TSB positivo tra'
 'Table Tennis': 'Tennis tavolo'
-Tag: Etichetta
-'Tag "{maintenanceTaskTag}" was used on "{activityName}", but the gear referenced on that activity is not attached to this component.': 'L''etichetta "{maintenanceTaskTag}" è stata usata su "{activityName}", ma l''attrezzatura associata a quell''attività non è collegata a questo componente.'
 'Taper sweet-spot (+15)': 'Zona ideale di tapering (+15)'
 'Team Sports': 'Sport di squadra'
 Tennis: Tennis
@@ -457,7 +452,7 @@ Time: Tempo
 'Time in zone': 'Time in zone'
 'Times completed': 'Volte completate'
 Title: Title
-'To enable it, configure {configFile} and rebuild the files for the changes to take effect': 'Per abilitarla, configura {configFile} e rigenera i file affinché le modifiche abbiano effetto'
+'To enable it, configure this in the admin panel and rebuild the files for the changes to take effect': 'To enable it, configure this in the admin panel and rebuild the files for the changes to take effect'
 'Toggle sidebar': 'Mostra/Nascondi barra laterale'
 'Top 10': 'Primi 10'
 'Total distance per month': 'Distanza totale per mese'
@@ -545,7 +540,6 @@ day(s): day(s)
 days: giorni
 'days needed for next Eddington': 'Giorni necessari per il prossimo Eddington'
 'days to reach {n}': 'days to reach {n}'
-history: cronologia
 hours: ore
 hrs: ore
 'last {numberOfDays} days': 'ultimi {numberOfDays} giorni'

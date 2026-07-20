@@ -8,22 +8,21 @@ use App\Domain\Activity\Activities;
 use App\Domain\Activity\Activity;
 use App\Domain\Activity\EnrichedActivities;
 use App\Domain\Calendar\Months;
-use App\Domain\Gear\CustomGear\CustomGearConfig;
 use App\Domain\Gear\DistanceOverTimePerGearChart;
 use App\Domain\Gear\DistancePerMonthPerGearChart;
 use App\Domain\Gear\FindGearStatsPerDay\FindGearStatsPerDay;
 use App\Domain\Gear\Gear;
 use App\Domain\Gear\GearId;
 use App\Domain\Gear\GearRepository;
-use App\Domain\Gear\ImportedGear\ImportedGear;
+use App\Domain\Gear\GearType;
 use App\Domain\Gear\Maintenance\Task\Progress\MaintenanceTaskProgressCalculator;
+use App\Domain\Settings\SettingsRepository;
 use App\Infrastructure\CQRS\Command\Command;
 use App\Infrastructure\CQRS\Command\CommandHandler;
 use App\Infrastructure\CQRS\Query\Bus\QueryBus;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Measurement\Length\Meter;
 use App\Infrastructure\ValueObject\Measurement\Time\Seconds;
-use App\Infrastructure\ValueObject\Measurement\UnitSystem;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -33,10 +32,9 @@ final readonly class BuildGearStatsHtmlCommandHandler implements CommandHandler
 {
     public function __construct(
         private GearRepository $gearRepository,
-        private CustomGearConfig $customGearConfig,
         private MaintenanceTaskProgressCalculator $maintenanceTaskProgressCalculator,
         private EnrichedActivities $enrichedActivities,
-        private UnitSystem $unitSystem,
+        private SettingsRepository $settingsRepository,
         private QueryBus $queryBus,
         private Environment $twig,
         private FilesystemOperator $buildHtmlStorage,
@@ -49,6 +47,7 @@ final readonly class BuildGearStatsHtmlCommandHandler implements CommandHandler
         assert($command instanceof BuildGearStatsHtml);
 
         $now = $command->getCurrentDateTime();
+        $unitSystem = $this->settingsRepository->appearance()->getUnitSystem();
         $activities = $this->enrichedActivities->findAll();
         $allUsedGear = $this->gearRepository->findAllUsed();
         $gearStats = $this->queryBus->ask(new FindGearStatsPerDay());
@@ -67,15 +66,14 @@ final readonly class BuildGearStatsHtmlCommandHandler implements CommandHandler
             'gear.html',
             $this->twig->load('html/gear/gear.html.twig')->render([
                 'maintenanceTaskIsDue' => !$this->maintenanceTaskProgressCalculator->getGearIdsThatHaveDueTasks()->isEmpty(),
-                'customGearConfig' => $this->customGearConfig,
                 'activeGear' => $activeGear,
                 'retiredGear' => $allUsedGear->filter(fn (Gear $gear): bool => $gear->isRetired()),
-                'unitSystem' => $this->unitSystem,
+                'unitSystem' => $unitSystem,
                 'distancePerMonthPerGearChart' => Json::encode(
                     DistancePerMonthPerGearChart::create(
                         gearCollection: $allUsedGear,
                         activityCollection: $activities,
-                        unitSystem: $this->unitSystem,
+                        unitSystem: $unitSystem,
                         months: $allMonths,
                     )->build()
                 ),
@@ -84,7 +82,7 @@ final readonly class BuildGearStatsHtmlCommandHandler implements CommandHandler
                         gears: $allUsedGear,
                         gearStats: $gearStats,
                         startDate: $activities->getFirstActivityStartDate(),
-                        unitSystem: $this->unitSystem,
+                        unitSystem: $unitSystem,
                         translator: $this->translator,
                         now: $now,
                     )->build()
@@ -107,16 +105,19 @@ final readonly class BuildGearStatsHtmlCommandHandler implements CommandHandler
         $elevation = Meter::from($activitiesWithoutGear->sum(fn (Activity $activity): float => $activity->getElevation()->toFloat()));
         $totalCalories = (int) $activitiesWithoutGear->sum(fn (Activity $activity): ?int => $activity->getCalories());
 
-        return ImportedGear::create(
+        return Gear::fromState(
             gearId: GearId::none(),
             distanceInMeter: $distanceInMeter,
             createdOn: SerializableDateTime::fromString('1970-01-01'),
             name: 'Unspecified',
             isRetired: false,
-        )
-            ->withMovingTime(Seconds::from($movingTimeInSeconds))
-            ->withElevation($elevation)
-            ->withNumberOfActivities($count)
-            ->withTotalCalories($totalCalories);
+            type: GearType::IMPORTED,
+            localImagePath: null,
+            movingTime: Seconds::from($movingTimeInSeconds),
+            elevation: $elevation,
+            numberOfActivities: $count,
+            totalCalories: $totalCalories,
+            purchasePrice: null,
+        );
     }
 }

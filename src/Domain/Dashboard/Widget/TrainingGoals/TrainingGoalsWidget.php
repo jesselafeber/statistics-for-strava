@@ -6,20 +6,34 @@ namespace App\Domain\Dashboard\Widget\TrainingGoals;
 
 use App\Domain\Calendar\Month;
 use App\Domain\Calendar\Week;
+use App\Domain\Dashboard\Widget\HasWideConfigurationForm;
+use App\Domain\Dashboard\Widget\RequiresConfiguration;
 use App\Domain\Dashboard\Widget\TrainingGoals\FindTrainingGoalMetrics\FindTrainingGoalMetrics;
 use App\Domain\Dashboard\Widget\Widget;
 use App\Domain\Dashboard\Widget\WidgetConfiguration;
 use App\Infrastructure\CQRS\Query\Bus\QueryBus;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Infrastructure\ValueObject\Time\Year;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
-final readonly class TrainingGoalsWidget implements Widget
+final readonly class TrainingGoalsWidget implements Widget, HasWideConfigurationForm, RequiresConfiguration
 {
     public function __construct(
+        private TranslatorInterface $translator,
         private QueryBus $queryBus,
         private Environment $twig,
     ) {
+    }
+
+    public function getLabel(): string
+    {
+        return $this->translator->trans('Training goals');
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'widget--training-goals';
     }
 
     public function getDefaultConfiguration(): WidgetConfiguration
@@ -33,6 +47,11 @@ final readonly class TrainingGoalsWidget implements Widget
         /** @var array<string, mixed> $config */
         $config = $configuration->get('goals');
         TrainingGoals::fromConfig($config);
+    }
+
+    public function configurationIsEmpty(WidgetConfiguration $configuration): bool
+    {
+        return empty($configuration->get('goals'));
     }
 
     public function render(SerializableDateTime $now, WidgetConfiguration $configuration): ?string
@@ -82,9 +101,6 @@ final readonly class TrainingGoalsWidget implements Widget
             };
 
             foreach ($trainingGoals as $trainingGoal) {
-                if (!$trainingGoal->isEnabled()) {
-                    continue;
-                }
                 if (!$trainingGoal->isActiveOn($now)) {
                     continue;
                 }
@@ -115,7 +131,7 @@ final readonly class TrainingGoalsWidget implements Widget
             return null;
         }
 
-        return $this->twig->load('html/dashboard/widget/widget--training-goals.html.twig')->render([
+        return $this->twig->load(sprintf('html/dashboard/widget/%s.html.twig', $this->getTemplateName()))->render([
             'fromToLabels' => $fromToLabels,
             'calculatedTrainingGoalsPerPeriod' => $calculatedGoalsPerPeriod,
         ]);

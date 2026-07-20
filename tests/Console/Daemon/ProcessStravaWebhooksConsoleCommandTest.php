@@ -4,18 +4,19 @@ namespace App\Tests\Console\Daemon;
 
 use App\Application\AppStatusChecker;
 use App\Application\AppUrl;
+use App\Application\RebuildStatus;
 use App\Console\Daemon\ProcessStravaWebhooksConsoleCommand;
 use App\Console\Daemon\RunStravaImportAndBuildAppConsoleCommand;
 use App\Domain\Activity\ActivityIdRepository;
 use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\ActivityWithRawData;
-use App\Domain\Athlete\Athlete;
-use App\Domain\Athlete\AthleteRepository;
 use App\Domain\Import\ImportMode;
+use App\Domain\Settings\SettingsRepository;
 use App\Domain\Strava\Strava;
 use App\Domain\Strava\Webhook\WebhookAspectType;
 use App\Domain\Strava\Webhook\WebhookEvent;
 use App\Domain\Strava\Webhook\WebhookEventRepository;
+use App\Infrastructure\KeyValue\KeyValueStore;
 use App\Infrastructure\Mutex\LockName;
 use App\Infrastructure\Mutex\Mutex;
 use App\Infrastructure\Serialization\Json;
@@ -25,7 +26,6 @@ use App\Tests\Infrastructure\CQRS\Command\Bus\SpyCommandBus;
 use App\Tests\Infrastructure\FileSystem\SuccessfulPermissionChecker;
 use App\Tests\Infrastructure\Time\Clock\PausedClock;
 use App\Tests\Infrastructure\Time\ResourceUsage\FixedResourceUsage;
-use Doctrine\DBAL\Connection;
 use Psr\Log\NullLogger;
 use Spatie\Snapshots\MatchesSnapshots;
 use Symfony\Component\Console\Application;
@@ -122,12 +122,6 @@ class ProcessStravaWebhooksConsoleCommandTest extends ConsoleCommandTestCase
     {
         parent::setUp();
 
-        $this->getContainer()->get(AthleteRepository::class)->save(Athlete::create([
-            'id' => 100,
-            'birthDate' => '1989-08-14',
-            'firstname' => 'Robin',
-            'lastname' => 'Ingelbrecht',
-        ]));
         $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
             ActivityBuilder::fromDefaults()->build(),
             [],
@@ -152,9 +146,6 @@ class ProcessStravaWebhooksConsoleCommandTest extends ConsoleCommandTestCase
 
     private function buildStravaImportCommand(SpyCommandBus $commandBus): RunStravaImportAndBuildAppConsoleCommand
     {
-        $connection = $this->createStub(Connection::class);
-        $connection->method('executeStatement')->willReturn(0);
-
         return new RunStravaImportAndBuildAppConsoleCommand(
             commandBus: $commandBus,
             resourceUsage: new FixedResourceUsage(),
@@ -166,13 +157,15 @@ class ProcessStravaWebhooksConsoleCommandTest extends ConsoleCommandTestCase
                 lockName: LockName::IMPORT_DATA_OR_BUILD_APP,
             ),
             appStatusChecker: new AppStatusChecker(
-                $this->getContainer()->get(AthleteRepository::class),
+                $this->getContainer()->get(SettingsRepository::class),
                 $this->getContainer()->get(ActivityIdRepository::class),
                 new SuccessfulPermissionChecker(),
             ),
-            connection: $connection,
             appUrl: AppUrl::fromString('http://localhost'),
             importMode: ImportMode::STRAVA_API,
+            keyValueStore: $this->getContainer()->get(KeyValueStore::class),
+            rebuildStatus: $this->getContainer()->get(RebuildStatus::class),
+            clock: PausedClock::fromString(self::TODAY),
         );
     }
 

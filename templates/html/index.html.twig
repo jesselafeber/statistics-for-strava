@@ -169,7 +169,7 @@
                     <span class="hidden" data-latest-version
                           data-current-version="{{ appVersion.getSemanticVersion() }}">
                     (latest: <a class="underline"
-                                href="https://github.com/robiningelbrecht/statistics-for-strava/releases/tag/[LATEST_VERSION]">[LATEST_VERSION]</a>)
+                                href="https://github.com/dreeveapp/dreeve/releases/tag/[LATEST_VERSION]">[LATEST_VERSION]</a>)
                 </span>
                 </div>
             </div>
@@ -225,8 +225,8 @@
     </main>
 </div>
 <script>
-    window.statisticsForStrava = {{ javascriptWindowConstants|raw }};
-    window.statisticsForStrava.placeholderBrokenImage = "{{ relativeUrl('/assets/placeholder-broken.webp') }}";
+    window.dreeve = {{ javascriptWindowConstants|raw }};
+    window.dreeve.placeholderBrokenImage = "{{ relativeUrl('/assets/placeholder-broken.webp') }}";
 </script>
 <script src="{{ relativeUrl(asset('libraries/echarts/echarts.min.js')) }}"></script>
 <script src="{{ relativeUrl(asset('libraries/echarts/echarts.world.min.js')) }}"></script>

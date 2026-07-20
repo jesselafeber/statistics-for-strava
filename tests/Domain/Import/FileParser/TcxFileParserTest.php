@@ -8,6 +8,7 @@ use App\Domain\Activity\SportType\SportType;
 use App\Domain\Import\FileParser\CouldNotParseActivityFile;
 use App\Domain\Import\FileParser\RawActivityFile;
 use App\Domain\Import\FileParser\TcxFileParser;
+use App\Domain\Import\SupportedFileExtension;
 use App\Infrastructure\ValueObject\String\Path;
 use App\Infrastructure\ValueObject\Time\SerializableTimezone;
 use App\Tests\Domain\Activity\IncrementingActivityIdFactory;
@@ -20,7 +21,7 @@ class TcxFileParserTest extends ActivityFileParserTestCase
 
     public function testSupportedExtensions(): void
     {
-        $this->assertSame('tcx', $this->parser->supportedExtension());
+        $this->assertSame(SupportedFileExtension::TCX, $this->parser->supportedExtension());
     }
 
     public function testParse(): void
@@ -46,8 +47,10 @@ class TcxFileParserTest extends ActivityFileParserTestCase
 
     public function testParseEmptyContentsThrows(): void
     {
-        $this->expectException(CouldNotParseActivityFile::class);
-        $this->parser->parse(RawActivityFile::from(Path::fromString('does-not-exist.tcx'), ''));
+        $rawActivityFile = RawActivityFile::from(Path::fromString('does-not-exist.tcx'), '');
+
+        $this->expectExceptionObject(new CouldNotParseActivityFile('Could not read "does-not-exist.tcx"', $rawActivityFile));
+        $this->parser->parse($rawActivityFile);
     }
 
     public function testParseUnknownSportDefaultsToWorkout(): void

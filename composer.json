@@ -1,8 +1,8 @@
 {
     "type": "project",
     "license": "GPL-3.0-or-later",
-    "name": "robiningelbrecht/statistics-for-strava",
-    "description": "Statistics for Strava is a self-hosted, open-source dashboard for your Strava data.",
+    "name": "robiningelbrecht/dreeve",
+    "description": "Dreeve is a self-hosted, open-source dashboard for your sports and fitness data.",
     "authors": [
         {
             "name": "Robin Ingelbrecht",
@@ -12,6 +12,8 @@
     "keywords": [
         "PHP",
         "Strava",
+        "health",
+        "statistics",
         "self-hosted"
     ],
     "minimum-stability": "stable",
@@ -35,6 +37,7 @@
         "doctrine/orm": "^3.3",
         "gehrisandro/tailwind-merge-php": "^1.1",
         "guzzlehttp/guzzle": "^7.9",
+        "halaxa/json-machine": "^1.2",
         "league/flysystem-bundle": "^3.3",
         "league/flysystem-memory": "^3.29",
         "moneyphp/money": "^4.8",
@@ -56,6 +59,7 @@
         "symfony/monolog-bundle": "^4.0",
         "symfony/process": "8.1.*",
         "symfony/runtime": "8.1.*",
+        "symfony/security-bundle": "8.1.*",
         "symfony/translation": "8.1.*",
         "symfony/twig-bundle": "8.1.*",
         "symfony/yaml": "8.1.*",
@@ -70,6 +74,9 @@
         "phpunit/phpunit": "^13",
         "rector/rector": "*",
         "spatie/phpunit-snapshot-assertions": "^5.1",
+        "symfony/browser-kit": "8.1.*",
+        "symfony/css-selector": "8.1.*",
+        "symfony/dom-crawler": "8.1.*",
         "symfony/phpunit-bridge": "8.1.*",
         "symfony/stopwatch": "8.1.*",
         "tomasvotruba/type-coverage": "^2.0"

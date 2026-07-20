@@ -21,10 +21,26 @@ class JsonTest extends TestCase
         $this->assertEquals($array, Json::encodeAndDecode($array));
     }
 
+    public function testEncodePretty(): void
+    {
+        $array = ['random' => ['array' => ['with', 'children']]];
+        $this->assertEquals(
+            '{
+    "random": {
+        "array": [
+            "with",
+            "children"
+        ]
+    }
+}',
+            Json::encodePretty($array)
+        );
+    }
+
     public function testDecodeWhenInvalidJson(): void
     {
         $this->expectExceptionObject(new \JsonException('Invalid JSON detected. This is usually caused by corrupted activity data.
-Please see the troubleshooting guide for steps to resolve the issue: https://docs.getsfs.app/#/troubleshooting/import-build-fails for more information.'));
+Please see the troubleshooting guide for steps to resolve the issue: https://docs.dreeve.app/#/troubleshooting/import-build-fails for more information.'));
 
         Json::decode('{"name": "Ride", "distance": 42,}');
     }

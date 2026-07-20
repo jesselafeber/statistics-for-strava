@@ -1,0 +1,109 @@
+{% autoescape false %}
+    {% if isActiveNavItem({'/admin/gear': false}) %}
+        {% set inMaintenanceLog = isActiveNavItem({'/admin/gear/maintenance-logs': false}) %}
+        {% set inMaintenanceConfig = isActiveNavItem({'/admin/gear/maintenance-config': false}) %}
+        {% set inMaintenance = inMaintenanceLog or inMaintenanceConfig %}
+        {% set inRecordingDevices = isActiveNavItem({'/admin/gear/recording-devices': false}) %}
+        {% set inGearOverview = not inMaintenance and not inRecordingDevices %}
+        <nav class="contextual-panel" aria-label="{{ "Gear"|trans }}">
+            <p class="px-2 pb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                {{ "Gear"|trans }}
+            </p>
+            <ul class="space-y-1">
+                <li>
+                    <a href="{{ relativeUrl(path('admin_manage_gear_overview')) }}" {{ inGearOverview ? 'aria-selected="true"' : '' }}>
+                        {{ "Gear"|trans }}
+                    </a>
+                </li>
+                <li>
+                    <button type="button"
+                            class="unstyled group w-full justify-between"
+                            data-collapse-toggle="submenu-maintenance"
+                            aria-controls="submenu-maintenance"
+                            aria-expanded="{{ inMaintenance ? 'true' : 'false' }}">
+                        <span>{{ "Maintenance"|trans }}</span>
+                        <svg class="size-3.5 shrink-0 transition-transform group-aria-expanded:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <ul id="submenu-maintenance" class="{{ inMaintenance ? '' : 'hidden' }} mt-1 space-y-1">
+                        <li>
+                            <a href="{{ relativeUrl(path('admin_manage_gear_maintenance_logs_overview')) }}" class="ps-5" {{ inMaintenanceLog ? 'aria-selected="true"' : '' }}>
+                                {{ "Log"|trans({}, 'admin') }}
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ relativeUrl(path('admin_manage_gear_maintenance_config')) }}" class="ps-5" {{ inMaintenanceConfig ? 'aria-selected="true"' : '' }}>
+                                {{ "Config"|trans({}, 'admin') }}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="{{ relativeUrl(path('admin_manage_recording_devices_overview')) }}" {{ inRecordingDevices ? 'aria-selected="true"' : '' }}>
+                        {{ "Recording devices"|trans }}
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
+    {% if isActiveNavItem({'/admin/settings': false}) %}
+        {% set inGeneral = isActiveNavItem({'/admin/settings/general': false}) %}
+        {% set inAppearance = isActiveNavItem({'/admin/settings/appearance': false}) %}
+        {% set inImport = isActiveNavItem({'/admin/settings/import': false}) %}
+        {% set inMetrics = isActiveNavItem({'/admin/settings/metrics': false}) %}
+        {% set inZwift = isActiveNavItem({'/admin/settings/zwift': false}) %}
+        {% set inIntegrations = isActiveNavItem({'/admin/settings/integrations': false}) %}
+        {% set inDaemon = isActiveNavItem({'/admin/settings/daemon': false}) %}
+        {% set inDashboard = isActiveNavItem({'/admin/settings/dashboard': false}) %}
+        <nav class="contextual-panel" aria-label="{{ "Settings"|trans({}, 'admin') }}">
+            <p class="px-2 pb-3 text-xs font-semibold uppercase tracking-wide text-gray-400">
+                {{ "Settings"|trans({}, 'admin') }}
+            </p>
+            <ul class="space-y-1">
+                <li>
+                    <a href="{{ relativeUrl(path('admin_settings', {'group': 'general'})) }}" {{ inGeneral ? 'aria-selected="true"' : '' }}>
+                        {{ "General"|trans({}, 'admin') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ relativeUrl(path('admin_settings', {'group': 'appearance'})) }}" {{ inAppearance ? 'aria-selected="true"' : '' }}>
+                        {{ "Appearance"|trans({}, 'admin') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ relativeUrl(path('admin_settings_dashboard')) }}" {{ inDashboard ? 'aria-selected="true"' : '' }}>
+                        {{ "Dashboard"|trans }}
+                    </a>
+                </li>
+                {% if importMode.isStravaApi() %}
+                    <li>
+                        <a href="{{ relativeUrl(path('admin_settings', {'group': 'import'})) }}" {{ inImport ? 'aria-selected="true"' : '' }}>
+                            {{ "Strava import"|trans({}, 'admin') }}
+                        </a>
+                    </li>
+                {% endif %}
+                <li>
+                    <a href="{{ relativeUrl(path('admin_settings', {'group': 'metrics'})) }}" {{ inMetrics ? 'aria-selected="true"' : '' }}>
+                        {{ "Metrics"|trans({}, 'admin') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ relativeUrl(path('admin_settings', {'group': 'zwift'})) }}" {{ inZwift ? 'aria-selected="true"' : '' }}>
+                        {{ "Zwift"|trans({}, 'admin') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ relativeUrl(path('admin_settings', {'group': 'integrations'})) }}" {{ inIntegrations ? 'aria-selected="true"' : '' }}>
+                        {{ "Integrations"|trans({}, 'admin') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ relativeUrl(path('admin_settings', {'group': 'daemon'})) }}" {{ inDaemon ? 'aria-selected="true"' : '' }}>
+                        {{ "Daemon"|trans({}, 'admin') }}
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    {% endif %}
+{% endautoescape %}

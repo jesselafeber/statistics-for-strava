@@ -9,29 +9,35 @@ use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\ActivityWithRawData;
 use App\Domain\Gear\GearId;
 use App\Domain\Gear\GearRepository;
-use App\Domain\Gear\ImportedGear\ImportedGearRepository;
-use App\Domain\Gear\Maintenance\GearMaintenanceConfig;
-use App\Domain\Gear\Maintenance\Task\MaintenanceTaskTagRepository;
+use App\Domain\Gear\Maintenance\GearMaintenanceRepository;
+use App\Domain\Gear\Maintenance\Log\GearMaintenanceLog;
+use App\Domain\Gear\Maintenance\Log\GearMaintenanceLogRepository;
+use App\Domain\Gear\Maintenance\Task\MaintenanceTaskId;
 use App\Domain\Gear\Maintenance\Task\Progress\MaintenanceTaskProgressCalculator;
 use App\Infrastructure\ValueObject\String\Name;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\Application\BuildAppFilesTestCase;
 use App\Tests\Domain\Activity\ActivityBuilder;
-use App\Tests\Domain\Gear\ImportedGear\ImportedGearBuilder;
+use App\Tests\Domain\Gear\GearBuilder;
+use App\Tests\ProvideGearMaintenanceConfig;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 class BuildGearMaintenanceHtmlCommandHandlerTest extends BuildAppFilesTestCase
 {
+    use ProvideGearMaintenanceConfig;
+
     public function testHandle(): void
     {
-        $gear = ImportedGearBuilder::fromDefaults()
+        $this->importGearMaintenanceConfig();
+
+        $gear = GearBuilder::fromDefaults()
             ->withGearId(GearId::fromUnprefixed('g10130856'))
             ->build();
-        $this->getContainer()->get(ImportedGearRepository::class)->save($gear);
+        $this->getContainer()->get(GearRepository::class)->add($gear);
 
         $this->getContainer()->get(
-            ImportedGearRepository::class)->save(ImportedGearBuilder::fromDefaults()
+            GearRepository::class)->add(GearBuilder::fromDefaults()
             ->withGearId(GearId::fromUnprefixed('retired'))
             ->withIsRetired(true)
             ->build()
@@ -87,6 +93,20 @@ class BuildGearMaintenanceHtmlCommandHandlerTest extends BuildAppFilesTestCase
             []
         ));
 
+        // Maintenance history is now persisted (it used to be derived from the hashtags
+        // in the activity titles above). Persist the rows those tags represent.
+        $gearMaintenanceLogRepository = $this->getContainer()->get(GearMaintenanceLogRepository::class);
+        $gearMaintenanceLogRepository->add(GearMaintenanceLog::create(
+            gearId: $gear->getId(),
+            maintenanceTaskId: MaintenanceTaskId::fromUnprefixed('chain-lubed'),
+            performedOn: SerializableDateTime::fromString('2025-01-01 00:00:00'),
+        ));
+        $gearMaintenanceLogRepository->add(GearMaintenanceLog::create(
+            gearId: GearId::fromUnprefixed('retired'),
+            maintenanceTaskId: MaintenanceTaskId::fromUnprefixed('chain-lubed'),
+            performedOn: SerializableDateTime::fromString('2025-01-01 00:00:00'),
+        ));
+
         $this->commandBus->dispatch(new BuildGearMaintenanceHtml());
         $this->assertFileSystemWrites($this->getContainer()->get('build_html.storage'));
     }
@@ -96,11 +116,9 @@ class BuildGearMaintenanceHtmlCommandHandlerTest extends BuildAppFilesTestCase
         $fileStorage = $this->getContainer()->get('build_html.storage');
 
         new BuildGearMaintenanceHtmlCommandHandler(
-            gearMaintenanceConfig: GearMaintenanceConfig::fromArray([]),
-            maintenanceTaskTagRepository: $this->getContainer()->get(MaintenanceTaskTagRepository::class),
+            gearMaintenanceRepository: $this->getContainer()->get(GearMaintenanceRepository::class),
             gearRepository: $this->getContainer()->get(GearRepository::class),
             maintenanceTaskProgressCalculator: $this->getContainer()->get(MaintenanceTaskProgressCalculator::class),
-            gearMaintenanceStorage: $fileStorage,
             twig: $this->getContainer()->get(Environment::class),
             buildHtmlStorage: $fileStorage,
             translator: $this->getContainer()->get(TranslatorInterface::class),

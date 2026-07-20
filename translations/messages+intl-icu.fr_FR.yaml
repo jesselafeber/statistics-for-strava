@@ -20,6 +20,7 @@ Activity: Activité
 'Acute Training Load (Fatigue) - 7-day exponentially weighted average of your daily training load. Represents short-term fatigue.': "Charge d'Entraînement Aiguë (Fatigue) - Moyenne pondérée exponentiellement sur 7 jours de votre charge d'entraînement quotidienne. Représente la fatigue à court terme."
 'Acute:Chronic Ratio - Ratio of ATL to CTL. Indicates injury risk.': 'Ratio Aiguë:Chronique (A:C) - Rapport entre ATL et CTL. Indique le risque de blessure.'
 'Adaptive & Inclusive Sports': 'Sports adaptés et inclusifs'
+'Admin panel': 'Admin panel'
 Afternoon: Après-midi
 All: Tous
 'All time': 'Depuis toujours'
@@ -71,7 +72,6 @@ Cricket: Cricket
 Crossfit: Crossfit
 'Current Status': 'Status actuel'
 'Current streaks': 'Séries actuelles'
-'Custom gear disabled': 'Matériel personnalisé désactivé'
 Cycling: Cyclisme
 'Daily TRIMP': 'TRIMP quotidien'
 'Daily activities': 'Activités quotidiennes'
@@ -84,12 +84,12 @@ Day: Day
 'Daytime stats': 'Statistiques diurnes'
 Dec: Déc
 Density: Densité
-'Detailed instructions are available in the documentation on': 'Des instructions détaillées sont disponibles dans la documentation sur'
 Details: Détails
 Device: Appareil
 Dist.: Dist.
 Distance: Distance
 'Distance & Elevation': 'Distance & Elevation'
+'Distance (single activity)': 'Distance (single activity)'
 'Distance breakdown': 'Répartition des distances'
 'Distance distribution': 'Distance distribution'
 'Distance in {unit}': 'Distance en {unit}'
@@ -107,6 +107,7 @@ Eddington: Eddington
 Elev: Dénivelé
 Elev.: Elev.
 Elevation: Dénivelé
+'Elevation (single activity)': 'Elevation (single activity)'
 'Elevation in {unit}': 'Dénivelé en {unit}'
 Elliptical: Elliptique
 Energy: Energy
@@ -134,7 +135,6 @@ Fri.: Fri.
 GAP: GAP
 Gear: Matériel
 'Gear "{gearId}" is referenced in your maintenance config file, but was not imported from Strava. Please check that the gear exists and is correctly synced.': 'Le matériel "{gearId}" est référencé dans votre fichier de configuration de maintenance, mais n''a pas été importé depuis Strava. Veuillez vérifier que le matériel existe et est correctement synchronisé.'
-'Gear details': 'Détails du matériel'
 'Gear maintenance': 'Maintenance du matériel'
 'Gear stats': 'Statistiques du matériel'
 "Gear that hasn't been used in the last three months, is disabled by default.": "Le matériel qui n'a pas été utilisé au cours des trois derniers mois est désactivé par défaut."
@@ -170,7 +170,6 @@ History: Historique
 'How often do you train': 'La fréquence de vos entraînements'
 'Ice Skate': 'Patin à glace'
 Id: Id
-'Image "{imgSrc}" is referenced in your maintenance config file, but was not found in "storage/gear-maintenance"': 'L''image "{imgSrc}" est référencée dans votre fichier de configuration de maintenance, mais n''a pas été trouvée dans "storage/gear-maintenance"'
 Imperial: Impérial
 "In that time, I’ve covered {totalDistance}, that's {numberOfTripsAroundTheWorld} trips around the world 🌍 or {numberOfTripsToTheMoonPercent}% of the way to the moon 🌕, and climbed an elevation of {totalElevation} which is {timesMountEverest} times Mount Everest 🏔. All up that's {totalTimeRecorded} of moving time 🎉.": "Pendant ce temps, j'ai parcouru {totalDistance}, soit {numberOfTripsAroundTheWorld} tours du monde 🌍 ou {numberOfTripsToTheMoonPercent}% du chemin vers la Lune 🌕, et gravi une altitude de {totalElevation}, soit {timesMountEverest} fois la hauteur du mont Everest 🏔. Au total, cela représente {totalTimeRecorded} de temps de déplacement 🎉."
 'Individual thresholds vary based on fitness level.': 'Les seuils individuels varient selon le niveau de forme physique.'
@@ -210,7 +209,6 @@ Low: Bas
 'Low risk': 'Risque faible'
 'Low training load': "Charge d'entraînement faible"
 Maintenance: Maintenance
-'Maintenance history': 'Historique de maintenance'
 Mar: Mar
 Max: Max
 'Max gradient': 'Max gradient'
@@ -250,6 +248,7 @@ None: Aucun
 'Not supported': 'Non pris en charge'
 Nov: Nov
 Now: Now
+'Number of activities': 'Number of activities'
 'Number of activities per month': "Nombre d'activités par mois"
 'Number of times completed': 'Nombre de fois complété'
 Oct: Oct
@@ -276,7 +275,6 @@ Photos: Photos
 'Pickle Ball': Pickleball
 Pilates: Pilates
 'Pizza slices': 'Pizza slices'
-'Please address these issues': 'Veuillez résoudre ces problèmes'
 'Polarised training (last 30 days)': 'Entraînement polarisé (30 derniers jours)'
 Power: Puissance
 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': 'Alimenté par une estimation de {caloriesBurned} calories, soit environ {numberOfPizzaSlices} parts de pizza 🍕.'
@@ -341,7 +339,6 @@ Squash: Squash
 'Start times': 'Heures de départ'
 'Stats per weekday': 'Statistiques par jour de la semaine'
 Status: Statut
-'Strava profile': 'Profil Strava'
 'Streak started on {date}': 'La série a commencé le {date}'
 Streaks: Séries
 Sun: Dim
@@ -351,8 +348,6 @@ Swim: Natation
 'TSB (Form)': 'TSB (État de forme)'
 'TSB positive in': 'TSB positive in'
 'Table Tennis': 'Tennis de table'
-Tag: Tag
-'Tag "{maintenanceTaskTag}" was used on "{activityName}", but the gear referenced on that activity is not attached to this component.': 'L''étiquette "{maintenanceTaskTag}" a été utilisée sur "{activityName}", mais le matériel référencé sur cette activité n''est pas attaché à ce composant.'
 'Taper sweet-spot (+15)': "Zone optimale d'affûtage (+15)"
 'Team Sports': "Sports d'équipe"
 Tennis: Tennis
@@ -457,7 +452,7 @@ Time: Temps
 'Time in zone': 'Time in zone'
 'Times completed': 'Fois accompli'
 Title: Title
-'To enable it, configure {configFile} and rebuild the files for the changes to take effect': "Pour l'activer, configurez {configFile} et reconstruisez les fichiers pour que les modifications prennent effet"
+'To enable it, configure this in the admin panel and rebuild the files for the changes to take effect': 'To enable it, configure this in the admin panel and rebuild the files for the changes to take effect'
 'Toggle sidebar': 'Basculer la barre latérale'
 'Top 10': 'Top 10'
 'Total distance per month': 'Distance totale par mois'
@@ -545,7 +540,6 @@ day(s): jour(s)
 days: jours
 'days needed for next Eddington': 'jours nécessaires pour le prochain Eddington'
 'days to reach {n}': 'days to reach {n}'
-history: historique
 hours: heures
 hrs: h
 'last {numberOfDays} days': 'derniers {numberOfDays} jours'

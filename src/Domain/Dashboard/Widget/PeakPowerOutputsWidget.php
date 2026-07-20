@@ -32,6 +32,16 @@ final readonly class PeakPowerOutputsWidget implements Widget
     ) {
     }
 
+    public function getLabel(): string
+    {
+        return $this->translator->trans('Peak power outputs');
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'widget--peak-power-outputs';
+    }
+
     public function getDefaultConfiguration(): WidgetConfiguration
     {
         return WidgetConfiguration::empty();
@@ -111,7 +121,7 @@ final readonly class PeakPowerOutputsWidget implements Widget
             ]),
         );
 
-        return $this->twig->load('html/dashboard/widget/widget--peak-power-outputs.html.twig')->render([
+        return $this->twig->load(sprintf('html/dashboard/widget/%s.html.twig', $this->getTemplateName()))->render([
             'powerOutputsPerActivityType' => $bestAllTimePowerOutputsPerActivityType,
             'timeIntervals' => ActivityPowerRepository::TIME_INTERVALS_IN_SECONDS_REDACTED,
         ]);

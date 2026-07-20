@@ -33,17 +33,17 @@ composer:
 	@make dcr cmd="composer $(arg)"
 
 download-database:
-	scp $(user)@$(server):/home/docker/stacks/strava-statistics/storage/database/strava.db ./storage/database/dreeve.db
+	@make stop
+	rm -Rf storage/database/dreeve.*
+	scp $(user)@$(server):/home/docker/stacks/dreeve/storage/database/dreeve.db ./storage/database/dreeve.db
+	@make dc cmd="up -d --build"
 
 download-assets:
-	scp -r $(user)@$(server):/home/docker/stacks/strava-statistics/storage/files ./storage/
+	scp -r $(user)@$(server):/home/docker/stacks/dreeve/storage/files ./storage/
 
 # Database migration helpers.
 migrate-diff:
 	@make console arg="doctrine:migrations:diff"
-
-migrate-run:
-	@make console arg="doctrine:migrations:migrate"
 
 # Translation helpers.
 translation-extract:
@@ -80,18 +80,12 @@ rector:
 	@make dcr cmd="vendor/bin/rector --config rector-tests.php"
 
 # Helpers to build the app.
-app-import-data:
-	docker compose exec app bin/console app:strava:import-data
-
-app-build-files:
-	docker compose exec app bin/console app:strava:build-files
-
 app-build-assets:
 	@make dcr cmd="npx @tailwindcss/cli -i public/css/tailwind.css -o public/css/dist/tailwind.min.css --minify"
 	@make dcr cmd="npx @tailwindcss/cli -i public/css/tailwind.css -o public/css/tailwind.output.css"
 	@make dcr cmd="node_modules/.bin/webpack --config webpack.config.js"
 
-app-run-docs:
+app-serve-docs:
 	docsify serve docs
 
 # Ollama models

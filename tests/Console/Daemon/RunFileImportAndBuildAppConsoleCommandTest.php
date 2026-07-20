@@ -4,15 +4,14 @@ namespace App\Tests\Console\Daemon;
 
 use App\Application\AppStatusChecker;
 use App\Application\AppUrl;
+use App\Application\RebuildStatus;
 use App\Console\Daemon\RunFileImportAndBuildAppConsoleCommand;
-use App\Console\Daemon\RunStravaImportAndBuildAppConsoleCommand;
 use App\Domain\Activity\ActivityIdRepository;
 use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\ActivityWithRawData;
-use App\Domain\Athlete\Athlete;
-use App\Domain\Athlete\AthleteRepository;
 use App\Domain\Import\ImportMode;
 use App\Domain\Import\WatchDirectory;
+use App\Domain\Settings\SettingsRepository;
 use App\Infrastructure\CQRS\Command\Bus\CommandBus;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\FileSystem\PermissionChecker;
@@ -30,7 +29,6 @@ use App\Tests\Infrastructure\FileSystem\SuccessfulPermissionChecker;
 use App\Tests\Infrastructure\FileSystem\UnwritablePermissionChecker;
 use App\Tests\Infrastructure\Time\Clock\PausedClock;
 use App\Tests\Infrastructure\Time\ResourceUsage\FixedResourceUsage;
-use Doctrine\DBAL\Connection;
 use League\Flysystem\FilesystemOperator;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -120,6 +118,34 @@ class RunFileImportAndBuildAppConsoleCommandTest extends ConsoleCommandTestCase
         $this->assertMatchesJsonSnapshot(Json::encode($this->commandBus->getDispatchedCommands()));
     }
 
+    public function testBuildsWhenForceRebuildIsSetEvenIfAlreadyBuiltToday(): void
+    {
+        $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
+            ActivityBuilder::fromDefaults()->build(),
+            [],
+        ));
+
+        $this->keyValueStore->save(KeyValue::fromState(
+            key: Key::APP_LAST_BUILT_ON,
+            value: Value::fromString(self::TODAY),
+        ));
+        $this->keyValueStore->save(KeyValue::fromState(
+            key: Key::FORCE_REBUILD,
+            value: Value::fromString('1'),
+        ));
+
+        $command = $this->getCommandInApplication('app:cron:run-file-import');
+        $commandTester = new CommandTester($command);
+        $commandTester->execute(['command' => $command->getName()]);
+
+        $this->assertStringNotContainsString('No files left to process...', $commandTester->getDisplay());
+        $this->assertMatchesJsonSnapshot(Json::encode($this->commandBus->getDispatchedCommands()));
+        $this->assertSame(self::TODAY, (string) $this->keyValueStore->find(Key::APP_LAST_BUILT_ON));
+
+        $this->expectExceptionObject(new EntityNotFound('KeyValue "forceRebuild" not found'));
+        $this->keyValueStore->find(Key::FORCE_REBUILD);
+    }
+
     public function testDoesNotBuildWhenNoActivitiesHaveBeenImported(): void
     {
         $command = $this->getCommandInApplication('app:cron:run-file-import');
@@ -132,7 +158,7 @@ class RunFileImportAndBuildAppConsoleCommandTest extends ConsoleCommandTestCase
             $commandTester->getDisplay(),
         );
 
-        $this->expectException(EntityNotFound::class);
+        $this->expectExceptionObject(new EntityNotFound('KeyValue "appLastBuiltOn" not found'));
         $this->keyValueStore->find(Key::APP_LAST_BUILT_ON);
     }
 
@@ -154,7 +180,7 @@ class RunFileImportAndBuildAppConsoleCommandTest extends ConsoleCommandTestCase
         );
     }
 
-    public function testImportsButDoesNotBuildWhenSkipBuildOptionIsSet(): void
+    public function testImportsOnlyWhenImportOptionIsSet(): void
     {
         $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
             ActivityBuilder::fromDefaults()->build(),
@@ -166,16 +192,16 @@ class RunFileImportAndBuildAppConsoleCommandTest extends ConsoleCommandTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            '--'.RunStravaImportAndBuildAppConsoleCommand::SKIP_BUILD_OPTION => true,
+            '--'.RunFileImportAndBuildAppConsoleCommand::IMPORT_OPTION => true,
         ]);
 
         $this->assertMatchesJsonSnapshot(Json::encode($this->commandBus->getDispatchedCommands()));
 
-        $this->expectException(EntityNotFound::class);
+        $this->expectExceptionObject(new EntityNotFound('KeyValue "appLastBuiltOn" not found'));
         $this->keyValueStore->find(Key::APP_LAST_BUILT_ON);
     }
 
-    public function testBuildsButDoesNotImportWhenSkipImportOptionIsSet(): void
+    public function testBuildsOnlyWhenBuildOptionIsSet(): void
     {
         $this->getContainer()->get(ActivityRepository::class)->add(ActivityWithRawData::fromState(
             ActivityBuilder::fromDefaults()->build(),
@@ -186,7 +212,7 @@ class RunFileImportAndBuildAppConsoleCommandTest extends ConsoleCommandTestCase
         $commandTester = new CommandTester($command);
         $commandTester->execute([
             'command' => $command->getName(),
-            '--'.RunStravaImportAndBuildAppConsoleCommand::SKIP_IMPORT_OPTION => true,
+            '--'.RunFileImportAndBuildAppConsoleCommand::BUILD_OPTION => true,
         ]);
 
         $this->assertMatchesJsonSnapshot(Json::encode($this->commandBus->getDispatchedCommands()));
@@ -278,13 +304,6 @@ class RunFileImportAndBuildAppConsoleCommandTest extends ConsoleCommandTestCase
         $this->watchStorage->deleteDirectory('watch');
         $this->keyValueStore = $this->getContainer()->get(KeyValueStore::class);
 
-        $this->getContainer()->get(AthleteRepository::class)->save(Athlete::create([
-            'id' => 100,
-            'birthDate' => '1989-08-14',
-            'firstname' => 'Robin',
-            'lastname' => 'Ingelbrecht',
-        ]));
-
         $this->command = $this->buildCommand($this->commandBus = new SpyCommandBus());
     }
 
@@ -294,13 +313,10 @@ class RunFileImportAndBuildAppConsoleCommandTest extends ConsoleCommandTestCase
         ImportMode $importMode = ImportMode::FILES,
         LoggerInterface $logger = new NullLogger(),
     ): RunFileImportAndBuildAppConsoleCommand {
-        $connection = $this->createStub(Connection::class);
-        $connection->method('executeStatement')->willReturn(0);
-
         return new RunFileImportAndBuildAppConsoleCommand(
             commandBus: $commandBus,
             appStatusChecker: new AppStatusChecker(
-                $this->getContainer()->get(AthleteRepository::class),
+                $this->getContainer()->get(SettingsRepository::class),
                 $this->getContainer()->get(ActivityIdRepository::class),
                 $permissionChecker,
             ),
@@ -314,9 +330,9 @@ class RunFileImportAndBuildAppConsoleCommandTest extends ConsoleCommandTestCase
             appUrl: AppUrl::fromString('http://localhost'),
             clock: PausedClock::fromString(self::TODAY),
             keyValueStore: $this->keyValueStore,
-            connection: $connection,
             logger: $logger,
             importMode: $importMode,
+            rebuildStatus: new RebuildStatus($this->keyValueStore),
         );
     }
 

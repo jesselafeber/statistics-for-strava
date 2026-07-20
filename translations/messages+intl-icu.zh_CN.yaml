@@ -20,6 +20,7 @@ Activity: 活动
 'Acute Training Load (Fatigue) - 7-day exponentially weighted average of your daily training load. Represents short-term fatigue.': '短期训练负荷（疲劳）– 7天每日训练负荷的指数加权平均值。代表短期疲劳。'
 'Acute:Chronic Ratio - Ratio of ATL to CTL. Indicates injury risk.': '短期/长期疲劳比率 – ATL与CTL的比值。表示受伤风险。'
 'Adaptive & Inclusive Sports': 适应性和包容性运动
+'Admin panel': 'Admin panel'
 Afternoon: 下午
 All: All
 'All time': 所有时间
@@ -71,7 +72,6 @@ Cricket: Cricket
 Crossfit: 交叉健身
 'Current Status': 'Current Status'
 'Current streaks': 'Current streaks'
-'Custom gear disabled': 自定义装备已禁用
 Cycling: 骑行
 'Daily TRIMP': 每日TRIMP
 'Daily activities': 每日活动
@@ -84,12 +84,12 @@ Day: Day
 'Daytime stats': 白天统计
 Dec: 十二月
 Density: Density
-'Detailed instructions are available in the documentation on': 详细说明
 Details: 详情
 Device: 设备
 Dist.: Dist.
 Distance: 距离
 'Distance & Elevation': 'Distance & Elevation'
+'Distance (single activity)': 'Distance (single activity)'
 'Distance breakdown': 距离分解
 'Distance distribution': 'Distance distribution'
 'Distance in {unit}': '以{unit}为单位的距离'
@@ -107,6 +107,7 @@ Eddington: 愛丁頓數
 Elev: 海拔
 Elev.: Elev.
 Elevation: 海拔高度
+'Elevation (single activity)': 'Elevation (single activity)'
 'Elevation in {unit}': '海拔高度（单位：{unit})'
 Elliptical: 椭圆机
 Energy: Energy
@@ -134,7 +135,6 @@ Fri.: Fri.
 GAP: GAP
 Gear: 装备
 'Gear "{gearId}" is referenced in your maintenance config file, but was not imported from Strava. Please check that the gear exists and is correctly synced.': '您的维护配置文件中引用了装备"{gearId}"，但该装备尚未从 Strava 导入。请检查该装备是否存在并已正确同步。'
-'Gear details': 装备详情
 'Gear maintenance': 装备维护
 'Gear stats': 装备统计
 "Gear that hasn't been used in the last three months, is disabled by default.": 过去三个月未使用的装备默认禁用。
@@ -170,7 +170,6 @@ History: 历史
 'How often do you train': 'How often do you train'
 'Ice Skate': 冰刀
 Id: Id
-'Image "{imgSrc}" is referenced in your maintenance config file, but was not found in "storage/gear-maintenance"': '您的维护配置文件中引用了图像"{imgSrc}"，但在"storage/gear-maintenance"中未找到该图像。'
 Imperial: Imperial
 "In that time, I’ve covered {totalDistance}, that's {numberOfTripsAroundTheWorld} trips around the world 🌍 or {numberOfTripsToTheMoonPercent}% of the way to the moon 🌕, and climbed an elevation of {totalElevation} which is {timesMountEverest} times Mount Everest 🏔. All up that's {totalTimeRecorded} of moving time 🎉.": '在那段时间里，我走了{totalDistance}，相当于环游世界{numberOfTripsAroundTheWorld}次🌍，或者说是到达月球的{numberOfTripsToTheMoonPercent}%🌕，并且攀登了{totalElevation}，相当于珠穆朗玛峰的{timesMountEverest}倍🏔。总而言之，我走了{totalTimeRecorded}的路🎉。'
 'Individual thresholds vary based on fitness level.': 个人阈值因体能水平而异。
@@ -210,7 +209,6 @@ Low: 低
 'Low risk': 'Low risk'
 'Low training load': 'Low training load'
 Maintenance: 维护
-'Maintenance history': 维护历史
 Mar: 三月
 Max: 最大
 'Max gradient': 'Max gradient'
@@ -250,6 +248,7 @@ None: 无
 'Not supported': 不支持
 Nov: 十一月
 Now: Now
+'Number of activities': 'Number of activities'
 'Number of activities per month': 每月活动数量
 'Number of times completed': 完成次数
 Oct: 十月
@@ -276,7 +275,6 @@ Photos: 照片
 'Pickle Ball': 匹克球
 Pilates: 普拉提
 'Pizza slices': 'Pizza slices'
-'Please address these issues': 请解决这些问题
 'Polarised training (last 30 days)': 极化训练（过去30天）
 Power: 功率
 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': '消耗了约{caloriesBurned}卡路里，或大约{numberOfPizzaSlices}片披萨🍕。'
@@ -341,7 +339,6 @@ Squash: 壁球
 'Start times': 开始时间
 'Stats per weekday': 按工作日统计
 Status: Status
-'Strava profile': 'Strava profile'
 'Streak started on {date}': 'Streak started on {date}'
 Streaks: 连续记录
 Sun: 周日
@@ -351,8 +348,6 @@ Swim: 游泳
 'TSB (Form)': 'TSB (状态)'
 'TSB positive in': 'TSB positive in'
 'Table Tennis': 乒乓球
-Tag: 标签
-'Tag "{maintenanceTaskTag}" was used on "{activityName}", but the gear referenced on that activity is not attached to this component.': '"{maintenanceTaskTag}"标签已在"{activityName}"中使用, 但该活动中引用的装备未附加到此组件。'
 'Taper sweet-spot (+15)': '最佳减量期 (+15)'
 'Team Sports': 'Team Sports'
 Tennis: 网球
@@ -457,7 +452,7 @@ Time: 时间
 'Time in zone': 'Time in zone'
 'Times completed': 完成次数
 Title: Title
-'To enable it, configure {configFile} and rebuild the files for the changes to take effect': '请配置{configFile}并重新构建文件以开启此功能'
+'To enable it, configure this in the admin panel and rebuild the files for the changes to take effect': 'To enable it, configure this in the admin panel and rebuild the files for the changes to take effect'
 'Toggle sidebar': 切换侧边栏
 'Top 10': 前10名
 'Total distance per month': 每月总距离
@@ -545,7 +540,6 @@ day(s): day(s)
 days: 天
 'days needed for next Eddington': '天 - 下一个爱丁顿所需天数'
 'days to reach {n}': 'days to reach {n}'
-history: 历史
 hours: 小时
 hrs: hrs
 'last {numberOfDays} days': '最近{numberOfDays}天'

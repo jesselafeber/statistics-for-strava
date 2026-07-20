@@ -10,10 +10,9 @@ use App\Domain\Activity\ActivityType;
 use App\Domain\Activity\BestEffort\BestEffortPeriod;
 use App\Domain\Activity\BestEffort\BestEffortsCalculator;
 use App\Domain\Activity\EnrichedActivities;
-use App\Domain\Athlete\AthleteRepository;
 use App\Domain\Challenge\ChallengeRepository;
+use App\Domain\Settings\SettingsRepository;
 use App\Domain\Zwift\ZwiftLevel;
-use App\Domain\Zwift\ZwiftRacingScore;
 use App\Infrastructure\CQRS\Command\Command;
 use App\Infrastructure\CQRS\Command\CommandHandler;
 use League\Flysystem\FilesystemOperator;
@@ -23,13 +22,11 @@ use Twig\Environment;
 final readonly class BuildBadgeSvgCommandHandler implements CommandHandler
 {
     public function __construct(
-        private AthleteRepository $athleteRepository,
+        private SettingsRepository $settingsRepository,
         private ChallengeRepository $challengeRepository,
         private EnrichedActivities $enrichedActivities,
         private BestEffortsCalculator $bestEffortsCalculator,
         private AppUrl $appUrl,
-        private ?ZwiftLevel $zwiftLevel,
-        private ?ZwiftRacingScore $zwiftRacingScore,
         private Environment $twig,
         private FilesystemOperator $fileStorage,
         private FilesystemOperator $buildHtmlStorage,
@@ -42,7 +39,9 @@ final readonly class BuildBadgeSvgCommandHandler implements CommandHandler
         assert($command instanceof BuildBadgeSvg);
 
         $now = $command->getCurrentDateTime();
-        $athlete = $this->athleteRepository->find();
+        $athlete = $this->settingsRepository->general()->getAthlete();
+        $zwiftLevel = $this->settingsRepository->zwift()->getZwiftLevel();
+        $zwiftRacingScore = $this->settingsRepository->zwift()->getZwiftRacingScore();
         $activities = $this->enrichedActivities->findAll();
 
         $activityTotals = ActivityTotals::getInstance(
@@ -61,13 +60,13 @@ final readonly class BuildBadgeSvgCommandHandler implements CommandHandler
             ])
         );
 
-        if ($this->zwiftLevel instanceof ZwiftLevel) {
+        if ($zwiftLevel instanceof ZwiftLevel) {
             $this->fileStorage->write(
                 'zwift-badge.svg',
                 $this->twig->load('svg/badge/svg-zwift-badge.html.twig')->render([
                     'athlete' => $athlete,
-                    'zwiftLevel' => $this->zwiftLevel,
-                    'zwiftRacingScore' => $this->zwiftRacingScore,
+                    'zwiftLevel' => $zwiftLevel,
+                    'zwiftRacingScore' => $zwiftRacingScore,
                 ])
             );
         }
@@ -95,7 +94,7 @@ final readonly class BuildBadgeSvgCommandHandler implements CommandHandler
         $this->buildHtmlStorage->write(
             'badge.html',
             $this->twig->load('html/badges.html.twig')->render([
-                'zwiftLevel' => $this->zwiftLevel,
+                'zwiftLevel' => $zwiftLevel,
                 'appUrl' => rtrim((string) $this->appUrl, '/'),
                 'sportTypesThatHaveBestEfforts' => $sportTypesThatHaveBestEfforts,
             ]),

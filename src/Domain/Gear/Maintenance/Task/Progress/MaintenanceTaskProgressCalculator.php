@@ -6,8 +6,9 @@ namespace App\Domain\Gear\Maintenance\Task\Progress;
 
 use App\Domain\Gear\GearIds;
 use App\Domain\Gear\GearRepository;
-use App\Domain\Gear\Maintenance\GearMaintenanceConfig;
-use App\Domain\Gear\Maintenance\Task\MaintenanceTaskTagRepository;
+use App\Domain\Gear\Maintenance\GearMaintenanceRepository;
+use App\Domain\Gear\Maintenance\Log\GearMaintenanceLog;
+use App\Domain\Gear\Maintenance\Log\GearMaintenanceLogRepository;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final readonly class MaintenanceTaskProgressCalculator
@@ -18,8 +19,8 @@ final readonly class MaintenanceTaskProgressCalculator
     public function __construct(
         #[AutowireIterator('app.maintenance_progress_calculation')]
         private iterable $maintenanceTaskProgressCalculations,
-        private GearMaintenanceConfig $gearMaintenanceConfig,
-        private MaintenanceTaskTagRepository $maintenanceTaskTagRepository,
+        private GearMaintenanceRepository $gearMaintenanceRepository,
+        private GearMaintenanceLogRepository $gearMaintenanceLogRepository,
         private GearRepository $gearRepository,
     ) {
     }
@@ -42,26 +43,23 @@ final readonly class MaintenanceTaskProgressCalculator
     public function getGearIdsThatHaveDueTasks(): GearIds
     {
         $gearIdsThatHaveDueTasks = GearIds::empty();
-        if (!$this->gearMaintenanceConfig->isFeatureEnabled()) {
+        $gearMaintenanceConfig = $this->gearMaintenanceRepository->find();
+        if (!$gearMaintenanceConfig->isFeatureEnabled()) {
             return $gearIdsThatHaveDueTasks;
         }
 
         $allGears = $this->gearRepository->findAll();
-        $maintenanceTaskTags = $this->maintenanceTaskTagRepository->findAll()->filterOnValid();
-        $allGearComponents = $this->gearMaintenanceConfig->getEnrichedGearComponents($maintenanceTaskTags);
 
-        foreach ($allGearComponents as $gearComponent) {
-            $gearComponent = $gearComponent->withMaintenanceTaskTags($maintenanceTaskTags);
+        foreach ($gearMaintenanceConfig->getGearComponents() as $gearComponent) {
             foreach ($gearComponent->getMaintenanceTasks() as $maintenanceTask) {
-                if (!$mostRecentTag = $maintenanceTask->getMostRecentMaintenanceTaskTag()) {
+                if (!($mostRecentMaintenance = $this->gearMaintenanceLogRepository->findMostRecentForMaintenanceTask($maintenanceTask->getId())) instanceof GearMaintenanceLog) {
                     continue;
                 }
 
                 $maintenanceTaskProgress = $this->calculateProgressFor(
                     ProgressCalculationContext::from(
                         gearIds: $gearComponent->getAttachedTo(),
-                        lastTaggedOnActivityId: $mostRecentTag->getTaggedOnActivityId(),
-                        lastTaggedOn: $mostRecentTag->getTaggedOn(),
+                        lastTaggedOn: $mostRecentMaintenance->getPerformedOn(),
                         intervalUnit: $maintenanceTask->getIntervalUnit(),
                         intervalValue: $maintenanceTask->getIntervalValue(),
                     )
@@ -69,7 +67,7 @@ final readonly class MaintenanceTaskProgressCalculator
 
                 if ($maintenanceTaskProgress->isDue()) {
                     foreach ($gearComponent->getAttachedTo() as $gearId) {
-                        if ($this->gearMaintenanceConfig->ignoreRetiredGear() && $allGears->getByGearId($gearId)?->isRetired()) {
+                        if ($gearMaintenanceConfig->ignoreRetiredGear() && $allGears->getByGearId($gearId)?->isRetired()) {
                             continue;
                         }
                         $gearIdsThatHaveDueTasks->add($gearId);

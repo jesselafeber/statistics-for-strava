@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Infrastructure\Twig;
 
-use App\Domain\Activity\ActivityId;
 use App\Domain\Gear\GearIds;
+use App\Domain\Gear\Maintenance\Log\GearMaintenanceLog;
+use App\Domain\Gear\Maintenance\Log\GearMaintenanceLogRepository;
 use App\Domain\Gear\Maintenance\Task\IntervalUnit;
+use App\Domain\Gear\Maintenance\Task\MaintenanceTaskId;
 use App\Domain\Gear\Maintenance\Task\Progress\MaintenanceTaskProgress;
 use App\Domain\Gear\Maintenance\Task\Progress\MaintenanceTaskProgressCalculator;
 use App\Domain\Gear\Maintenance\Task\Progress\ProgressCalculationContext;
@@ -17,24 +19,29 @@ final readonly class MaintenanceTaskTwigExtension
 {
     public function __construct(
         private MaintenanceTaskProgressCalculator $maintenanceTaskProgressCalculator,
+        private GearMaintenanceLogRepository $gearMaintenanceLogRepository,
     ) {
+    }
+
+    #[AsTwigFunction('mostRecentMaintenanceForTask')]
+    public function mostRecentMaintenanceForTask(MaintenanceTaskId $maintenanceTaskId): ?GearMaintenanceLog
+    {
+        return $this->gearMaintenanceLogRepository->findMostRecentForMaintenanceTask($maintenanceTaskId);
     }
 
     #[AsTwigFunction('calculateMaintenanceTaskProgress')]
     public function calculateProgress(
         GearIds $gearIds,
-        ?ActivityId $lastTaggedOnActivityId,
         ?SerializableDateTime $lastTaggedOn,
         IntervalUnit $intervalUnit,
         int $intervalValue,
     ): MaintenanceTaskProgress {
-        if (!$lastTaggedOnActivityId instanceof ActivityId || !$lastTaggedOn instanceof SerializableDateTime) {
+        if (!$lastTaggedOn instanceof SerializableDateTime) {
             return MaintenanceTaskProgress::from(0, '0');
         }
 
         $context = ProgressCalculationContext::from(
             gearIds: $gearIds,
-            lastTaggedOnActivityId: $lastTaggedOnActivityId,
             lastTaggedOn: $lastTaggedOn,
             intervalUnit: $intervalUnit,
             intervalValue: $intervalValue,

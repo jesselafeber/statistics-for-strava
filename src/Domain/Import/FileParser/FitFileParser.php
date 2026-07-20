@@ -12,7 +12,6 @@ use App\Domain\Activity\ImportSource;
 use App\Domain\Activity\Lap\ActivityLap;
 use App\Domain\Activity\Lap\ActivityLapIdFactory;
 use App\Domain\Activity\Lap\ActivityLaps;
-use App\Domain\Activity\Math;
 use App\Domain\Activity\Route\RouteGeography;
 use App\Domain\Activity\SportType\SportType;
 use App\Domain\Activity\Stream\ActivityStream;
@@ -22,13 +21,15 @@ use App\Domain\Activity\WorldType;
 use App\Domain\Import\FileParser\Fit\FitManufacturer;
 use App\Domain\Import\FileParser\Fit\FitProduct;
 use App\Domain\Import\FileParser\Fit\FitSportType;
+use App\Domain\Import\SupportedFileExtension;
 use App\Infrastructure\Process\ProcessFactory;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\Time\Clock\Clock;
 use App\Infrastructure\ValueObject\Geography\Coordinate;
-use App\Infrastructure\ValueObject\Geography\EncodedPolyline;
+use App\Infrastructure\ValueObject\Geography\GeoMath;
 use App\Infrastructure\ValueObject\Geography\Latitude;
 use App\Infrastructure\ValueObject\Geography\Longitude;
+use App\Infrastructure\ValueObject\Geography\Polyline;
 use App\Infrastructure\ValueObject\Measurement\Length\Kilometer;
 use App\Infrastructure\ValueObject\Measurement\Length\Meter;
 use App\Infrastructure\ValueObject\Measurement\Velocity\MetersPerSecond;
@@ -51,9 +52,9 @@ final readonly class FitFileParser implements ActivityFileParser
     ) {
     }
 
-    public function supportedExtension(): string
+    public function supportedExtension(): SupportedFileExtension
     {
-        return 'fit';
+        return SupportedFileExtension::FIT;
     }
 
     public function parse(RawActivityFile $file): ParsedActivityFile
@@ -65,18 +66,7 @@ final readonly class FitFileParser implements ActivityFileParser
             throw new CouldNotParseActivityFile(message: sprintf('fit-tool could not decode "%s": %s', $file->getPath()->getFilename(), trim($process->getErrorOutput())), activityFile: $file);
         }
 
-        try {
-            /** @var array<mixed> $decoded */
-            $decoded = Json::decode($process->getOutput());
-        } catch (\JsonException $exception) {
-            throw new CouldNotParseActivityFile(message: sprintf('fit-tool produced invalid JSON for "%s": %s', $file->getPath()->getFilename(), $exception->getMessage()), activityFile: $file);
-        }
-
-        /** @var array<int, array<string, mixed>> $messages */
-        $messages = $decoded['files'][0]['messages'] ?? [];
-        if ([] === $messages) {
-            throw new CouldNotParseActivityFile(message: sprintf('No FIT messages found in "%s"', $file->getPath()->getFilename()), activityFile: $file);
-        }
+        $output = $process->getOutput();
 
         /** @var list<array<string, mixed>> $records */
         $records = [];
@@ -88,7 +78,14 @@ final readonly class FitFileParser implements ActivityFileParser
         $manufacturerId = null;
         $productId = null;
 
+        $messages = Json::decodeLazy(
+            json: $output,
+            pointer: '/files/0/messages',
+        );
+
+        $hasMessages = false;
         foreach ($messages as $message) {
+            $hasMessages = true;
             $fields = $this->fieldMap($message['fields'] ?? []);
             switch ($message['name'] ?? null) {
                 case 'record':
@@ -108,6 +105,10 @@ final readonly class FitFileParser implements ActivityFileParser
             if (null === $productName && is_string($fields['product_name'] ?? null) && '' !== $fields['product_name']) {
                 $productName = $fields['product_name'];
             }
+        }
+
+        if (!$hasMessages) {
+            throw new CouldNotParseActivityFile(message: sprintf('No FIT messages found in "%s"', $file->getPath()->getFilename()), activityFile: $file);
         }
 
         $deviceName = match (true) {
@@ -278,7 +279,7 @@ final readonly class FitFileParser implements ActivityFileParser
             $latitude = is_numeric($record['position_lat'] ?? null) ? (float) $record['position_lat'] : null;
             $longitude = is_numeric($record['position_long'] ?? null) ? (float) $record['position_long'] : null;
             $streams[StreamType::LAT_LNG->value][] = (null !== $latitude && null !== $longitude)
-                ? [Math::semicirclesToDegrees($latitude), Math::semicirclesToDegrees($longitude)]
+                ? [GeoMath::semicirclesToDegrees($latitude), GeoMath::semicirclesToDegrees($longitude)]
                 : null;
 
             $streams[StreamType::ALTITUDE->value][] = is_numeric($record['enhanced_altitude'] ?? $record['altitude'] ?? null) ? (float) ($record['enhanced_altitude'] ?? $record['altitude'] ?? null) : null;
@@ -304,8 +305,8 @@ final readonly class FitFileParser implements ActivityFileParser
         // at 0/0 ("null island"); fall through to the first GPS record instead.
         if (null !== $latitude && null !== $longitude && (0.0 !== $latitude || 0.0 !== $longitude)) {
             return Coordinate::createFromLatAndLng(
-                latitude: Latitude::fromString((string) Math::semicirclesToDegrees($latitude)),
-                longitude: Longitude::fromString((string) Math::semicirclesToDegrees($longitude)),
+                latitude: Latitude::fromString((string) GeoMath::semicirclesToDegrees($latitude)),
+                longitude: Longitude::fromString((string) GeoMath::semicirclesToDegrees($longitude)),
             );
         }
 
@@ -354,6 +355,6 @@ final readonly class FitFileParser implements ActivityFileParser
             return null;
         }
 
-        return (string) EncodedPolyline::encode($coordinates);
+        return (string) Polyline::fromCoordinates($coordinates)->simplify()->encode();
     }
 }

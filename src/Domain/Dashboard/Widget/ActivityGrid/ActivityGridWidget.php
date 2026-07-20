@@ -27,6 +27,16 @@ final readonly class ActivityGridWidget implements Widget
     ) {
     }
 
+    public function getLabel(): string
+    {
+        return $this->translator->trans('Activity heatmap');
+    }
+
+    public function getTemplateName(): string
+    {
+        return 'widget--activity-grid';
+    }
+
     public function getDefaultConfiguration(): WidgetConfiguration
     {
         return WidgetConfiguration::empty()
@@ -41,7 +51,7 @@ final readonly class ActivityGridWidget implements Widget
         if (!is_array($configuration->get('metricsDisplayOrder'))) {
             throw new InvalidDashboardLayout('Configuration item "metricsDisplayOrder" must be an array.');
         }
-        if (3 !== count($configuration->get('metricsDisplayOrder'))) {
+        if (3 !== count(array_unique($configuration->get('metricsDisplayOrder')))) {
             throw new InvalidDashboardLayout('Configuration item "metricsDisplayOrder" must contain all 3 grid types.');
         }
         foreach ($configuration->get('metricsDisplayOrder') as $metricDisplayOrder) {
@@ -108,7 +118,7 @@ final readonly class ActivityGridWidget implements Widget
             )->build());
         }
 
-        return $this->twig->load('html/dashboard/widget/widget--activity-grid.html.twig')->render([
+        return $this->twig->load(sprintf('html/dashboard/widget/%s.html.twig', $this->getTemplateName()))->render([
             'gridCharts' => $activityGridsCharts,
             'metricsDisplayOrder' => array_map(
                 ActivityGridType::from(...),

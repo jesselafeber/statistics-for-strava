@@ -10,14 +10,12 @@ use App\Domain\Activity\ActivityWithRawData;
 use App\Domain\Activity\DbalActivityIdRepository;
 use App\Domain\Activity\DbalActivityRepository;
 use App\Domain\Activity\ImportSource;
-use App\Domain\Gear\CustomGear\CustomGearRepository;
 use App\Domain\Gear\GearId;
 use App\Domain\Gear\GearRepository;
-use App\Domain\Gear\ImportedGear\ImportedGearRepository;
+use App\Domain\Gear\GearType;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\ContainerTestCase;
-use App\Tests\Domain\Gear\CustomGear\CustomGearBuilder;
-use App\Tests\Domain\Gear\ImportedGear\ImportedGearBuilder;
+use App\Tests\Domain\Gear\GearBuilder;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class DbalActivityIdRepositoryTest extends ContainerTestCase
@@ -97,15 +95,41 @@ class DbalActivityIdRepositoryTest extends ContainerTestCase
         );
     }
 
+    public function testHasImportedFromStravaApi(): void
+    {
+        $this->assertFalse($this->activityIdRepository->hasImportedFromStravaApi());
+
+        $this->activityRepository->add(ActivityWithRawData::fromState(
+            ActivityBuilder::fromDefaults()
+                ->withActivityId(ActivityId::fromUnprefixed(1))
+                ->withImportSource(ImportSource::FIT_FILE)
+                ->build(),
+            ['raw' => 'data']
+        ));
+
+        $this->assertFalse($this->activityIdRepository->hasImportedFromStravaApi());
+
+        $this->activityRepository->add(ActivityWithRawData::fromState(
+            ActivityBuilder::fromDefaults()
+                ->withActivityId(ActivityId::fromUnprefixed(2))
+                ->withImportSource(ImportSource::STRAVA_API)
+                ->build(),
+            ['raw' => 'data']
+        ));
+
+        $this->assertTrue($this->activityIdRepository->hasImportedFromStravaApi());
+    }
+
     public function testFindAllWithoutStravaGear(): void
     {
-        $this->getContainer()->get(ImportedGearRepository::class)->save(
-            ImportedGearBuilder::fromDefaults()
+        $this->getContainer()->get(GearRepository::class)->add(
+            GearBuilder::fromDefaults()
                 ->withGearId(GearId::fromUnprefixed('imported'))
                 ->build()
         );
-        $this->getContainer()->get(CustomGearRepository::class)->save(
-            CustomGearBuilder::fromDefaults()
+        $this->getContainer()->get(GearRepository::class)->add(
+            GearBuilder::fromDefaults()
+                ->withGearType(GearType::CUSTOM)
                 ->withGearId(GearId::fromUnprefixed('custom'))
                 ->build()
         );

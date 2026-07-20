@@ -1,37 +1,38 @@
 - Getting Started
-  - [Prerequisites](getting-started/prerequisites.md "Statistics for Strava | Prerequisites")
-  - [Installation](getting-started/installation.md "Statistics for Strava | Installation")
-  - [Scheduling](getting-started/scheduling.md "Statistics for Strava | Scheduling")
-  - [Challenges and trophies](getting-started/challenges-and-trophies.md "Statistics for Strava | Challenges and trophies")
-  - [Updates](getting-started/updates.md "Statistics for Strava | Updates")
-  - [Proxmox setup](getting-started/proxmox.md "Statistics for Strava | Proxmox setup")
-  - [Kubernetes with HelmForge](getting-started/kubernetes-helmforge.md "Statistics for Strava | Kubernetes with HelmForge")
 
-- Configuration
+  - [Prerequisites](getting-started/prerequisites.md "Dreeve | Prerequisites")
+  - [Installation](getting-started/installation.md "Dreeve | Installation")
+  - [Updates](getting-started/updates.md "Dreeve | Updates")
+  - [Migrating from v4 to v5](getting-started/migrating-from-v4.md "Dreeve | Migrating from v4 to v5")
 
-  - [Main configuration](configuration/main-configuration.md "Statistics for Strava | Main configuration")
-  - [Dashboard widgets](configuration/dashboard-widgets.md "Statistics for Strava | Dashboard widgets")
-  - [Custom gear](configuration/custom-gear.md "Statistics for Strava | Custom gear")
-  - [Gear maintenance](configuration/gear-maintenance.md "Statistics for Strava | Gear maintenance")
-  - [Strava webhooks](configuration/strava-webhooks.md "Statistics for Strava | Strava webhooks")
-  - [AI integration](configuration/ai-integration.md "Statistics for Strava | AI integration")
-  
+- Importing activities
+
+  - [Overview](importing/overview.md "Dreeve | Importing activities")
+  - [File import](importing/file-import.md "Dreeve | File import")
+  - [Strava import](importing/strava-import.md "Dreeve | Strava import")
+  - [Strava webhooks](importing/strava-webhooks.md "Dreeve | Strava webhooks")
+  - [Strava challenges and trophies](importing/strava-challenges-and-trophies.md "Dreeve | Strava challenges and trophies")
+
+- Integrations
+
+  - [AI assistant](integrations/ai.md "Dreeve | AI assistant")
+  - [Notifications](integrations/notifications.md "Dreeve | Notifications")
+
 - Troubleshooting
 
-  - [Strava API errors](troubleshooting/strava-api-errors.md "Statistics for Strava | Strava API errors")
-  - [Shoutrrr notifications](troubleshooting/shoutrrr-notifications.md "Statistics for Strava | Shoutrrr notifications")
-  - [Import/build fails with syntax error](troubleshooting/import-build-fails.md "Statistics for Strava | Import/build fails with syntax error")
-  - [FAQ](troubleshooting/faq.md "Statistics for Strava | FAQ")
-  - [Logs](troubleshooting/logs.md "Statistics for Strava | Logs")
+  - [FAQ](troubleshooting/faq.md "Dreeve | FAQ")
+  - [Logs](troubleshooting/logs.md "Dreeve | Logs")
+  - [Import/build fails with syntax error](troubleshooting/import-build-fails.md "Dreeve | Import/build fails with syntax error")
+  - [Strava API errors](troubleshooting/strava-api-errors.md "Dreeve | Strava API errors")
+  - [Notification issues](troubleshooting/shoutrrr-notifications.md "Dreeve | Notification issues")
 
 - Development
 
-  - [Locales and translations](development/locales-and-translations.md "Statistics for Strava | Locales and translations")
-  - [Local development](development/local-development.md "Statistics for Strava | Local development")
+  - [Local development](development/local-development.md "Dreeve | Local development")
+  - [Locales and translations](development/locales-and-translations.md "Dreeve | Locales and translations")
 
 - Community & Contributions
 
-  - [Feature requests](community/feature-requests.md "Statistics for Strava | Feature requests")
-  - [Projects](community/projects.md "Statistics for Strava | Projects")
-  
-- [Changelog](changelog.md "Statistics for Strava | Changelog")
+  - [Feature requests](community/feature-requests.md "Dreeve | Feature requests")
+
+- [Changelog](changelog.md "Dreeve | Changelog")

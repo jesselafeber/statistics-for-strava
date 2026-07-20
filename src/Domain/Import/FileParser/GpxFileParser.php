@@ -19,11 +19,13 @@ use App\Domain\Activity\Stream\ActivityStream;
 use App\Domain\Activity\Stream\ActivityStreams;
 use App\Domain\Activity\Stream\StreamType;
 use App\Domain\Activity\WorldType;
+use App\Domain\Import\SupportedFileExtension;
 use App\Infrastructure\Time\Clock\Clock;
 use App\Infrastructure\ValueObject\Geography\Coordinate;
-use App\Infrastructure\ValueObject\Geography\EncodedPolyline;
+use App\Infrastructure\ValueObject\Geography\GeoMath;
 use App\Infrastructure\ValueObject\Geography\Latitude;
 use App\Infrastructure\ValueObject\Geography\Longitude;
+use App\Infrastructure\ValueObject\Geography\Polyline;
 use App\Infrastructure\ValueObject\Measurement\Length\Kilometer;
 use App\Infrastructure\ValueObject\Measurement\Length\Meter;
 use App\Infrastructure\ValueObject\Measurement\Velocity\MetersPerSecond;
@@ -44,9 +46,9 @@ final readonly class GpxFileParser implements ActivityFileParser
     ) {
     }
 
-    public function supportedExtension(): string
+    public function supportedExtension(): SupportedFileExtension
     {
-        return 'gpx';
+        return SupportedFileExtension::GPX;
     }
 
     public function parse(RawActivityFile $file): ParsedActivityFile
@@ -133,7 +135,7 @@ final readonly class GpxFileParser implements ActivityFileParser
                     $altitude = $this->sanitizeElevation(property_exists($trackpoint, 'ele') && null !== $trackpoint->ele ? (float) $trackpoint->ele : null);
 
                     if (!in_array(null, [$previousLatitude, $previousLongitude, $latitude, $longitude], true)) {
-                        $delta = Math::haversineDistance(
+                        $delta = GeoMath::haversineDistance(
                             lat1: $previousLatitude,
                             lon1: $previousLongitude,
                             lat2: $latitude,
@@ -145,7 +147,7 @@ final readonly class GpxFileParser implements ActivityFileParser
 
                     $instantSpeed = null;
                     if (null !== $previousTime && $time > $previousTime && null !== $latitude && null !== $longitude && null !== $previousLatitude && null !== $previousLongitude) {
-                        $instantSpeed = Math::haversineDistance(
+                        $instantSpeed = GeoMath::haversineDistance(
                             lat1: $previousLatitude,
                             lon1: $previousLongitude,
                             lat2: $latitude,
@@ -485,6 +487,6 @@ final readonly class GpxFileParser implements ActivityFileParser
             return null;
         }
 
-        return (string) EncodedPolyline::encode($coordinates);
+        return (string) Polyline::fromCoordinates($coordinates)->simplify()->encode();
     }
 }

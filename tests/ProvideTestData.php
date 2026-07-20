@@ -22,12 +22,12 @@ use App\Domain\Activity\Stream\Metric\ActivityStreamMetric;
 use App\Domain\Activity\Stream\Metric\ActivityStreamMetricRepository;
 use App\Domain\Activity\Stream\Metric\ActivityStreamMetricType;
 use App\Domain\Activity\Stream\StreamType;
-use App\Domain\Athlete\Athlete;
-use App\Domain\Athlete\AthleteRepository;
 use App\Domain\Challenge\ChallengeId;
 use App\Domain\Challenge\ChallengeRepository;
 use App\Domain\Gear\GearId;
-use App\Domain\Gear\ImportedGear\ImportedGearRepository;
+use App\Domain\Gear\GearRepository;
+use App\Domain\Gear\RecordingDevice\RecordingDevice;
+use App\Domain\Gear\RecordingDevice\RecordingDeviceRepository;
 use App\Domain\Integration\Weather\OpenMeteo\Weather;
 use App\Domain\Segment\SegmentEffort\SegmentEffortId;
 use App\Domain\Segment\SegmentEffort\SegmentEffortRepository;
@@ -51,9 +51,11 @@ use App\Tests\Domain\Activity\Split\ActivitySplitBuilder;
 use App\Tests\Domain\Activity\Stream\ActivityStreamBuilder;
 use App\Tests\Domain\Activity\Stream\CombinedStream\CombinedActivityStreamBuilder;
 use App\Tests\Domain\Challenge\ChallengeBuilder;
-use App\Tests\Domain\Gear\ImportedGear\ImportedGearBuilder;
+use App\Tests\Domain\Gear\GearBuilder;
 use App\Tests\Domain\Segment\SegmentBuilder;
 use App\Tests\Domain\Segment\SegmentEffort\SegmentEffortBuilder;
+use Money\Currency;
+use Money\Money;
 use Symfony\Component\DependencyInjection\Container;
 
 trait ProvideTestData
@@ -86,14 +88,7 @@ trait ProvideTestData
 
     protected function addGeneralFixtures(): void
     {
-        /** @var AthleteRepository $athleteRepository */
-        $athleteRepository = $this->getContainer()->get(AthleteRepository::class);
-        $athleteRepository->save(Athlete::create([
-            'id' => 100,
-            'birthDate' => '1989-08-14',
-            'firstname' => 'Robin',
-            'lastname' => 'Ingelbrecht',
-        ]));
+        // The athlete is derived from the general settings baseline (see ProvideSettings).
 
         /** @var KeyValueStore $keyValueStore */
         $keyValueStore = $this->getContainer()->get(KeyValueStore::class);
@@ -105,10 +100,10 @@ trait ProvideTestData
 
     protected function addGearFixtures(): void
     {
-        /** @var ImportedGearRepository $gearRepository */
-        $gearRepository = $this->getContainer()->get(ImportedGearRepository::class);
-        $gearRepository->save(
-            ImportedGearBuilder::fromDefaults()
+        /** @var GearRepository $gearRepository */
+        $gearRepository = $this->getContainer()->get(GearRepository::class);
+        $gearRepository->add(
+            GearBuilder::fromDefaults()
                 ->withGearId(GearId::fromUnprefixed('b12659861'))
                 ->withCreatedOn(SerializableDateTime::fromString('2023-06-20 09:04:58'))
                 ->withDistanceInMeter(Meter::from(1450147))
@@ -116,8 +111,8 @@ trait ProvideTestData
                 ->withIsRetired(false)
                 ->build()
         );
-        $gearRepository->save(
-            ImportedGearBuilder::fromDefaults()
+        $gearRepository->add(
+            GearBuilder::fromDefaults()
                 ->withGearId(GearId::fromUnprefixed('b12659862'))
                 ->withCreatedOn(SerializableDateTime::fromString('2023-06-20 09:04:58'))
                 ->withDistanceInMeter(Meter::from(145014))
@@ -126,14 +121,23 @@ trait ProvideTestData
                 ->build()
         );
 
-        $gearRepository->save(
-            ImportedGearBuilder::fromDefaults()
+        $gearRepository->add(
+            GearBuilder::fromDefaults()
                 ->withGearId(GearId::fromUnprefixed('b12659562'))
                 ->withCreatedOn(SerializableDateTime::fromString('2023-06-20 09:04:58'))
                 ->withDistanceInMeter(Meter::from(100000))
                 ->withName('Zwift One')
                 ->withIsRetired(true)
                 ->build()
+        );
+
+        /** @var RecordingDeviceRepository $recordingDeviceRepository */
+        $recordingDeviceRepository = $this->getContainer()->get(RecordingDeviceRepository::class);
+        $recordingDeviceRepository->save(
+            RecordingDevice::create(
+                name: 'Polar Vantage M',
+                purchasePrice: new Money(29950, new Currency('EUR')),
+            )
         );
     }
 

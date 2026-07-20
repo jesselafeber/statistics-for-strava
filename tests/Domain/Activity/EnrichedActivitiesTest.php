@@ -13,11 +13,13 @@ use App\Domain\Activity\SportType\SportTypes;
 use App\Infrastructure\Exception\EntityNotFound;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\ContainerTestCase;
+use App\Tests\ProvideGearMaintenanceConfig;
 use Spatie\Snapshots\MatchesSnapshots;
 
 class EnrichedActivitiesTest extends ContainerTestCase
 {
     use MatchesSnapshots;
+    use ProvideGearMaintenanceConfig;
 
     private EnrichedActivities $enrichedActivities;
     private ActivityRepository $activityRepository;
@@ -30,15 +32,6 @@ class EnrichedActivitiesTest extends ContainerTestCase
             ['raw' => 'data']
         ));
 
-        $activity = $activity->withTags([
-            '#sfs-chain-lubed',
-            '#sfs-chain-replaced',
-            '#sfs-chain-cleaned',
-            '#sfs-di-2-charged',
-            '#sfs-peddle-board',
-            '#sfs-workout-shoes',
-        ]);
-
         $persisted = $this->enrichedActivities->find($activity->getId());
         $this->assertEquals(
             $activity,
@@ -48,7 +41,7 @@ class EnrichedActivitiesTest extends ContainerTestCase
 
     public function testFindItShouldThrowWhenNotFound(): void
     {
-        $this->expectException(EntityNotFound::class);
+        $this->expectExceptionObject(new EntityNotFound('Activity "activity-1" not found'));
         $this->enrichedActivities->find(ActivityId::fromUnprefixed(1));
     }
 
@@ -166,6 +159,8 @@ class EnrichedActivitiesTest extends ContainerTestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->importGearMaintenanceConfig();
 
         $this->enrichedActivities = $this->getContainer()->get(EnrichedActivities::class);
         $this->activityRepository = $this->getContainer()->get(ActivityRepository::class);

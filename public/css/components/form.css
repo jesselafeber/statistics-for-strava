@@ -1,0 +1,82 @@
+@layer components {
+    body.admin {
+        .modal-like-form {
+            @apply flex min-h-[calc(100vh-6rem)] items-center justify-center;
+        }
+
+        label {
+            @apply block text-sm font-medium text-gray-700;
+        }
+
+        .description {
+            @apply mt-0.5 text-xs text-gray-500;
+        }
+
+        .form-error {
+            @apply flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50;
+
+            &::before {
+                content: "";
+                @apply shrink-0 size-4 me-3 bg-contain bg-center bg-no-repeat;
+                background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" fill="%23991b1b" viewBox="0 0 20 20"><path fill-rule="evenodd" clip-rule="evenodd" d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM10 4.5a1 1 0 0 1 1 1v5a1 1 0 0 1-2 0v-5a1 1 0 0 1 1-1ZM10 12.75a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Z"/></svg>');
+            }
+        }
+
+        input:where([type="text"], [type="number"], [type="date"], [type="password"], [type="email"], [type="search"], [type="url"]):not(.unstyled),
+        textarea:not(.unstyled),
+        select:not(.unstyled) {
+            @apply mt-1 block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 placeholder:text-gray-400 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary;
+            @apply disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500;
+        }
+
+        select:not(.unstyled) {
+            @apply pe-7.5;
+        }
+
+        input:where([type="radio"], [type="checkbox"]) {
+            @apply size-4 rounded border-gray-300 bg-white text-primary focus:ring-primary/30;
+            @apply disabled:cursor-not-allowed disabled:bg-gray-100 disabled:border-gray-300 disabled:text-gray-400;
+        }
+
+        button:where([type="submit"], [type="button"]):not(.unstyled),
+        a:where([type="button"]):not(.unstyled) {
+            @apply rounded-lg px-4 py-2.5 text-sm whitespace-nowrap;
+            @apply cursor-pointer inline-flex items-center justify-center gap-2.5 border border-gray-300 font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50;
+
+            &.btn--primary {
+                @apply border-0 bg-primary text-white hover:brightness-95;
+            }
+
+            &.btn--secondary {
+                @apply border-0 bg-transparent font-medium text-gray-500 shadow-none hover:text-gray-700 hover:bg-gray-50;
+            }
+
+            &.btn--add {
+                @apply gap-0.5 border-0 bg-primary-soft text-primary shadow-none hover:bg-primary hover:text-white;
+            }
+
+            &.btn--danger {
+                @apply border-0 bg-red-600 text-white hover:brightness-95;
+            }
+
+            &.btn--large {
+                @apply px-5 py-3 text-base rounded-xl;
+            }
+
+            &[data-has-loading-state] {
+                &.is-loading::before {
+                    content: "";
+                    @apply size-5 rounded-full border-[3px] border-current/30 border-t-current animate-spin;
+                }
+
+                span.label {
+                    @apply group-[.is-loading]:hidden;
+                }
+
+                span.label--loading {
+                    @apply hidden group-[.is-loading]:inline;
+                }
+            }
+        }
+    }
+}

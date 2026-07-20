@@ -7,26 +7,14 @@ namespace App\Domain\Gear\Maintenance;
 use App\Domain\Gear\GearIds;
 use App\Infrastructure\ValueObject\Collection;
 
+/**
+ * @extends Collection<\App\Domain\Gear\Maintenance\GearComponent>
+ */
 final class GearComponents extends Collection
 {
     public function getItemClassName(): string
     {
         return GearComponent::class;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getAllMaintenanceTags(): array
-    {
-        $tags = [];
-        foreach ($this as $gearComponent) {
-            foreach ($gearComponent->getMaintenanceTasks() as $maintenanceTask) {
-                $tags[] = (string) $maintenanceTask->getTag();
-            }
-        }
-
-        return $tags;
     }
 
     public function getAllReferencedGearIds(): GearIds
@@ -38,19 +26,6 @@ final class GearComponents extends Collection
             }
         }
 
-        return $gearIds;
-    }
-
-    /**
-     * @return string[]
-     */
-    public function getAllReferencedImages(): array
-    {
-        $images = [];
-        foreach ($this as $gearComponent) {
-            $images[] = $gearComponent->getImgSrc();
-        }
-
-        return array_filter($images);
+        return $gearIds->unique();
     }
 }

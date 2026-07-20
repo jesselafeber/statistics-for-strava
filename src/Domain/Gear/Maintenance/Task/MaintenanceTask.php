@@ -5,37 +5,34 @@ declare(strict_types=1);
 namespace App\Domain\Gear\Maintenance\Task;
 
 use App\Infrastructure\ValueObject\String\Name;
-use App\Infrastructure\ValueObject\String\Tag;
 
-final class MaintenanceTask
+final readonly class MaintenanceTask
 {
-    private ?MaintenanceTaskTag $mostRecentMaintenanceTaskTag = null;
-
     private function __construct(
-        private readonly Tag $tag,
-        private readonly Name $label,
-        private readonly int $intervalValue,
-        private readonly IntervalUnit $intervalUnit,
+        private MaintenanceTaskId $id,
+        private Name $label,
+        private int $intervalValue,
+        private IntervalUnit $intervalUnit,
     ) {
     }
 
     public static function create(
-        Tag $tag,
+        MaintenanceTaskId $id,
         Name $label,
         int $intervalValue,
         IntervalUnit $intervalUnit,
     ): self {
         return new self(
-            tag: $tag,
+            id: $id,
             label: $label,
             intervalValue: $intervalValue,
             intervalUnit: $intervalUnit,
         );
     }
 
-    public function getTag(): Tag
+    public function getId(): MaintenanceTaskId
     {
-        return $this->tag;
+        return $this->id;
     }
 
     public function getLabel(): Name
@@ -51,17 +48,5 @@ final class MaintenanceTask
     public function getIntervalUnit(): IntervalUnit
     {
         return $this->intervalUnit;
-    }
-
-    public function withMostRecentMaintenanceTaskTag(?MaintenanceTaskTag $maintenanceTaskTag): self
-    {
-        return clone ($this, [
-            'mostRecentMaintenanceTaskTag' => $maintenanceTaskTag,
-        ]);
-    }
-
-    public function getMostRecentMaintenanceTaskTag(): ?MaintenanceTaskTag
-    {
-        return $this->mostRecentMaintenanceTaskTag;
     }
 }

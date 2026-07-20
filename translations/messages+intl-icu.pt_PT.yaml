@@ -20,6 +20,7 @@ Activity: Activity
 'Acute Training Load (Fatigue) - 7-day exponentially weighted average of your daily training load. Represents short-term fatigue.': 'Carga de treino aguda (Fadiga) - Média de 7-dias ponderada exponencial da carga de treino. Representa fadiga de curto prazo.'
 'Acute:Chronic Ratio - Ratio of ATL to CTL. Indicates injury risk.': 'Rácio Agudo:Crónico - Rácio entre ATL e CTL. Indica risco de lesão.'
 'Adaptive & Inclusive Sports': 'Desportos Adaptativos e Inclusivos'
+'Admin panel': 'Admin panel'
 Afternoon: Tarde
 All: All
 'All time': 'Desde sempre'
@@ -71,7 +72,6 @@ Cricket: Cricket
 Crossfit: Crossfit
 'Current Status': 'Current Status'
 'Current streaks': 'Current streaks'
-'Custom gear disabled': 'Equipamentos customizados está desactivado'
 Cycling: Cycling
 'Daily TRIMP': 'TRIMP Diário'
 'Daily activities': 'Actividades diárias'
@@ -84,12 +84,12 @@ Day: Day
 'Daytime stats': 'Estatísticas por períodos do dia'
 Dec: Dez
 Density: Density
-'Detailed instructions are available in the documentation on': 'Instruções detalhadas disponíveis na documentação em'
 Details: Details
 Device: Dispositivo
 Dist.: Dist.
 Distance: Distância
 'Distance & Elevation': 'Distance & Elevation'
+'Distance (single activity)': 'Distance (single activity)'
 'Distance breakdown': 'Divisão da distância'
 'Distance distribution': 'Distance distribution'
 'Distance in {unit}': 'Distância em {unit}'
@@ -107,6 +107,7 @@ Eddington: Eddington
 Elev: Desnível
 Elev.: Elev.
 Elevation: Elevação
+'Elevation (single activity)': 'Elevation (single activity)'
 'Elevation in {unit}': 'Elevação em {unit}'
 Elliptical: Elíptica
 Energy: Energy
@@ -134,7 +135,6 @@ Fri.: Fri.
 GAP: GAP
 Gear: Equipamento
 'Gear "{gearId}" is referenced in your maintenance config file, but was not imported from Strava. Please check that the gear exists and is correctly synced.': 'Equipamento "{gearId}" está referenciado no ficheiro de configuração, mas não foi importado do Strava. Por favor verifique se o equipamento existe e foi corretamente sincronizado.'
-'Gear details': 'Detalhes de equipamento'
 'Gear maintenance': 'Manutenção de equipamento'
 'Gear stats': 'Estatísticas do equipamento'
 "Gear that hasn't been used in the last three months, is disabled by default.": 'Equipamento não utilizado nos últimos três meses é desativado por defeito.'
@@ -170,7 +170,6 @@ History: Histórico
 'How often do you train': 'How often do you train'
 'Ice Skate': 'Patinagem no Gelo'
 Id: Id
-'Image "{imgSrc}" is referenced in your maintenance config file, but was not found in "storage/gear-maintenance"': 'Imagem "{imgSrc}" referenciada no ficheiro de configuração de manutenção, mas não foi encontrado em "storage/gear-maintenance"'
 Imperial: Imperial
 "In that time, I’ve covered {totalDistance}, that's {numberOfTripsAroundTheWorld} trips around the world 🌍 or {numberOfTripsToTheMoonPercent}% of the way to the moon 🌕, and climbed an elevation of {totalElevation} which is {timesMountEverest} times Mount Everest 🏔. All up that's {totalTimeRecorded} of moving time 🎉.": "In that time, I’ve covered {totalDistance}, that's {numberOfTripsAroundTheWorld} trips around the world 🌍 or {numberOfTripsToTheMoonPercent}% of the way to the moon 🌕, and climbed an elevation of {totalElevation} which is {timesMountEverest} times Mount Everest 🏔. All up that's {totalTimeRecorded} of moving time 🎉."
 'Individual thresholds vary based on fitness level.': 'Thresholds individuais variam consoante o nível de forma.'
@@ -210,7 +209,6 @@ Low: Baixa
 'Low risk': 'Low risk'
 'Low training load': 'Low training load'
 Maintenance: Manutenção
-'Maintenance history': 'Maintenance history'
 Mar: Mar
 Max: Máx
 'Max gradient': 'Max gradient'
@@ -250,6 +248,7 @@ None: None
 'Not supported': 'Not supported'
 Nov: Nov
 Now: Now
+'Number of activities': 'Number of activities'
 'Number of activities per month': 'Número de actividades por mês'
 'Number of times completed': 'Number of times completed'
 Oct: Out
@@ -276,7 +275,6 @@ Photos: Fotos
 'Pickle Ball': Pickleball
 Pilates: Pilates
 'Pizza slices': 'Pizza slices'
-'Please address these issues': 'Por favor resolva estas situaçãoes'
 'Polarised training (last 30 days)': 'Polarised training (last 30 days)'
 Power: Potência
 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.': 'Powered by an estimated {caloriesBurned} calories, or roughly {numberOfPizzaSlices} slices of pizza 🍕.'
@@ -341,7 +339,6 @@ Squash: Squash
 'Start times': 'Horas de início'
 'Stats per weekday': 'Estatísticas por dia da semana'
 Status: Status
-'Strava profile': 'Strava profile'
 'Streak started on {date}': 'Streak started on {date}'
 Streaks: Sequências
 Sun: Dom
@@ -351,8 +348,6 @@ Swim: Natação
 'TSB (Form)': 'TSB (Forma)'
 'TSB positive in': 'TSB positive in'
 'Table Tennis': 'Ténis de Mesa'
-Tag: Tag
-'Tag "{maintenanceTaskTag}" was used on "{activityName}", but the gear referenced on that activity is not attached to this component.': 'Tag "{maintenanceTaskTag}" foi usada em "{activityName}", mas o equipamento referenciado na actividade não está associado a este componente.'
 'Taper sweet-spot (+15)': 'Ponto de foco (+15)'
 'Team Sports': 'Team Sports'
 Tennis: Ténis
@@ -457,7 +452,7 @@ Time: Hora
 'Time in zone': 'Time in zone'
 'Times completed': 'Vezes concluído'
 Title: Title
-'To enable it, configure {configFile} and rebuild the files for the changes to take effect': 'Para activar, configurar {configFile} e recriar os ficheiros para que as mudanças sejam efectivas'
+'To enable it, configure this in the admin panel and rebuild the files for the changes to take effect': 'To enable it, configure this in the admin panel and rebuild the files for the changes to take effect'
 'Toggle sidebar': 'Ativar/desativar barra lateral'
 'Top 10': 'Top 10'
 'Total distance per month': 'Distância total por mês'
@@ -545,7 +540,6 @@ day(s): day(s)
 days: dias
 'days needed for next Eddington': 'days needed for next Eddington'
 'days to reach {n}': 'days to reach {n}'
-history: history
 hours: horas
 hrs: hrs
 'last {numberOfDays} days': 'últimos {numberOfDays} dias'

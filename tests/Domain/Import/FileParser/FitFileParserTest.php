@@ -8,6 +8,7 @@ use App\Domain\Activity\SportType\SportType;
 use App\Domain\Import\FileParser\CouldNotParseActivityFile;
 use App\Domain\Import\FileParser\FitFileParser;
 use App\Domain\Import\FileParser\RawActivityFile;
+use App\Domain\Import\SupportedFileExtension;
 use App\Infrastructure\Process\ProcessFactory;
 use App\Infrastructure\Process\SymfonyProcessFactory;
 use App\Infrastructure\Serialization\Json;
@@ -28,7 +29,7 @@ class FitFileParserTest extends ActivityFileParserTestCase
 
     public function testSupportedExtensions(): void
     {
-        $this->assertSame('fit', $this->parser->supportedExtension());
+        $this->assertSame(SupportedFileExtension::FIT, $this->parser->supportedExtension());
     }
 
     public function testParse(): void
@@ -103,8 +104,10 @@ class FitFileParserTest extends ActivityFileParserTestCase
         $process->method('getErrorOutput')->willReturn('boom');
         $this->processFactory->method('create')->willReturn($process);
 
-        $this->expectException(CouldNotParseActivityFile::class);
-        $this->parser->parse($this->rawFile('/tmp/activity.fit'));
+        $rawActivityFile = $this->rawFile('/tmp/activity.fit');
+
+        $this->expectExceptionObject(new CouldNotParseActivityFile('fit-tool could not decode "activity.fit": boom', $rawActivityFile));
+        $this->parser->parse($rawActivityFile);
     }
 
     public function testParseUnsupportedSportThrows(): void
@@ -121,8 +124,10 @@ class FitFileParserTest extends ActivityFileParserTestCase
         unset($message);
         $this->givenFitToolReturns(Json::encode($document));
 
-        $this->expectException(CouldNotParseActivityFile::class);
-        $this->parser->parse($this->rawFile('/tmp/activity.fit'));
+        $rawActivityFile = $this->rawFile('/tmp/activity.fit');
+
+        $this->expectExceptionObject(new CouldNotParseActivityFile('Unsupported FIT sport 8 (sub sport null)', $rawActivityFile));
+        $this->parser->parse($rawActivityFile);
     }
 
     /**

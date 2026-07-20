@@ -1,0 +1,56 @@
+{% extends "html/admin/page/template.html.twig" %}
+
+{% block main %}
+    {% set cron = settings.cron ?? {} %}
+    <div class="flex flex-col gap-4">
+        <form data-dispatch-command="{{ dispatchCommand }}" class="p-4 bg-white border border-gray-200 rounded-lg shadow-xs">
+            <input type="hidden" name="group" value="{{ group.value }}">
+            <div class="mb-5">
+                <h3 class="text-lg font-semibold">{{ "Daemon"|trans({}, 'admin') }}</h3>
+                <p class="description">
+                    {{ "Scheduled actions the daemon runs at regular intervals."|trans({}, 'admin') }}
+                </p>
+            </div>
+            <div data-form-error class="form-error hidden" role="alert"></div>
+            <div class="flex items-center p-4 mb-4 text-sm text-blue-800 border border-blue-300 rounded-lg bg-blue-50" role="alert">
+                <svg class="shrink-0 inline size-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                </svg>
+                <span class="sr-only">{{ "Info"|trans({}, 'admin') }}</span>
+                <div>
+                    {{ "Changes to these settings only take effect after you restart the daemon container."|trans({}, 'admin') }}
+                </div>
+            </div>
+            <div class="flex flex-col gap-3">
+                {% for action in enum('App\\Infrastructure\\Daemon\\Cron\\CronActionId').cases()|filter(action => action.supportsImportMode(importMode)) %}
+                    {% set actionId = action.value %}
+                    {% set stored = cron[actionId] ?? {} %}
+                    {% set defaultExpression = action.defaultCronExpression %}
+                    <div class="flex flex-col gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                        <label class="flex items-center gap-2 mt-0! font-medium cursor-pointer">
+                            <input type="checkbox" name="data[cron][{{ actionId }}][enabled]" value="1"
+                                   {{ (stored.enabled ?? false) ? 'checked' : '' }}>
+                            <span>{{ action|trans }}</span>
+                        </label>
+                        <p class="description mt-0!">{{ action|transDescription }}</p>
+                        <div>
+                            <label for="cron-{{ actionId }}">{{ "Cron expression"|trans({}, 'admin') }}</label>
+                            <input type="text" id="cron-{{ actionId }}" name="data[cron][{{ actionId }}][expression]"
+                                   value="{{ stored.expression ?? defaultExpression }}" required
+                                   placeholder="{{ defaultExpression }}">
+                            <p class="description">
+                                {{ "Cron expression specifying when the action should run, e.g. '0 14 * * *' runs every day at 14:00. See crontab.guru for help."|trans({}, 'admin') }}
+                            </p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="flex justify-end gap-2 border-t border-gray-200 pt-4 mt-6">
+                <button type="submit" data-has-loading-state class="group btn--primary">
+                    <span class="label">{{ "Save settings"|trans({}, 'admin') }}</span>
+                    <span class="label--loading">{{ "Saving..."|trans({}, 'admin') }}</span>
+                </button>
+            </div>
+        </form>
+    </div>
+{% endblock main %}

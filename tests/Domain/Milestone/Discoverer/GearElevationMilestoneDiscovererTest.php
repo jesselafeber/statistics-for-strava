@@ -6,16 +6,17 @@ use App\Domain\Activity\ActivityId;
 use App\Domain\Activity\ActivityRepository;
 use App\Domain\Activity\ActivityWithRawData;
 use App\Domain\Gear\GearId;
-use App\Domain\Gear\ImportedGear\ImportedGearRepository;
+use App\Domain\Gear\GearRepository;
 use App\Domain\Milestone\Context\GearElevationContext;
 use App\Domain\Milestone\Discoverer\GearElevationMilestoneDiscoverer;
+use App\Domain\Settings\SettingsGroup;
+use App\Domain\Settings\SettingsRepository;
 use App\Infrastructure\Serialization\Json;
 use App\Infrastructure\ValueObject\Measurement\Length\Meter;
-use App\Infrastructure\ValueObject\Measurement\UnitSystem;
 use App\Infrastructure\ValueObject\Time\SerializableDateTime;
 use App\Tests\ContainerTestCase;
 use App\Tests\Domain\Activity\ActivityBuilder;
-use App\Tests\Domain\Gear\ImportedGear\ImportedGearBuilder;
+use App\Tests\Domain\Gear\GearBuilder;
 use App\Tests\Domain\Milestone\IncrementingMilestoneIdFactory;
 use Spatie\Snapshots\MatchesSnapshots;
 
@@ -99,9 +100,11 @@ class GearElevationMilestoneDiscovererTest extends ContainerTestCase
         $this->insertGear($gearId, 'Canyon Endurace');
         $this->insertActivity('1', '2024-01-01', $gearId, 500.0);
 
+        $settingsRepository = $this->getContainer()->get(SettingsRepository::class);
+        $settingsRepository->save(SettingsGroup::APPEARANCE, ['unitSystem' => 'imperial']);
         $discoverer = new GearElevationMilestoneDiscoverer(
             $this->getConnection(),
-            UnitSystem::IMPERIAL,
+            $settingsRepository,
             new IncrementingMilestoneIdFactory(),
         );
         $milestones = $discoverer->discover();
@@ -116,15 +119,15 @@ class GearElevationMilestoneDiscovererTest extends ContainerTestCase
         parent::setUp();
         $this->discoverer = new GearElevationMilestoneDiscoverer(
             $this->getConnection(),
-            UnitSystem::METRIC,
+            $this->getContainer()->get(SettingsRepository::class),
             new IncrementingMilestoneIdFactory(),
         );
     }
 
     private function insertGear(GearId $gearId, string $name): void
     {
-        $this->getContainer()->get(ImportedGearRepository::class)->save(
-            ImportedGearBuilder::fromDefaults()
+        $this->getContainer()->get(GearRepository::class)->add(
+            GearBuilder::fromDefaults()
                 ->withGearId($gearId)
                 ->withName($name)
                 ->build()
