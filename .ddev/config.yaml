@@ -15,6 +15,10 @@ corepack_enable: false
 hooks:
   post-start:
     - exec: mkdir -p /var/www/html/storage/database /var/www/html/storage/files
+    # v5 (Dreeve) Symfony runtime requires a .env file to boot. The fork keeps
+    # .env untracked+gitignored, so seed a local dev .env when it is missing.
+    # Fill STRAVA_* with real values (or set IMPORT_MODE=files) to import.
+    - exec: bash -c 'ENV=/var/www/html/.env; if [ ! -f "$ENV" ]; then { echo "APP_SECRET=$(openssl rand -hex 16)"; echo "APP_URL=https://statistics-for-strava.ddev.site"; echo "IMPORT_MODE=stravaApi"; echo "STRAVA_CLIENT_ID=replace-me"; echo "STRAVA_CLIENT_SECRET=replace-me"; echo "STRAVA_REFRESH_TOKEN=replace-me"; echo "ADMIN_USERNAME=admin"; echo "ADMIN_PASSWORD_HASH="; } > "$ENV"; fi'
     # Build the fit-tool .FIT decoder (docker/fit-tool) into the gitignored var/ dir
     # and expose it on PATH. Only builds when missing, so restarts stay fast.
     - exec: bash -c 'BIN=/var/www/html/var/bin/fit-tool; if [ ! -x "$BIN" ]; then mkdir -p /var/www/html/var/bin && cd /var/www/html/docker/fit-tool && GOMODCACHE=/var/www/html/var/gocache /usr/local/bin/go build -ldflags="-s -w" -o "$BIN" .; fi; sudo ln -sf "$BIN" /usr/local/bin/fit-tool'
